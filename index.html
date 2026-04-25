@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IOSx — Device Config Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060b1a;
+    --surface: rgba(15, 23, 42, 0.82);
+    --surface2: rgba(21, 32, 61, 0.9);
+    --border: rgba(120, 140, 200, 0.12);
+    --border2: rgba(120, 140, 200, 0.22);
+    --accent: #7c6cff;
+    --accent2: #4cc9f0;
+    --accent3: #8ea0ff;
+    --text: #eef2ff;
+    --muted: #94a3b8;
+    --dim: #64748b;
+    --green: #34d399;
+    --red: #fb7185;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background:
+      radial-gradient(circle at 60% 8%, rgba(124,108,255,0.28), transparent 28%),
+      radial-gradient(circle at 62% 62%, rgba(76,201,240,0.18), transparent 20%),
+      radial-gradient(circle at 45% 78%, rgba(124,108,255,0.12), transparent 22%),
+      linear-gradient(180deg, #08101f 0%, #060b1a 45%, #050814 100%);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    display: none;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .header { text-align: center; padding: 20px 0 8px; }
+
+  .logo {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(52px, 12vw, 90px);
+    font-weight: 700;
+    letter-spacing: 2px;
+    line-height: 1;
+    color: var(--text);
+    position: relative;
+    display: inline-block;
+  }
+
+  .logo .x {
+    color: var(--accent);
+    text-shadow: 0 0 28px rgba(124,108,255,0.35);
+  }
+
+  .logo-scan {
+    display: none;
+  }
+
+  @keyframes scan {
+    0% { top: 0; opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    100% { top: 100%; opacity: 0; }
+  }
+
+  .tagline {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-transform: none;
+    margin-top: 12px;
+  }
+
+  .status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* STEPS */
+  .steps { display: flex; align-items: center; padding: 0 4px; }
+
+  .step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+  }
+
+  .step::after {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 50%; right: -50%;
+    height: 1px;
+    background: var(--border2);
+    transition: background 0.4s;
+  }
+
+  .step:last-child::after { display: none; }
+
+  .step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface);
+    position: relative; z-index: 1;
+    transition: all 0.3s;
+  }
+
+  .step.active .step-num { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 22px rgba(124,108,255,0.18); }
+  .step.done .step-num { border-color: var(--green); background: rgba(52,211,153,0.08); color: #9ff0cb; }
+  .step.done::after { background: rgba(52,211,153,0.2); }
+
+  .step-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--dim);
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .step.active .step-label { color: var(--accent); }
+  .step.done .step-label { color: var(--green); }
+
+  /* CARD */
+  .card {
+    background: rgba(12, 18, 35, 0.72);
+    border: 1px solid rgba(134, 151, 255, 0.14);
+    border-radius: 20px;
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.4;
+  }
+
+  .card-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-title::after { content: ''; flex: 1; height: 1px; background: rgba(120,140,200,0.1); }
+
+  /* FORM */
+  .form-group { margin-bottom: 16px; }
+
+  .form-label {
+    display: block;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .form-input, .form-select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    padding: 11px 14px;
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none; appearance: none;
+  }
+
+  .form-input::placeholder { color: var(--dim); font-weight: 400; }
+  .form-input:focus, .form-select:focus { border-color: rgba(124,108,255,0.55); box-shadow: 0 0 0 4px rgba(124,108,255,0.10); }
+
+  .form-select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b80' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  .form-select option, .form-select optgroup { background: #13131a; color: var(--text); }
+
+  /* BUTTON */
+  .btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: linear-gradient(135deg, #7c6cff 0%, #6f7dff 55%, #5ba8ff 100%);
+    color: white;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 6px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 24px rgba(92,110,255,0.28), inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+
+  .btn::before { display: none; }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 14px 34px rgba(92,110,255,0.34), inset 0 1px 0 rgba(255,255,255,0.18); }
+  .btn span { position: relative; z-index: 1; }
+
+  /* STATUS */
+  .status-msg {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px;
+    text-align: center;
+    margin-top: 12px;
+    height: 16px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    letter-spacing: 1px;
+  }
+  .status-msg.visible { opacity: 1; }
+
+  /* DIVIDER */
+  .divider { display: flex; align-items: center; gap: 14px; }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-text { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 600; color: var(--dim); letter-spacing: 2px; }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    backdrop-filter: blur(6px);
+  }
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    background: rgba(12, 18, 35, 0.72);
+    border: 1px solid rgba(134, 151, 255, 0.14);
+    border-radius: 20px;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+    animation: modalIn 0.25s ease both;
+    max-height: 90vh;
+    overflow-y: auto;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  .modal::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent2), transparent);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    width: 28px; height: 28px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: 'Rajdhani', sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .modal-close:hover { border-color: var(--muted); color: var(--text); }
+
+  .modal-title { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
+  .modal-price { font-size: 32px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .modal-price-sub { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 24px; }
+
+  /* PAY ROWS */
+  .pay-list { display: flex; flex-direction: column; }
+
+  .pay-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 6px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 10px;
+    margin: 0 -6px;
+  }
+  .pay-row:hover { background: var(--surface2); }
+  .pay-row.active { background: rgba(124,108,255,0.06); border-bottom-color: transparent; }
+
+  .pay-icon {
+    width: 38px; height: 38px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-weight: 700;
+  }
+
+  .pay-row-info { flex: 1; }
+  .pay-row-name { font-size: 15px; font-weight: 600; color: var(--text); }
+  .pay-row-sub { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 600; color: var(--muted); margin-top: 2px; letter-spacing: 0.5px; }
+  .pay-row-amount { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .pay-row-arrow { color: var(--dim); font-size: 16px; margin-left: 4px; transition: transform 0.2s; }
+  .pay-row.active .pay-row-arrow { transform: rotate(90deg); color: var(--accent); }
+
+  /* PAY FORM */
+  .pay-form {
+    display: none;
+    background: rgba(124,108,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 4px 0 6px;
+    animation: slideDown 0.2s ease;
+  }
+  .pay-form.active { display: block; }
+
+  /* CRYPTO BOX */
+  .crypto-box {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+
+  .crypto-label { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+  .crypto-amount { font-family: 'Share Tech Mono', monospace; font-size: 18px; color: var(--accent); margin-bottom: 12px; }
+  .crypto-addr-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-bottom: 6px; }
+
+  .crypto-addr {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    word-break: break-all;
+    line-height: 1.7;
+    padding: 10px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .crypto-note {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+  }
+
+  /* KEY REVEAL */
+  .key-reveal {
+    display: none;
+    margin-top: 24px;
+    padding: 24px;
+    background: rgba(52,211,153,0.04);
+    border: 1px solid rgba(52,211,153,0.18);
+    border-radius: 12px;
+    text-align: center;
+    animation: fadeIn 0.4s ease;
+  }
+  .key-reveal.active { display: block; }
+
+  .key-label { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-bottom: 14px; }
+  .key-value { font-family: 'Share Tech Mono', monospace; font-size: 18px; font-weight: 700; color: var(--green); letter-spacing: 3px; word-break: break-all; text-shadow: 0 0 20px rgba(52,211,153,0.4); margin-bottom: 12px; }
+  .key-warn { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+
+  /* BUY CARD */
+  .buy-card {
+    background: rgba(12, 18, 35, 0.72);
+    border: 1px solid rgba(134, 151, 255, 0.14);
+    border-radius: 20px;
+    padding: 28px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .buy-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent2), transparent); opacity: 0.5; }
+
+  .buy-card-tag { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; }
+  .buy-card-price { font-size: 36px; font-weight: 700; color: var(--text); line-height: 1; }
+  .buy-card-sub { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--dim); margin-top: 4px; }
+
+  .btn-buy {
+    flex-shrink: 0;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #7c6cff 0%, #6f7dff 55%, #5ba8ff 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    color: white;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: none;
+    cursor: pointer;
+    border-radius: 14px;
+    transition: all 0.2s;
+    white-space: nowrap;
+    box-shadow: 0 10px 24px rgba(92,110,255,0.28), inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .btn-buy:hover { transform: translateY(-1px); box-shadow: 0 14px 34px rgba(92,110,255,0.34), inset 0 1px 0 rgba(255,255,255,0.18); }
+
+  /* PAGES */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* CONFIRM */
+  .confirm-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    border: 2px solid var(--green);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 20px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 20px rgba(52,211,153,0.15); }
+    50% { box-shadow: 0 0 30px rgba(52,211,153,0.3); }
+  }
+
+  .confirm-title { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 4px; color: var(--green); text-align: center; margin-bottom: 8px; text-transform: uppercase; }
+  .confirm-sub { font-size: 14px; color: var(--muted); text-align: center; margin-bottom: 28px; line-height: 1.6; }
+
+  .confirm-details { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 20px; }
+
+  .confirm-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .confirm-row:last-child { border-bottom: none; }
+  .confirm-row-label { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; }
+  .confirm-row-value { font-weight: 600; color: var(--text); text-align: right; max-width: 60%; word-break: break-word; }
+
+  @keyframes modalIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes slideDown { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    gap: 8px;
+    background: rgba(12,18,35,0.72);
+    border: 1px solid rgba(134,151,255,0.14);
+    border-radius: 16px;
+    padding: 6px;
+    backdrop-filter: blur(18px);
+  }
+  .nav-tab {
+    flex: 1;
+    padding: 10px 8px;
+    border-radius: 12px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .nav-tab.active {
+    background: rgba(124,108,255,0.15);
+    color: var(--accent);
+    border: 1px solid rgba(124,108,255,0.25);
+  }
+  .nav-tab:hover:not(.active) { color: var(--text); background: rgba(255,255,255,0.04); }
+
+  /* CODES PAGE */
+  .codes-search-wrap { position: relative; }
+  .codes-search-wrap .form-input { padding-left: 38px; }
+  .codes-search-icon {
+    position: absolute;
+    left: 13px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--dim);
+    font-size: 15px;
+    pointer-events: none;
+  }
+
+  .code-card {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeIn 0.3s ease;
+  }
+  .code-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .code-device {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .code-date {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    white-space: nowrap;
+    padding-top: 2px;
+  }
+  .code-value-wrap {
+    background: var(--bg);
+    border: 1px solid rgba(124,108,255,0.2);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .code-value {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 15px;
+    color: var(--green);
+    letter-spacing: 2px;
+    word-break: break-all;
+    text-shadow: 0 0 14px rgba(52,211,153,0.3);
+  }
+  .code-copy-btn {
+    flex-shrink: 0;
+    background: transparent;
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    color: var(--muted);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .code-copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .code-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .code-status.active { color: var(--green); }
+  .code-status.used { color: var(--dim); }
+
+  .codes-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--dim);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    line-height: 2;
+  }
+  .codes-empty-icon { font-size: 32px; margin-bottom: 12px; opacity: 0.4; }
+
+  .codes-hint {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+    text-align: center;
+    letter-spacing: 0.5px;
+    line-height: 1.8;
+    margin-top: 4px;
+  }
+
+  .device-wrapper { position: relative; }
+  .device-list {
+    background: rgba(13, 20, 39, 0.96);
+    border: 1px solid rgba(124,108,255,0.18);
+    max-height: 240px;
+    overflow-y: auto;
+    margin-top: 8px;
+    border-radius: 16px;
+    position: relative;
+    z-index: 50;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+  }
+  .device-item {
+    padding: 12px 14px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.16s ease;
+    color: var(--text);
+    border-radius: 10px;
+    margin: 2px 6px;
+  }
+  .device-item:hover { background: rgba(124,108,255,0.10); color: #ffffff; }
+  .device-item:last-child { border-bottom: none; }
+  .device-brand {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .device-back {
+    color: var(--muted);
+    font-size: 13px;
+    background: rgba(0,212,255,0.03);
+    border-bottom: 1px solid var(--border2) !important;
+  }
+  .device-back:hover { color: var(--accent); background: rgba(0,212,255,0.07); }
+
+  .top-link {
+    position: absolute;
+    top: 20px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(15, 23, 42, 0.7);
+    color: var(--text);
+    text-decoration: none;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+    z-index: 60;
+  }
+
+  .top-link-left {
+    left: 24px;
+  }
+
+  .top-link-right {
+    right: 24px;
+  }
+
+  .top-link:hover {
+    transform: translateY(-1px);
+    border-color: rgba(124,108,255,0.35);
+    box-shadow: 0 8px 20px rgba(92,110,255,0.18);
+  }
+
+  .code-box {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 14px;
+  }
+
+  .code-empty {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .code-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .code-value {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+    color: var(--text);
+    word-break: break-all;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  /* AUTH SCREEN */
+  #authScreen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 20px;
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: 460px;
+    background: rgba(12, 18, 35, 0.78);
+    border: 1px solid rgba(134, 151, 255, 0.16);
+    border-radius: 22px;
+    padding: 30px 24px;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  .auth-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .auth-subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  .auth-google-btn {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 13px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .auth-google-btn:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(124,108,255,0.4);
+  }
+
+  .auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .auth-divider::before,
+  .auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .auth-divider span {
+    color: var(--dim);
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .auth-switch-btn {
+    margin-top: 12px;
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--accent2);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 8px 4px;
+  }
+
+  .auth-switch-btn:hover {
+    color: var(--accent3);
+  }
+</style>
+</head>
+<body>
+
+<div id="authScreen">
+  <div class="auth-card">
+    <div class="auth-title">Добро пожаловать!</div>
+    <div class="auth-subtitle">Зарегистрируйтесь или войдите, чтобы подать заявку на помощь с настройкой Android-устройства</div>
+    <button type="button" class="auth-google-btn" id="authGoogleBtn" onclick="signInWithGoogle()">
+      <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-9 20-20 0-1.3-.1-2.7-.4-4z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 19 13 24 13c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-5l-6.2-5.2C29.4 35.6 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-8H6.3C9.6 35.7 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.4-2.5 4.5-4.6 5.8l6.2 5.2C40.7 35.3 44 30 44 24c0-1.3-.1-2.7-.4-4z"/></svg>
+      Продолжить через Google
+    </button>
+    <div class="auth-divider"><span>или</span></div>
+    <form id="authForm" autocomplete="on" onsubmit="handleEmailAuth(); return false;" style="margin:0;">
+    <div class="form-group">
+      <label class="form-label">Gmail</label>
+      <input type="email" id="authEmail" name="email" class="form-input" placeholder="user@gmail.com" autocomplete="email" inputmode="email">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Пароль</label>
+      <input type="password" id="authPassword" name="password" class="form-input" placeholder="Минимум 8 символов" minlength="6" autocomplete="current-password">
+    </div>
+    <div id="forgotPasswordWrap" style="display:none;text-align:right;margin-top:-6px;margin-bottom:10px;">
+      <button type="button" onclick="openForgotPassword()" style="background:none;border:none;color:var(--accent2);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;cursor:pointer;padding:4px 0;letter-spacing:0.3px;transition:color 0.2s;" onmouseover="this.style.color='var(--accent3)'" onmouseout="this.style.color='var(--accent2)'">Забыли пароль?</button>
+    </div>
+    <button type="submit" class="btn" id="authActionBtn"><span>Создать аккаунт</span></button>
+    </form>
+    <button type="button" class="auth-switch-btn" id="authSwitchBtn" onclick="toggleAuthMode()">Уже есть аккаунт? Войти</button>
+    <div class="status-msg" id="authStatus"></div>
+  </div>
+</div>
+
+<div id="appContent" style="display:none;">
+
+<a href="#" class="top-link top-link-left" onclick="openCodes(); return false;">Ваши заявки</a>
+<a href="#" class="top-link top-link-right" onclick="openCabinet(); return false;">Ваш кабинет</a>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">
+      IOS<span class="x">x</span>
+      <div class="logo-scan"></div>
+    </div>
+    <div class="tagline">Сервис подачи заявок на настройку Android-устройств</div>
+    <div class="status-bar">
+      <div class="status-dot"></div>
+      <span>Сервис активен</span>
+    </div>
+  </div>
+
+  <!-- NAV TABS -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="tabOrder" onclick="switchTab('order')">🔧 Заявка</button>
+  </div>
+  <!-- TAB: ЗАЯВКА -->
+  <div id="sectionOrder">
+  <div class="steps">
+    <div class="step active" id="step1">
+      <div class="step-num">01</div>
+      <div class="step-label">Заявка</div>
+    </div>
+    <div class="step" id="step2">
+      <div class="step-num">02</div>
+      <div class="step-label">Оплата</div>
+    </div>
+    <div class="step" id="step3">
+      <div class="step-num">03</div>
+      <div class="step-label">Готово</div>
+    </div>
+  </div>
+
+  <!-- PAGE 1: Форма заявки -->
+  <div id="page1" class="page active">
+    <div class="card">
+      <div class="card-title">Подача заявки на настройку</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:20px;font-family:'Rajdhani',sans-serif;">
+        Заполните форму, чтобы направить запрос на помощь с настройкой вашего устройства. После отправки мы рассмотрим заявку и свяжемся с вами через указанный контакт для уточнения деталей.<br>
+        <span style="font-size:12px;color:var(--dim);">Результат зависит от модели устройства и конкретной задачи. Сервис не выполняет обход защитных ограничений производителя или оператора. Данные предоставляются добровольно.</span>
+      </div>
+      <form id="requestForm" action="https://formspree.io/f/mwvawjvb" method="POST">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-input" id="email" placeholder="user@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Telegram</label>
+          <input type="text" name="telegram" class="form-input" id="username" placeholder="@username или номер" required>
+          <div style="font-size:11px;color:var(--dim);margin-top:6px;">Для связи по заявке</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Устройство</label>
+          <div class="device-wrapper">
+            <input
+              type="text"
+              id="deviceSearch"
+              class="form-input"
+              placeholder="Например: Samsung S21, Redmi Note 10..."
+              autocomplete="off"
+            >
+            <input type="hidden" name="device" id="deviceHidden">
+            <div id="deviceList" class="device-list"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Комментарий (необязательно)</label>
+          <input type="text" name="comment" class="form-input" placeholder="Опиши задачу...">
+          <div style="font-size:11px;color:var(--dim);margin-top:6px;font-family:'Share Tech Mono',monospace;letter-spacing:0.5px;line-height:1.6;">
+            Например: "не синхронизируется почта" / "пропал Wi-Fi" / "нужна помощь с резервной копией"
+          </div>
+        </div>
+        <button type="button" class="btn" onclick="submitRequest()"><span>Отправить заявку →</span></button>
+        <div class="status-msg" id="formStatus"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PAGE 2: скрыта -->
+
+  <!-- PAGE 3: Подтверждение -->
+  <div id="page3" class="page">
+    <div class="card" style="text-align:center;">
+      <div class="confirm-icon">✓</div>
+      <div class="confirm-title">Заявка принята</div>
+      <div class="confirm-sub" id="confirmSub">Ваш запрос отправлен. Мы рассмотрим его и свяжемся с вами через указанный контакт для уточнения деталей.</div>
+      <div class="confirm-details">
+        <div class="confirm-row">
+          <span class="confirm-row-label">Email</span>
+          <span class="confirm-row-value" id="confirmEmail">—</span>
+        </div>
+        <div class="confirm-row">
+          <span class="confirm-row-label">Username</span>
+          <span class="confirm-row-value" id="confirmUser">—</span>
+        </div>
+        <div class="confirm-row">
+          <span class="confirm-row-label">Устройство</span>
+          <span class="confirm-row-value" id="confirmDevice">—</span>
+        </div>
+        <div class="confirm-row">
+          <span class="confirm-row-label">Статус</span>
+          <span class="confirm-row-value" style="color:var(--green)">✓ Принято</span>
+        </div>
+      </div>
+      <button class="btn" style="display:none;" onclick="goToPayment()"><span>Перейти к оплате →</span></button>
+    </div>
+  </div>
+
+  </div><!-- end sectionOrder -->
+
+  <!-- TAB: ВАШИ КОДЫ -->
+  <div id="sectionCodes" style="display:none;">
+    <div class="card">
+      <div class="card-title">Найти вашу заявку</div>
+      <div class="form-group">
+        <label class="form-label">Email или Telegram</label>
+        <div class="codes-search-wrap">
+          <span class="codes-search-icon">🔍</span>
+          <input type="text" id="codesQuery" class="form-input" placeholder="user@example.com или @username" autocomplete="off" oninput="searchCodes()">
+        </div>
+        <div class="codes-hint" id="codesHint">Введите email или Telegram, которые указывали при подаче заявки</div>
+      </div>
+      <div id="codesResult"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div style="position:fixed;bottom:0;left:0;right:0;text-align:center;padding:14px 0;font-family:'Share Tech Mono',monospace;font-size:11px;color:#64748b;letter-spacing:1px;background:linear-gradient(0deg,rgba(5,8,20,0.95),transparent);z-index:50;">
+  <a href="#" onclick="openPrivacy();return false;" style="color:#64748b;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#7c6cff'" onmouseout="this.style.color='#64748b'">Политика конфиденциальности</a>
+  &nbsp;·&nbsp; IOSx · Сервис настройки Android-устройств
+</div>
+
+<!-- MODAL: ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ -->
+<div class="modal-overlay" id="privacyOverlay" onclick="if(event.target===this)closePrivacy()" style="z-index:1100;">
+  <div class="modal" style="max-width:580px;max-height:80vh;overflow-y:auto;">
+    <button class="modal-close" onclick="closePrivacy()">✕</button>
+    <div class="modal-title" style="font-size:18px;margin-bottom:4px;">Политика конфиденциальности</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:24px;letter-spacing:1px;">Последнее обновление: 2025</div>
+
+    <div style="display:flex;flex-direction:column;gap:22px;">
+
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent3);margin-bottom:8px;">🔒 Что мы собираем</div>
+        <p style="color:var(--muted);font-size:15px;line-height:1.7;margin-bottom:8px;">При заполнении формы заявки вы добровольно можете указать следующие данные:</p>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:5px;">
+          <li style="color:var(--muted);font-size:15px;display:flex;gap:8px;"><span style="color:var(--accent);">›</span>адрес электронной почты</li>
+          <li style="color:var(--muted);font-size:15px;display:flex;gap:8px;"><span style="color:var(--accent);">›</span>имя пользователя Telegram</li>
+          <li style="color:var(--muted);font-size:15px;display:flex;gap:8px;"><span style="color:var(--accent);">›</span>модель устройства</li>
+          <li style="color:var(--muted);font-size:15px;display:flex;gap:8px;"><span style="color:var(--accent);">›</span>описание задачи или проблемы</li>
+        </ul>
+        <p style="color:var(--muted);font-size:15px;line-height:1.7;margin-top:8px;"><strong style="color:var(--accent3);">Все данные предоставляются исключительно добровольно.</strong> Без них подача заявки невозможна, так как они нужны для обратной связи с вами.</p>
+      </div>
+
+      <div style="height:1px;background:var(--border);"></div>
+
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent3);margin-bottom:8px;">⚙️ Зачем нужны данные</div>
+        <p style="color:var(--muted);font-size:15px;line-height:1.7;">Email и Telegram используются <strong style="color:var(--text);">исключительно для обратной связи</strong> по вашей заявке. Модель устройства и описание задачи нужны для корректной обработки обращения. Данные не продаются и не передаются третьим лицам в рекламных целях. Передача возможна только в случаях, прямо предусмотренных применимым законодательством.</p>
+      </div>
+
+      <div style="height:1px;background:var(--border);"></div>
+
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent3);margin-bottom:8px;">🗂️ Хранение</div>
+        <p style="color:var(--muted);font-size:15px;line-height:1.7;">Мы стараемся хранить данные не дольше, чем это необходимо для обработки обращения.</p>
+      </div>
+
+      <div style="height:1px;background:var(--border);"></div>
+
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent3);margin-bottom:8px;">🛡️ Безопасность</div>
+        <p style="color:var(--muted);font-size:15px;line-height:1.7;">Мы стараемся применять разумные меры для защиты переданных вами сведений, однако не можем гарантировать абсолютную защиту при передаче данных через интернет.</p>
+      </div>
+
+      <div style="height:1px;background:var(--border);"></div>
+
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent3);margin-bottom:8px;">⚠️ Ограничения сервиса</div>
+        <p style="color:var(--muted);font-size:15px;line-height:1.7;">Сервис помогает с общими вопросами настройки Android-устройств. <strong style="color:var(--text);">Мы не обходим защитные ограничения производителей, операторов или платформ.</strong> Результат зависит от конкретной модели устройства, версии ОС и характера задачи. Никаких гарантий конкретного результата не предоставляется.</p>
+      </div>
+
+      <div style="height:1px;background:var(--border);"></div>
+
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent3);margin-bottom:8px;">✉️ Связь</div>
+        <p style="color:var(--muted);font-size:15px;line-height:1.7;">По вопросам, связанным с обработкой данных или удалением ваших сведений, вы можете обратиться через контакты, указанные на сайте.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ОПЛАТА (временно скрыта) -->
+
+<script>
+  let openForm = null;
+
+  function openCodes() {
+    document.getElementById('codesOverlay').classList.add('active');
+  }
+
+  function closeCodes() {
+    document.getElementById('codesOverlay').classList.remove('active');
+  }
+
+  // false = ключа нет, true = ключ есть
+  const hasUserCode = false;
+
+  function updateCodesModal() {
+    const emptyBlock = document.getElementById('codesEmpty');
+    const readyBlock = document.getElementById('codesReady');
+    if (hasUserCode) {
+      emptyBlock.style.display = 'none';
+      readyBlock.style.display = 'block';
+    } else {
+      emptyBlock.style.display = 'block';
+      readyBlock.style.display = 'none';
+    }
+  }
+
+  function copyUserCode(btn) {
+    const code = document.getElementById('userCodeValue').textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      btn.textContent = '✓ Скопировано';
+      setTimeout(() => { btn.textContent = '⧉ Скопировать ключ'; }, 2000);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', updateCodesModal);
+
+  // TAB SWITCHING
+  function switchTab(tab) {
+    const isOrder = tab === 'order';
+    document.getElementById('sectionOrder').style.display = isOrder ? '' : 'none';
+    document.getElementById('sectionCodes').style.display = isOrder ? 'none' : '';
+    document.getElementById('tabOrder').classList.toggle('active', isOrder);
+    document.getElementById('tabCodes').classList.toggle('active', !isOrder);
+    if (!isOrder) {
+      document.getElementById('codesQuery').focus();
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // CODES SEARCH
+  const KEYS = [
+    // Пример (удали или замени на реальные):
+    // { contact: "@testuser", device: "Xiaomi Mi 11", code: "IOSX-A1B2-C3D4-E5F6", date: "2025-01-15", used: false },
+  ];
+
+  window.addKey = function(contact, device, code) {
+    const today = new Date().toISOString().slice(0,10);
+    KEYS.push({ contact: contact.toLowerCase(), device, code, date: today, used: false });
+  };
+
+  function searchCodes() {
+    const q = document.getElementById('codesQuery').value.trim().toLowerCase();
+    const result = document.getElementById('codesResult');
+    const hint = document.getElementById('codesHint');
+
+    if (q.length < 3) {
+      result.innerHTML = '';
+      hint.style.display = '';
+      return;
+    }
+    hint.style.display = 'none';
+
+    const found = KEYS.filter(k => k.contact.toLowerCase().includes(q));
+
+    if (found.length === 0) {
+      result.innerHTML = `
+        <div class="codes-empty">
+          <div class="codes-empty-icon">🔎</div>
+          Заявки не найдены<br>
+          <span style="font-size:10px;">Проверьте правильность email или @username</span>
+        </div>`;
+      return;
+    }
+
+    result.innerHTML = `
+      <div style="font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;">
+        Найдено заявок: ${found.length}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        ${found.map((k, i) => `
+          <div class="code-card">
+            <div class="code-card-header">
+              <div class="code-device">${k.device}</div>
+              <div class="code-date">${k.date}</div>
+            </div>
+            <div class="code-value-wrap">
+              <div class="code-value" id="cval-${i}">${k.code}</div>
+              <button class="code-copy-btn" onclick="copyCode('cval-${i}', this)">⧉ Копировать</button>
+            </div>
+            <div class="code-status ${k.used ? 'used' : 'active'}">
+              <span>${k.used ? '⬤' : '⬤'}</span>
+              ${k.used ? 'Использован' : 'Активен'}
+            </div>
+          </div>
+        `).join('')}
+      </div>`;
+  }
+
+  function copyCode(id, btn) {
+    const text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).catch(() => {});
+    btn.textContent = '✓ Скопировано';
+    setTimeout(() => btn.textContent = '⧉ Копировать', 2000);
+  }
+
+  // STEPS
+  function setStep(n) {
+    [1,2,3].forEach(i => {
+      const el = document.getElementById('step' + i);
+      el.classList.remove('active','done');
+      if (i < n) el.classList.add('done');
+      if (i === n) el.classList.add('active');
+    });
+    ['page1','page2','page3'].forEach((id,i) => {
+      document.getElementById(id).classList.toggle('active', i+1 === n);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // SUBMIT FORM (Formspree)
+  async function submitRequest() {
+    const email = document.getElementById('email').value.trim();
+    const username = document.getElementById('username').value.trim();
+    const device = document.getElementById('deviceHidden').value.trim();
+    const status = document.getElementById('formStatus');
+
+    if (!email || !username || !device) {
+      status.textContent = !device && document.getElementById('deviceSearch').value
+        ? '⚠ ВЫБЕРИ УСТРОЙСТВО ИЗ СПИСКА'
+        : '⚠ ЗАПОЛНИ ВСЕ ПОЛЯ';
+      status.style.color = 'var(--red)';
+      status.classList.add('visible');
+      return;
+    }
+
+    status.textContent = 'ОТПРАВКА...';
+    status.style.color = 'var(--muted)';
+    status.classList.add('visible');
+
+    const form = document.getElementById('requestForm');
+    const data = new FormData(form);
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!res.ok) throw new Error('Form error');
+    } catch(e) {
+      status.textContent = '⚠ ОШИБКА ОТПРАВКИ — ПОПРОБУЙ ЕЩЁ РАЗ';
+      status.style.color = 'var(--red)';
+      return;
+    }
+
+    document.getElementById('confirmEmail').textContent = email;
+    document.getElementById('confirmUser').textContent = username;
+    document.getElementById('confirmDevice').textContent = device;
+    setStep(3);
+  }
+
+  function goToPayment() { setStep(2); }
+
+  // PRIVACY MODAL
+  function openPrivacy() { document.getElementById('privacyOverlay').classList.add('active'); }
+  function closePrivacy() { document.getElementById('privacyOverlay').classList.remove('active'); }
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closePrivacy(); } });
+
+  // MODAL
+  function openModal() {
+    document.getElementById('modalOverlay').classList.add('active');
+    document.getElementById('keyReveal').classList.remove('active');
+    document.getElementById('payStatus').classList.remove('visible');
+  }
+
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+  function overlayClick(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+
+  // TOGGLE PAY FORM
+  function toggleForm(id) {
+    const form = document.getElementById('form-' + id);
+    const row = form.previousElementSibling;
+
+    if (openForm && openForm !== id) {
+      document.getElementById('form-' + openForm).classList.remove('active');
+      document.getElementById('form-' + openForm).previousElementSibling.classList.remove('active');
+    }
+
+    const isOpen = form.classList.contains('active');
+    form.classList.toggle('active', !isOpen);
+    row.classList.toggle('active', !isOpen);
+    openForm = isOpen ? null : id;
+  }
+
+  // COPY
+  function copyAddr(id, btn) {
+    const text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).catch(() => {});
+    btn.textContent = '✓ Скопировано';
+    setTimeout(() => btn.textContent = '⧉ Скопировать адрес', 2000);
+  }
+
+  // DEVICE SEARCH — smart, curated list ~300 popular models
+  const devicesByBrand = {
+    "Xiaomi": [
+      "Xiaomi 11T","Xiaomi 11T Pro",
+      "Xiaomi 12","Xiaomi 12 Lite","Xiaomi 12 Pro","Xiaomi 12T","Xiaomi 12T Pro",
+      "Xiaomi 13","Xiaomi 13 Lite","Xiaomi 13 Pro","Xiaomi 13T","Xiaomi 13T Pro",
+      "Xiaomi 14","Xiaomi 14 Pro","Xiaomi 14 Ultra","Xiaomi 14T","Xiaomi 14T Pro",
+      "Xiaomi 15","Xiaomi 15 Pro","Xiaomi 15 Ultra",
+      "Xiaomi MIX 4","Xiaomi MIX Fold","Xiaomi MIX Fold 2","Xiaomi MIX Fold 3",
+      "Xiaomi Pad 6","Xiaomi Pad 6 Pro"
+    ],
+    "Redmi": [
+      "Redmi 9","Redmi 9A","Redmi 9C","Redmi 9T",
+      "Redmi 10","Redmi 10A","Redmi 10C",
+      "Redmi 12","Redmi 12C","Redmi 12 5G",
+      "Redmi 13","Redmi 13C","Redmi 13 5G",
+      "Redmi Note 9","Redmi Note 9 Pro","Redmi Note 9S",
+      "Redmi Note 10","Redmi Note 10 Pro","Redmi Note 10S","Redmi Note 10 5G",
+      "Redmi Note 11","Redmi Note 11 Pro","Redmi Note 11S","Redmi Note 11 5G",
+      "Redmi Note 12","Redmi Note 12 Pro","Redmi Note 12 Pro+","Redmi Note 12S","Redmi Note 12 5G","Redmi Note 12 Turbo",
+      "Redmi Note 13","Redmi Note 13 Pro","Redmi Note 13 Pro+","Redmi Note 13 5G",
+      "Redmi K60","Redmi K60 Pro","Redmi K70","Redmi K70 Pro"
+    ],
+    "POCO": [
+      "POCO F3","POCO F4","POCO F4 GT","POCO F5","POCO F5 Pro","POCO F6","POCO F6 Pro",
+      "POCO X3","POCO X3 NFC","POCO X3 Pro","POCO X4 GT","POCO X4 Pro 5G",
+      "POCO X5","POCO X5 Pro","POCO X6","POCO X6 Pro","POCO X6 Neo",
+      "POCO M3","POCO M3 Pro","POCO M4","POCO M4 Pro","POCO M4 5G","POCO M5","POCO M5s","POCO M6 Pro",
+      "POCO C40","POCO C50","POCO C55","POCO C65"
+    ],
+    "Samsung Galaxy S": [
+      "Samsung Galaxy S20","Samsung Galaxy S20+","Samsung Galaxy S20 Ultra",
+      "Samsung Galaxy S21","Samsung Galaxy S21+","Samsung Galaxy S21 Ultra",
+      "Samsung Galaxy S21 FE",
+      "Samsung Galaxy S22","Samsung Galaxy S22+","Samsung Galaxy S22 Ultra",
+      "Samsung Galaxy S23","Samsung Galaxy S23+","Samsung Galaxy S23 Ultra",
+      "Samsung Galaxy S23 FE",
+      "Samsung Galaxy S24","Samsung Galaxy S24+","Samsung Galaxy S24 Ultra",
+      "Samsung Galaxy S24 FE",
+      "Samsung Galaxy S25","Samsung Galaxy S25+","Samsung Galaxy S25 Ultra"
+    ],
+    "Samsung Galaxy A": [
+      "Samsung Galaxy A03","Samsung Galaxy A03s","Samsung Galaxy A04","Samsung Galaxy A04s",
+      "Samsung Galaxy A13","Samsung Galaxy A13 5G","Samsung Galaxy A14","Samsung Galaxy A14 5G",
+      "Samsung Galaxy A23","Samsung Galaxy A23 5G","Samsung Galaxy A24",
+      "Samsung Galaxy A33 5G","Samsung Galaxy A34","Samsung Galaxy A34 5G",
+      "Samsung Galaxy A52","Samsung Galaxy A52s","Samsung Galaxy A53 5G","Samsung Galaxy A54",
+      "Samsung Galaxy A55","Samsung Galaxy A55 5G",
+      "Samsung Galaxy A73 5G","Samsung Galaxy A74"
+    ],
+    "Samsung Galaxy M/F": [
+      "Samsung Galaxy M13","Samsung Galaxy M14","Samsung Galaxy M23","Samsung Galaxy M33",
+      "Samsung Galaxy M34","Samsung Galaxy M53","Samsung Galaxy M54",
+      "Samsung Galaxy F14","Samsung Galaxy F23","Samsung Galaxy F34","Samsung Galaxy F54"
+    ],
+    "Samsung Galaxy Z": [
+      "Samsung Galaxy Z Fold 3","Samsung Galaxy Z Fold 4","Samsung Galaxy Z Fold 5","Samsung Galaxy Z Fold 6",
+      "Samsung Galaxy Z Flip 3","Samsung Galaxy Z Flip 4","Samsung Galaxy Z Flip 5","Samsung Galaxy Z Flip 6"
+    ]
+  };
+
+  // Flat list for search
+  const allDevices = Object.values(devicesByBrand).flat();
+
+  const deviceSearch = document.getElementById('deviceSearch');
+  const deviceList   = document.getElementById('deviceList');
+  const deviceHidden = document.getElementById('deviceHidden');
+
+  // Score a device name against a query for smart ranking
+  function scoreDevice(name, query) {
+    const n = name.toLowerCase();
+    const q = query.toLowerCase().trim();
+    if (n === q) return 100;
+    if (n.startsWith(q)) return 80;
+    const words = q.split(/\s+/);
+    if (words.every(w => n.includes(w))) return 60;
+    if (n.includes(q)) return 50;
+    if (words.some(w => n.includes(w))) return 20;
+    return 0;
+  }
+
+  function selectDevice(device) {
+    deviceSearch.value  = device;
+    deviceHidden.value  = device;
+    deviceList.innerHTML = '';
+    deviceSearch.style.borderColor = 'var(--green)';
+    setTimeout(() => { deviceSearch.style.borderColor = ''; }, 1200);
+  }
+
+  function renderBrandList() {
+    deviceList.innerHTML = '';
+    Object.keys(devicesByBrand).forEach(brand => {
+      const div = document.createElement('div');
+      div.className = 'device-item device-brand';
+      const count = devicesByBrand[brand].length;
+      div.innerHTML = `<span>${brand}</span><span style="color:var(--dim);font-size:12px;font-family:'Share Tech Mono',monospace">${count} моделей ›</span>`;
+      div.addEventListener('click', (e) => { e.stopPropagation(); renderBrandDevices(brand); });
+      deviceList.appendChild(div);
+    });
+    // Always show "Other device" at the bottom
+    appendOtherOption();
+  }
+
+  function renderBrandDevices(brand) {
+    deviceList.innerHTML = '';
+    const back = document.createElement('div');
+    back.className = 'device-item device-back';
+    back.innerHTML = '‹ Назад к брендам';
+    back.addEventListener('click', (e) => { e.stopPropagation(); renderBrandList(); });
+    deviceList.appendChild(back);
+    devicesByBrand[brand].forEach(device => {
+      const div = document.createElement('div');
+      div.className = 'device-item';
+      div.textContent = device;
+      div.addEventListener('click', (e) => { e.stopPropagation(); selectDevice(device); });
+      deviceList.appendChild(div);
+    });
+  }
+
+  function appendOtherOption() {
+    const div = document.createElement('div');
+    div.className = 'device-item';
+    div.style.cssText = 'color:var(--muted);border-top:1px solid var(--border);margin-top:4px;';
+    div.textContent = '✏ Другое устройство — ввести вручную';
+    div.addEventListener('click', (e) => {
+      e.stopPropagation();
+      deviceSearch.value = '';
+      deviceHidden.value = '';
+      deviceList.innerHTML = '';
+      deviceSearch.focus();
+      deviceSearch.placeholder = 'Введите название вашего устройства...';
+    });
+    deviceList.appendChild(div);
+  }
+
+  function renderSearchResults(query) {
+    deviceList.innerHTML = '';
+    const q = query.toLowerCase().trim();
+
+    // Score and filter
+    const results = allDevices
+      .map(d => ({ name: d, score: scoreDevice(d, q) }))
+      .filter(r => r.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 25);
+
+    if (results.length === 0) {
+      // No matches — allow custom input
+      const info = document.createElement('div');
+      info.className = 'device-item';
+      info.style.color = 'var(--muted)';
+      info.textContent = '🔍 Совпадений нет';
+      deviceList.appendChild(info);
+      const custom = document.createElement('div');
+      custom.className = 'device-item';
+      custom.style.cssText = 'color:var(--accent2);border-top:1px solid var(--border);margin-top:4px;';
+      custom.innerHTML = `✏ Использовать «${deviceSearch.value.trim()}» как название устройства`;
+      custom.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectDevice(deviceSearch.value.trim());
+      });
+      deviceList.appendChild(custom);
+      // Also update hidden so user can submit as-is
+      deviceHidden.value = deviceSearch.value.trim();
+      return;
+    }
+
+    results.forEach(r => {
+      const div = document.createElement('div');
+      div.className = 'device-item';
+      // Highlight matched part
+      const highlighted = r.name.replace(new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi'),
+        '<span style="color:var(--accent);font-weight:700">$1</span>');
+      div.innerHTML = highlighted;
+      div.addEventListener('click', (e) => { e.stopPropagation(); selectDevice(r.name); });
+      deviceList.appendChild(div);
+    });
+
+    // Custom input option at the bottom if typed something specific
+    const typed = deviceSearch.value.trim();
+    if (typed && !allDevices.some(d => d.toLowerCase() === typed.toLowerCase())) {
+      const custom = document.createElement('div');
+      custom.className = 'device-item';
+      custom.style.cssText = 'color:var(--muted);border-top:1px solid var(--border);margin-top:4px;font-size:13px;';
+      custom.innerHTML = `✏ Использовать «${typed}» (ввод вручную)`;
+      custom.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectDevice(typed);
+      });
+      deviceList.appendChild(custom);
+      // Allow submit with custom text
+      deviceHidden.value = typed;
+    }
+  }
+
+  deviceSearch.addEventListener('focus', () => {
+    deviceSearch.style.borderColor = 'var(--accent)';
+    if (!deviceSearch.value.trim()) renderBrandList();
+    else renderSearchResults(deviceSearch.value);
+  });
+
+  deviceSearch.addEventListener('blur', () => {
+    setTimeout(() => {
+      // If user typed something but didn't pick from list — use it as custom input
+      if (deviceSearch.value.trim() && !deviceHidden.value) {
+        deviceHidden.value = deviceSearch.value.trim();
+      }
+      deviceSearch.style.borderColor = '';
+      deviceList.innerHTML = '';
+    }, 200);
+  });
+
+  deviceSearch.addEventListener('input', () => {
+    const value = deviceSearch.value.trim();
+    deviceHidden.value = value; // allow custom input always
+    if (!value) { renderBrandList(); return; }
+    renderSearchResults(value);
+  });
+
+  deviceList.addEventListener('click', (e) => { e.stopPropagation(); });
+
+  document.addEventListener('click', (e) => {
+    if (!deviceSearch.contains(e.target) && !deviceList.contains(e.target)) {
+      deviceList.innerHTML = '';
+    }
+  });
+
+  function processPayment(type) {
+    const status = document.getElementById('payStatus');
+    const btn = document.getElementById(type + 'Btn');
+
+    btn.textContent = 'ОБРАБОТКА...';
+    status.classList.remove('visible');
+
+    setTimeout(() => {
+      document.getElementById('keyReveal').classList.add('active');
+      btn.textContent = '✓ Запрос принят';
+      status.textContent = '✓ Проверяем транзакцию — ключ придёт на email';
+      status.style.color = 'var(--green)';
+      status.classList.add('visible');
+    }, 1800);
+  }
+
+  function openCabinet() {
+    loadCabinet();
+    document.getElementById('cabinetOverlay').classList.add('active');
+  }
+
+  function closeCabinet() {
+    document.getElementById('cabinetOverlay').classList.remove('active');
+  }
+
+  function saveCabinet() {
+    var telegram = document.getElementById('cabinetTelegram').value.trim();
+    var status   = document.getElementById('cabinetSaveStatus');
+    // Email comes from session — password is NEVER stored in localStorage
+    localStorage.setItem('iosxTelegram', telegram);
+    status.textContent = '✓ Данные сохранены';
+    status.style.color = 'var(--green)';
+    status.classList.add('visible');
+    setTimeout(function() { status.classList.remove('visible'); }, 3000);
+  }
+
+  function loadCabinet() {
+    try {
+      var session = JSON.parse(sessionStorage.getItem('iosxSession') || '{}');
+      document.getElementById('cabinetEmail').value = session.email || '';
+    } catch(e) {}
+    document.getElementById('cabinetPassword').value = ''; // never pre-fill password
+    document.getElementById('cabinetTelegram').value = localStorage.getItem('iosxTelegram') || '';
+  }
+</script>
+
+<script>
+  // --- SECURE AUTH (frontend-ready, plug in real API later) ---
+
+  // ── Helpers ──────────────────────────────────────────────────────────────
+
+  // Sanitize string to prevent XSS when injecting into DOM
+  function sanitize(str) {
+    var d = document.createElement('div');
+    d.appendChild(document.createTextNode(str));
+    return d.innerHTML;
+  }
+
+  // Validate email format
+  function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  // Generate a random session token (replaces storing password)
+  function generateToken() {
+    var arr = new Uint8Array(24);
+    crypto.getRandomValues(arr);
+    return Array.from(arr).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  // Hash password with SHA-256 (for local demo — on real backend use bcrypt server-side)
+  async function hashPassword(password) {
+    var enc = new TextEncoder().encode(password);
+    var buf = await crypto.subtle.digest('SHA-256', enc);
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  // ── Brute-force protection removed ───────────────────────────────────────
+  function isLockedOut() { return false; }
+  function recordFailedAttempt() {}
+  function resetAttempts() {}
+
+  // ── UI helpers ────────────────────────────────────────────────────────────
+  let isEmailSignInMode = false;
+
+  function setAuthStatus(message, color) {
+    color = color || 'var(--muted)';
+    var status = document.getElementById('authStatus');
+    status.textContent = message; // textContent — safe, no XSS
+    status.style.color = color;
+    status.classList.toggle('visible', !!message);
+  }
+
+  function showApp() {
+    document.getElementById('authScreen').style.display = 'none';
+    document.getElementById('appContent').style.display = '';
+  }
+
+  function setAuthMode(signInMode) {
+    isEmailSignInMode = signInMode;
+    document.getElementById('authActionBtn').innerHTML = signInMode
+      ? '<span>Войти</span>'
+      : '<span>Создать аккаунт</span>';
+    document.getElementById('authSwitchBtn').textContent = signInMode
+      ? 'Нет аккаунта? Создать'
+      : 'Уже есть аккаунт? Войти';
+    document.getElementById('authPassword').autocomplete = signInMode ? 'current-password' : 'new-password';
+    setAuthStatus('');
+  }
+
+  window.toggleAuthMode = function() { setAuthMode(!isEmailSignInMode); };
+
+  window.signInWithGoogle = function() {
+    setAuthStatus('Вход через Google временно недоступен', 'var(--muted)');
+  };
+
+  // ── Main auth handler ─────────────────────────────────────────────────────
+  window.handleEmailAuth = async function() {
+    var btn      = document.getElementById('authActionBtn');
+    var email    = document.getElementById('authEmail').value.trim().toLowerCase();
+    var password = document.getElementById('authPassword').value;
+
+    // 1. Basic validation
+    if (!email || !password) {
+      setAuthStatus('Пожалуйста, заполните все поля', 'var(--red)'); return;
+    }
+    if (!isValidEmail(email)) {
+      setAuthStatus('Введите корректный email', 'var(--red)'); return;
+    }
+    if (password.length < 8) {
+      setAuthStatus('Минимум 8 символов', 'var(--red)'); return;
+    }
+
+    // 3. Lock UI during request
+    btn.disabled = true;
+    btn.innerHTML = '<span>Проверяем...</span>';
+
+    try {
+      var pwHash = await hashPassword(password);
+
+      // ── TODO: replace this block with real API call ──────────────────────
+      // Example when you add a backend:
+      //
+      // var res = await fetch('/api/auth', {
+      //   method: 'POST',
+      //   headers: {'Content-Type':'application/json'},
+      //   body: JSON.stringify({ email, passwordHash: pwHash, mode: isEmailSignInMode ? 'login' : 'register' })
+      // });
+      // var data = await res.json();
+      // if (!res.ok) throw new Error(data.error || 'Ошибка сервера');
+      // var token = data.token;
+      // ────────────────────────────────────────────────────────────────────
+
+      // TEMP: local stub (remove when backend is ready)
+      var stored = localStorage.getItem('iosxUser');
+      var token;
+      if (isEmailSignInMode) {
+        // Login
+        if (!stored) { throw new Error('Аккаунт не найден. Создайте аккаунт'); }
+        var user = JSON.parse(stored);
+        if (user.email !== email) { throw new Error('Аккаунт не найден. Создайте аккаунт'); }
+        if (user.pwHash !== pwHash) { throw new Error('Неверный пароль'); }
+        token = generateToken();
+      } else {
+        // Register
+        if (stored && JSON.parse(stored).email === email) { throw new Error('Email уже зарегистрирован'); }
+        token = generateToken();
+        // Store ONLY email + hash — NEVER plaintext password
+        localStorage.setItem('iosxUser', JSON.stringify({ email, pwHash }));
+      }
+      // END TEMP stub
+
+      // 4. Save session (token + email only — NO password)
+      sessionStorage.setItem('iosxSession', JSON.stringify({ token, email }));
+      localStorage.setItem('iosxEmail', email); // for UX: pre-fill next time
+
+      resetAttempts();
+      showApp();
+
+    } catch(err) {
+      setAuthStatus(err.message, 'var(--red)');
+      btn.disabled = false;
+      btn.innerHTML = isEmailSignInMode ? '<span>Войти</span>' : '<span>Создать аккаунт</span>';
+    }
+  };
+
+  // ── Sign out ──────────────────────────────────────────────────────────────
+  window.signOutGoogle = function() {
+    sessionStorage.removeItem('iosxSession');
+    // localStorage: keep email for UX prefill, remove sensitive data
+    localStorage.removeItem('iosxTelegram');
+    document.getElementById('authScreen').style.display = '';
+    document.getElementById('appContent').style.display = 'none';
+    document.getElementById('cabinetOverlay').classList.remove('active');
+    setAuthStatus('');
+  };
+
+
+  // ── Forgot password ───────────────────────────────────────────────────────
+  window.openForgotPassword = function() {
+    var emailField = document.getElementById('authEmail');
+    var forgotEmailField = document.getElementById('forgotEmail');
+    if (emailField && emailField.value) {
+      forgotEmailField.value = emailField.value;
+    }
+    document.getElementById('forgotStatus').textContent = '';
+    document.getElementById('forgotStatus').classList.remove('visible');
+    document.getElementById('forgotOverlay').classList.add('active');
+    setTimeout(function() { forgotEmailField.focus(); }, 100);
+  };
+
+  window.closeForgotPassword = function() {
+    document.getElementById('forgotOverlay').classList.remove('active');
+  };
+
+  window.handleForgotPassword = async function() {
+    var email = document.getElementById('forgotEmail').value.trim().toLowerCase();
+    var status = document.getElementById('forgotStatus');
+    var btn = document.getElementById('forgotBtn');
+
+    status.style.color = 'var(--red)';
+
+    if (!email) {
+      status.textContent = 'Введите email';
+      status.classList.add('visible');
+      return;
+    }
+
+    // ── TODO: when Firebase is ready, replace this block with:
+    // import { sendPasswordResetEmail } from "firebase/auth";
+    // await sendPasswordResetEmail(auth, email);
+    // ─────────────────────────────────────────────────────────
+
+    // Local stub: check localStorage
+    var stored = localStorage.getItem('iosxUser');
+    var found = false;
+    if (stored) {
+      try {
+        var user = JSON.parse(stored);
+        if (user.email === email) found = true;
+      } catch(e) {}
+    }
+
+    if (!found) {
+      status.textContent = 'Аккаунт с таким email не найден';
+      status.classList.add('visible');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span>Отправляем...</span>';
+
+    // Simulate async delay (replace with real API call later)
+    await new Promise(function(r) { setTimeout(r, 800); });
+
+    status.style.color = 'var(--green)';
+    status.textContent = 'Инструкция отправлена. Проверьте контакт, указанный при регистрации';
+    status.classList.add('visible');
+
+    btn.disabled = false;
+    btn.innerHTML = '<span>Отправить инструкцию</span>';
+  };
+
+  // Show/hide "Забыли пароль?" depending on mode
+  var _origSetAuthMode = setAuthMode;
+  setAuthMode = function(signInMode) {
+    _origSetAuthMode(signInMode);
+    var wrap = document.getElementById('forgotPasswordWrap');
+    if (wrap) wrap.style.display = signInMode ? 'block' : 'none';
+  };
+
+  // Escape key closes forgot modal too
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeForgotPassword();
+  });
+
+  // ── On page load ──────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    var session = sessionStorage.getItem('iosxSession');
+    if (session) {
+      // Valid session exists in this tab
+      showApp();
+    } else {
+      var savedEmail = localStorage.getItem('iosxEmail');
+      if (savedEmail) {
+        document.getElementById('authEmail').value = savedEmail;
+        setAuthMode(true); // switch to login mode if email is known
+      }
+    }
+  });
+</script>
+<!-- MODAL: ВАШИ КОДЫ -->
+<div class="modal-overlay" id="codesOverlay" onclick="if(event.target===this)closeCodes()">
+  <div class="modal" style="max-width:520px;">
+    <button class="modal-close" onclick="closeCodes()">✕</button>
+    <div class="modal-title" style="font-size:18px;margin-bottom:4px;">Ваши заявки</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:20px;letter-spacing:1px;">
+      История обращений
+    </div>
+
+    <div id="codesEmpty" class="code-box">
+      <div class="code-empty">Заявок пока нет. Заполните форму, чтобы подать запрос.</div>
+    </div>
+
+    <div id="codesReady" class="code-box" style="display:none;">
+      <div class="code-label">Ваш код заявки</div>
+      <div class="code-value" id="userCodeValue">IOSX-7X4P-91KM-2QRT</div>
+      <button class="copy-btn" onclick="copyUserCode(this)">⧉ Скопировать код</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="cabinetOverlay" onclick="if(event.target===this)closeCabinet()">
+  <div class="modal" style="max-width:520px;">
+    <button class="modal-close" onclick="closeCabinet()">✕</button>
+
+    <div class="modal-title" style="font-size:18px;margin-bottom:4px;">Ваш кабинет</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:20px;letter-spacing:1px;">
+      Личные данные
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" id="cabinetEmail" class="form-input" placeholder="user@example.com">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Пароль</label>
+      <input type="password" id="cabinetPassword" class="form-input" placeholder="Минимум 8 символов" autocomplete="current-password">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Telegram</label>
+      <input type="text" id="cabinetTelegram" class="form-input" placeholder="@username">
+      <div style="font-size:11px;color:var(--dim);margin-top:6px;">
+        Укажите Telegram для связи по заявкам
+      </div>
+    </div>
+
+    <button type="button" class="btn" onclick="saveCabinet()" style="margin-bottom:10px;">
+      <span>Сохранить данные →</span>
+    </button>
+
+    <button type="button" onclick="signOutGoogle()" style="
+      width:100%;padding:11px;border-radius:14px;
+      background:transparent;border:1px solid rgba(251,113,133,0.2);
+      color:var(--red);font-family:'Rajdhani',sans-serif;
+      font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;
+      letter-spacing:0.5px;
+    "
+    onmouseover="this.style.background='rgba(251,113,133,0.07)'"
+    onmouseout="this.style.background='transparent'">
+      Выйти
+    </button>
+
+    <div class="status-msg" id="cabinetSaveStatus" style="margin-top:12px;"></div>
+  </div>
+</div>
+
+</div>
+
+
+<!-- MODAL: ВОССТАНОВЛЕНИЕ ПАРОЛЯ -->
+<div class="modal-overlay" id="forgotOverlay" onclick="if(event.target===this)closeForgotPassword()">
+  <div class="modal" style="max-width:460px;">
+    <button class="modal-close" onclick="closeForgotPassword()">✕</button>
+    <div class="modal-title" style="font-size:18px;margin-bottom:4px;">Восстановление доступа</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:24px;letter-spacing:1px;">
+      Укажите email, указанный при регистрации
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" id="forgotEmail" class="form-input" placeholder="user@gmail.com" autocomplete="email" inputmode="email">
+    </div>
+    <button type="button" class="btn" onclick="handleForgotPassword()" id="forgotBtn">
+      <span>Отправить инструкцию</span>
+    </button>
+    <div class="status-msg" id="forgotStatus" style="margin-top:14px;height:auto;min-height:16px;line-height:1.5;"></div>
+  </div>
+</div>
+
+</body>
+</html>
