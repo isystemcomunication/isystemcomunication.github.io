@@ -902,7 +902,7 @@
     </div>
     <div class="form-group">
       <label class="form-label">Пароль</label>
-      <input type="password" id="authPassword" name="password" class="form-input" placeholder="Минимум 8 символов" minlength="6" autocomplete="current-password">
+      <input type="password" id="authPassword" name="password" class="form-input" placeholder="Минимум 8 символов" minlength="8" autocomplete="current-password">
     </div>
     <div id="forgotPasswordWrap" style="display:none;text-align:right;margin-top:-6px;margin-bottom:10px;">
       <button type="button" onclick="openForgotPassword()" style="background:none;border:none;color:var(--accent2);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;cursor:pointer;padding:4px 0;letter-spacing:0.3px;transition:color 0.2s;" onmouseover="this.style.color='var(--accent3)'" onmouseout="this.style.color='var(--accent2)'">Забыли пароль?</button>
@@ -911,6 +911,21 @@
     </form>
     <button type="button" class="auth-switch-btn" id="authSwitchBtn" onclick="toggleAuthMode()">Уже есть аккаунт? Войти</button>
     <div class="status-msg" id="authStatus"></div>
+
+    <!-- Verification pending state -->
+    <div id="verifyPending" style="display:none;margin-top:16px;padding:20px;background:rgba(76,201,240,0.06);border:1px solid rgba(76,201,240,0.2);border-radius:16px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:10px;">✉️</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;">Подтвердите email</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:18px;" id="verifyEmailHint">Письмо подтверждения отправлено на вашу почту</div>
+      <button type="button" class="btn" onclick="checkEmailVerified()" id="verifyCheckBtn" style="margin-bottom:10px;">
+        <span>Я подтвердил →</span>
+      </button>
+      <button type="button" onclick="resendVerification()" id="verifyResendBtn" style="width:100%;padding:10px;border-radius:14px;background:transparent;border:1px solid rgba(76,201,240,0.2);color:var(--accent2);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;" onmouseover="this.style.background='rgba(76,201,240,0.07)'" onmouseout="this.style.background='transparent'">
+        Отправить письмо ещё раз
+      </button>
+      <div class="status-msg" id="verifyStatus" style="margin-top:10px;height:auto;min-height:14px;line-height:1.5;"></div>
+    </div>
+
   </div>
 </div>
 
@@ -1594,178 +1609,313 @@
   }
 
   function loadCabinet() {
-    try {
-      var session = JSON.parse(sessionStorage.getItem('iosxSession') || '{}');
-      document.getElementById('cabinetEmail').value = session.email || '';
-    } catch(e) {}
-    document.getElementById('cabinetPassword').value = ''; // never pre-fill password
+    // Берём email из реального Firebase-пользователя
+    getFirebaseAuth().then(function(fb) {
+      var user = fb.auth.currentUser;
+      var emailEl = document.getElementById('cabinetEmail');
+      if (emailEl && user) emailEl.value = user.email || '';
+    }).catch(function(){});
+    document.getElementById('cabinetPassword').value = '';
     document.getElementById('cabinetTelegram').value = localStorage.getItem('iosxTelegram') || '';
   }
 </script>
 
 <script>
-  // --- SECURE AUTH (frontend-ready, plug in real API later) ---
+  // --- FIREBASE AUTH: email/password + email verification link ---
 
-  // ── Helpers ──────────────────────────────────────────────────────────────
-
-  // Sanitize string to prevent XSS when injecting into DOM
   function sanitize(str) {
     var d = document.createElement('div');
-    d.appendChild(document.createTextNode(str));
+    d.appendChild(document.createTextNode(str || ''));
     return d.innerHTML;
   }
 
-  // Validate email format
+  var _fbAuth = null;
+  async function getFirebaseAuth() {
+    if (_fbAuth) return _fbAuth;
+
+    var firebaseConfig = {
+      apiKey:            "AIzaSyDpjJemT5tAxPmuLEmqtib5yKuw8_shKok",
+      authDomain:        "iosx-71a9d.firebaseapp.com",
+      projectId:         "iosx-71a9d",
+      storageBucket:     "iosx-71a9d.firebasestorage.app",
+      messagingSenderId: "99982710026",
+      appId:             "1:99982710026:web:7957b7a3c051ad96ac16f3"
+    };
+
+    var appModule = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+    var authModule = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+
+    var app = appModule.getApps().length ? appModule.getApps()[0] : appModule.initializeApp(firebaseConfig);
+    var auth = authModule.getAuth(app);
+    auth.languageCode = 'ru';
+
+    _fbAuth = {
+      auth: auth,
+      createUserWithEmailAndPassword: authModule.createUserWithEmailAndPassword,
+      signInWithEmailAndPassword: authModule.signInWithEmailAndPassword,
+      sendEmailVerification: authModule.sendEmailVerification,
+      sendPasswordResetEmail: authModule.sendPasswordResetEmail,
+      onAuthStateChanged: authModule.onAuthStateChanged,
+      signOut: authModule.signOut,
+      GoogleAuthProvider: authModule.GoogleAuthProvider,
+      signInWithPopup: authModule.signInWithPopup
+    };
+
+    return _fbAuth;
+  }
+
   function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email || '');
   }
 
-  // Generate a random session token (replaces storing password)
-  function generateToken() {
-    var arr = new Uint8Array(24);
-    crypto.getRandomValues(arr);
-    return Array.from(arr).map(b => b.toString(16).padStart(2,'0')).join('');
+  var isEmailSignInMode = false;
+
+  function setTextStatus(id, message, color) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = message || '';
+    el.style.color = color || 'var(--muted)';
+    el.classList.toggle('visible', !!message);
   }
-
-  // Hash password with SHA-256 (for local demo — on real backend use bcrypt server-side)
-  async function hashPassword(password) {
-    var enc = new TextEncoder().encode(password);
-    var buf = await crypto.subtle.digest('SHA-256', enc);
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-  }
-
-  // ── Brute-force protection removed ───────────────────────────────────────
-  function isLockedOut() { return false; }
-  function recordFailedAttempt() {}
-  function resetAttempts() {}
-
-  // ── UI helpers ────────────────────────────────────────────────────────────
-  let isEmailSignInMode = false;
 
   function setAuthStatus(message, color) {
-    color = color || 'var(--muted)';
-    var status = document.getElementById('authStatus');
-    status.textContent = message; // textContent — safe, no XSS
-    status.style.color = color;
-    status.classList.toggle('visible', !!message);
+    setTextStatus('authStatus', message, color);
+  }
+
+  function setVerifyStatus(message, color) {
+    setTextStatus('verifyStatus', message, color);
+  }
+
+  function showAuthForm() {
+    document.getElementById('authScreen').style.display = '';
+    document.getElementById('appContent').style.display = 'none';
+    document.getElementById('authForm').style.display = '';
+    document.getElementById('authGoogleBtn').style.display = '';
+    var divider = document.querySelector('.auth-divider');
+    if (divider) divider.style.display = '';
+    document.getElementById('authSwitchBtn').style.display = '';
+    document.getElementById('verifyPending').style.display = 'none';
   }
 
   function showApp() {
     document.getElementById('authScreen').style.display = 'none';
     document.getElementById('appContent').style.display = '';
+    var cabinetOverlay = document.getElementById('cabinetOverlay');
+    if (cabinetOverlay) cabinetOverlay.classList.remove('active');
+    var codesOverlay = document.getElementById('codesOverlay');
+    if (codesOverlay) codesOverlay.classList.remove('active');
+  }
+
+  function showVerifyPending(hintText) {
+    document.getElementById('authScreen').style.display = '';
+    document.getElementById('appContent').style.display = 'none';
+    document.getElementById('authForm').style.display = 'none';
+    document.getElementById('authGoogleBtn').style.display = 'none';
+    var divider = document.querySelector('.auth-divider');
+    if (divider) divider.style.display = 'none';
+    document.getElementById('authSwitchBtn').style.display = 'none';
+    document.getElementById('verifyPending').style.display = '';
+    document.getElementById('verifyEmailHint').textContent = hintText || 'Письмо со ссылкой подтверждения отправлено на вашу почту';
+    setAuthStatus('');
+    setVerifyStatus('');
   }
 
   function setAuthMode(signInMode) {
-    isEmailSignInMode = signInMode;
-    document.getElementById('authActionBtn').innerHTML = signInMode
+    isEmailSignInMode = !!signInMode;
+    document.getElementById('authActionBtn').innerHTML = isEmailSignInMode
       ? '<span>Войти</span>'
       : '<span>Создать аккаунт</span>';
-    document.getElementById('authSwitchBtn').textContent = signInMode
+    document.getElementById('authSwitchBtn').textContent = isEmailSignInMode
       ? 'Нет аккаунта? Создать'
       : 'Уже есть аккаунт? Войти';
-    document.getElementById('authPassword').autocomplete = signInMode ? 'current-password' : 'new-password';
+    document.getElementById('authPassword').autocomplete = isEmailSignInMode ? 'current-password' : 'new-password';
+    var forgotWrap = document.getElementById('forgotPasswordWrap');
+    if (forgotWrap) forgotWrap.style.display = isEmailSignInMode ? 'block' : 'none';
     setAuthStatus('');
   }
 
-  window.toggleAuthMode = function() { setAuthMode(!isEmailSignInMode); };
-
-  window.signInWithGoogle = function() {
-    setAuthStatus('Вход через Google временно недоступен', 'var(--muted)');
+  window.toggleAuthMode = function() {
+    setAuthMode(!isEmailSignInMode);
   };
 
-  // ── Main auth handler ─────────────────────────────────────────────────────
-  window.handleEmailAuth = async function() {
-    var btn      = document.getElementById('authActionBtn');
-    var email    = document.getElementById('authEmail').value.trim().toLowerCase();
-    var password = document.getElementById('authPassword').value;
-
-    // 1. Basic validation
-    if (!email || !password) {
-      setAuthStatus('Пожалуйста, заполните все поля', 'var(--red)'); return;
-    }
-    if (!isValidEmail(email)) {
-      setAuthStatus('Введите корректный email', 'var(--red)'); return;
-    }
-    if (password.length < 8) {
-      setAuthStatus('Минимум 8 символов', 'var(--red)'); return;
-    }
-
-    // 3. Lock UI during request
+  window.signInWithGoogle = async function() {
+    var btn = document.getElementById('authGoogleBtn');
     btn.disabled = true;
-    btn.innerHTML = '<span>Проверяем...</span>';
+    btn.style.opacity = '0.7';
+    setAuthStatus('');
 
     try {
-      var pwHash = await hashPassword(password);
-
-      // ── TODO: replace this block with real API call ──────────────────────
-      // Example when you add a backend:
-      //
-      // var res = await fetch('/api/auth', {
-      //   method: 'POST',
-      //   headers: {'Content-Type':'application/json'},
-      //   body: JSON.stringify({ email, passwordHash: pwHash, mode: isEmailSignInMode ? 'login' : 'register' })
-      // });
-      // var data = await res.json();
-      // if (!res.ok) throw new Error(data.error || 'Ошибка сервера');
-      // var token = data.token;
-      // ────────────────────────────────────────────────────────────────────
-
-      // TEMP: local stub (remove when backend is ready)
-      var stored = localStorage.getItem('iosxUser');
-      var token;
-      if (isEmailSignInMode) {
-        // Login
-        if (!stored) { throw new Error('Аккаунт не найден. Создайте аккаунт'); }
-        var user = JSON.parse(stored);
-        if (user.email !== email) { throw new Error('Аккаунт не найден. Создайте аккаунт'); }
-        if (user.pwHash !== pwHash) { throw new Error('Неверный пароль'); }
-        token = generateToken();
-      } else {
-        // Register
-        if (stored && JSON.parse(stored).email === email) { throw new Error('Email уже зарегистрирован'); }
-        token = generateToken();
-        // Store ONLY email + hash — NEVER plaintext password
-        localStorage.setItem('iosxUser', JSON.stringify({ email, pwHash }));
+      var fb = await getFirebaseAuth();
+      var provider = new fb.GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+      var result = await fb.signInWithPopup(fb.auth, provider);
+      if (result.user) {
+        showApp();
       }
-      // END TEMP stub
-
-      // 4. Save session (token + email only — NO password)
-      sessionStorage.setItem('iosxSession', JSON.stringify({ token, email }));
-      localStorage.setItem('iosxEmail', email); // for UX: pre-fill next time
-
-      resetAttempts();
-      showApp();
-
-    } catch(err) {
-      setAuthStatus(err.message, 'var(--red)');
-      btn.disabled = false;
-      btn.innerHTML = isEmailSignInMode ? '<span>Войти</span>' : '<span>Создать аккаунт</span>';
+    } catch (err) {
+      var msg = {
+        'auth/popup-closed-by-user':   'Окно входа закрыто. Попробуйте ещё раз',
+        'auth/popup-blocked':          'Браузер заблокировал всплывающее окно. Разрешите pop-up и попробуйте снова',
+        'auth/cancelled-popup-request':'Запрос отменён. Попробуйте ещё раз',
+        'auth/network-request-failed': 'Ошибка сети. Проверьте интернет',
+        'auth/unauthorized-domain':    'Домен не авторизован — добавьте его в Firebase Console → Authentication → Settings',
+        'auth/account-exists-with-different-credential': 'Этот email уже используется с другим способом входа'
+      }[err.code] || ('Ошибка: ' + (err.message || err.code));
+      setAuthStatus(msg, 'var(--red)');
     }
+
+    btn.disabled = false;
+    btn.style.opacity = '';
   };
 
-  // ── Sign out ──────────────────────────────────────────────────────────────
-  window.signOutGoogle = function() {
-    sessionStorage.removeItem('iosxSession');
-    // localStorage: keep email for UX prefill, remove sensitive data
-    localStorage.removeItem('iosxTelegram');
-    document.getElementById('authScreen').style.display = '';
-    document.getElementById('appContent').style.display = 'none';
-    document.getElementById('cabinetOverlay').classList.remove('active');
+  function getEmailActionSettings() {
+    var cleanUrl = window.location.origin && window.location.origin !== 'null'
+      ? window.location.origin + window.location.pathname
+      : 'https://isystemcomunication.github.io/IOSx.github.io/';
+    return {
+      url: cleanUrl,
+      handleCodeInApp: false
+    };
+  }
+
+  async function sendVerificationToCurrentUser() {
+    var fb = await getFirebaseAuth();
+    var user = fb.auth.currentUser;
+    if (!user) throw new Error('no_user');
+    await fb.sendEmailVerification(user, getEmailActionSettings());
+  }
+
+  window.handleEmailAuth = async function() {
+    var btn = document.getElementById('authActionBtn');
+    var email = document.getElementById('authEmail').value.trim().toLowerCase();
+    var password = document.getElementById('authPassword').value;
+
+    if (!email || !password) {
+      setAuthStatus('Пожалуйста, заполните email и пароль', 'var(--red)');
+      return;
+    }
+    if (!isValidEmail(email)) {
+      setAuthStatus('Введите корректный email', 'var(--red)');
+      return;
+    }
+    if (password.length < 8) {
+      setAuthStatus('Пароль должен быть минимум 8 символов', 'var(--red)');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span>Проверяем...</span>';
+    setAuthStatus('');
+
+    try {
+      var fb = await getFirebaseAuth();
+
+      if (isEmailSignInMode) {
+        var loginResult = await fb.signInWithEmailAndPassword(fb.auth, email, password);
+        localStorage.setItem('iosxEmail', email);
+
+        if (!loginResult.user.emailVerified) {
+          showVerifyPending('Сначала подтвердите email по ссылке из письма, затем нажмите «Я подтвердил»');
+          btn.disabled = false;
+          btn.innerHTML = '<span>Войти</span>';
+          return;
+        }
+
+        showApp();
+        return;
+      }
+
+      var registerResult = await fb.createUserWithEmailAndPassword(fb.auth, email, password);
+      localStorage.setItem('iosxEmail', email);
+      sessionStorage.setItem('iosxJustRegistered', '1');
+
+      await fb.sendEmailVerification(registerResult.user, getEmailActionSettings());
+      showVerifyPending('Мы отправили на почту ссылку подтверждения. Откройте письмо, нажмите ссылку, затем вернитесь и нажмите «Я подтвердил»');
+
+    } catch (err) {
+      var msg = {
+        'auth/email-already-in-use': 'Этот email уже зарегистрирован. Нажмите «Уже есть аккаунт? Войти»',
+        'auth/user-not-found': 'Аккаунт не найден. Создайте аккаунт',
+        'auth/wrong-password': 'Неверный пароль',
+        'auth/invalid-credential': 'Неверный email или пароль',
+        'auth/invalid-email': 'Введите корректный email',
+        'auth/weak-password': 'Пароль должен быть минимум 8 символов',
+        'auth/too-many-requests': 'Слишком много попыток. Подождите немного',
+        'auth/network-request-failed': 'Ошибка сети. Проверьте интернет'
+      }[err.code] || 'Ошибка: ' + (err.message || 'попробуйте ещё раз');
+      setAuthStatus(msg, 'var(--red)');
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = isEmailSignInMode ? '<span>Войти</span>' : '<span>Создать аккаунт</span>';
+  };
+
+  window.checkEmailVerified = async function() {
+    var btn = document.getElementById('verifyCheckBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span>Проверяем...</span>';
+    setVerifyStatus('');
+
+    try {
+      var fb = await getFirebaseAuth();
+      var user = fb.auth.currentUser;
+      if (!user) throw new Error('no_user');
+
+      await user.reload();
+      user = fb.auth.currentUser;
+
+      if (user && user.emailVerified) {
+        sessionStorage.removeItem('iosxJustRegistered');
+        setVerifyStatus('Email подтверждён', 'var(--green)');
+        showApp();
+        return;
+      }
+
+      setVerifyStatus('Email ещё не подтверждён. Откройте письмо и нажмите ссылку', 'var(--red)');
+    } catch (e) {
+      setVerifyStatus('Ошибка проверки. Войдите заново или попробуйте позже', 'var(--red)');
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<span>Я подтвердил →</span>';
+  };
+
+  window.resendVerification = async function() {
+    var btn = document.getElementById('verifyResendBtn');
+    btn.disabled = true;
+    setVerifyStatus('Отправляем письмо...', 'var(--muted)');
+
+    try {
+      await sendVerificationToCurrentUser();
+      setVerifyStatus('Письмо отправлено ещё раз. Проверьте входящие и спам', 'var(--green)');
+    } catch (err) {
+      var msg = err.code === 'auth/too-many-requests'
+        ? 'Слишком много запросов. Подождите немного'
+        : 'Не удалось отправить письмо. Попробуйте войти заново';
+      setVerifyStatus(msg, 'var(--red)');
+    }
+
+    btn.disabled = false;
+  };
+
+  window.signOutGoogle = async function() {
+    try {
+      var fb = await getFirebaseAuth();
+      await fb.signOut(fb.auth);
+    } catch(e) {}
+    sessionStorage.removeItem('iosxJustRegistered');
+    showAuthForm();
+    setAuthMode(false);
     setAuthStatus('');
   };
 
-
-  // ── Forgot password ───────────────────────────────────────────────────────
   window.openForgotPassword = function() {
-    var emailField = document.getElementById('authEmail');
-    var forgotEmailField = document.getElementById('forgotEmail');
-    if (emailField && emailField.value) {
-      forgotEmailField.value = emailField.value;
-    }
-    document.getElementById('forgotStatus').textContent = '';
-    document.getElementById('forgotStatus').classList.remove('visible');
+    var authEmail = document.getElementById('authEmail');
+    var forgotEmail = document.getElementById('forgotEmail');
+    if (authEmail && forgotEmail && authEmail.value) forgotEmail.value = authEmail.value;
+    setTextStatus('forgotStatus', '');
     document.getElementById('forgotOverlay').classList.add('active');
-    setTimeout(function() { forgotEmailField.focus(); }, 100);
+    setTimeout(function() { if (forgotEmail) forgotEmail.focus(); }, 100);
   };
 
   window.closeForgotPassword = function() {
@@ -1774,77 +1924,71 @@
 
   window.handleForgotPassword = async function() {
     var email = document.getElementById('forgotEmail').value.trim().toLowerCase();
-    var status = document.getElementById('forgotStatus');
     var btn = document.getElementById('forgotBtn');
 
-    status.style.color = 'var(--red)';
-
     if (!email) {
-      status.textContent = 'Введите email';
-      status.classList.add('visible');
+      setTextStatus('forgotStatus', 'Введите email', 'var(--red)');
       return;
     }
-
-    // ── TODO: when Firebase is ready, replace this block with:
-    // import { sendPasswordResetEmail } from "firebase/auth";
-    // await sendPasswordResetEmail(auth, email);
-    // ─────────────────────────────────────────────────────────
-
-    // Local stub: check localStorage
-    var stored = localStorage.getItem('iosxUser');
-    var found = false;
-    if (stored) {
-      try {
-        var user = JSON.parse(stored);
-        if (user.email === email) found = true;
-      } catch(e) {}
-    }
-
-    if (!found) {
-      status.textContent = 'Аккаунт с таким email не найден';
-      status.classList.add('visible');
+    if (!isValidEmail(email)) {
+      setTextStatus('forgotStatus', 'Введите корректный email', 'var(--red)');
       return;
     }
 
     btn.disabled = true;
     btn.innerHTML = '<span>Отправляем...</span>';
 
-    // Simulate async delay (replace with real API call later)
-    await new Promise(function(r) { setTimeout(r, 800); });
-
-    status.style.color = 'var(--green)';
-    status.textContent = 'Инструкция отправлена. Проверьте контакт, указанный при регистрации';
-    status.classList.add('visible');
+    try {
+      var fb = await getFirebaseAuth();
+      await fb.sendPasswordResetEmail(fb.auth, email);
+      setTextStatus('forgotStatus', 'Ссылка восстановления отправлена на почту', 'var(--green)');
+    } catch(e) {
+      setTextStatus('forgotStatus', 'Ошибка отправки. Проверьте email и попробуйте ещё раз', 'var(--red)');
+    }
 
     btn.disabled = false;
     btn.innerHTML = '<span>Отправить инструкцию</span>';
   };
 
-  // Show/hide "Забыли пароль?" depending on mode
-  var _origSetAuthMode = setAuthMode;
-  setAuthMode = function(signInMode) {
-    _origSetAuthMode(signInMode);
-    var wrap = document.getElementById('forgotPasswordWrap');
-    if (wrap) wrap.style.display = signInMode ? 'block' : 'none';
-  };
-
-  // Escape key closes forgot modal too
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeForgotPassword();
+    if (e.key === 'Escape') {
+      var forgotOverlay = document.getElementById('forgotOverlay');
+      if (forgotOverlay) forgotOverlay.classList.remove('active');
+    }
   });
 
-  // ── On page load ──────────────────────────────────────────────────────────
-  document.addEventListener('DOMContentLoaded', function() {
-    var session = sessionStorage.getItem('iosxSession');
-    if (session) {
-      // Valid session exists in this tab
-      showApp();
-    } else {
-      var savedEmail = localStorage.getItem('iosxEmail');
-      if (savedEmail) {
-        document.getElementById('authEmail').value = savedEmail;
-        setAuthMode(true); // switch to login mode if email is known
-      }
+  document.addEventListener('DOMContentLoaded', async function() {
+    showAuthForm();
+    setAuthMode(false);
+
+    var savedEmail = localStorage.getItem('iosxEmail');
+    if (savedEmail) document.getElementById('authEmail').value = savedEmail;
+
+    try {
+      var fb = await getFirebaseAuth();
+      fb.onAuthStateChanged(fb.auth, async function(user) {
+        if (!user) {
+          showAuthForm();
+          return;
+        }
+
+        await user.reload().catch(function(){});
+        user = fb.auth.currentUser;
+
+        if (user && user.emailVerified) {
+          showApp();
+          return;
+        }
+
+        if (sessionStorage.getItem('iosxJustRegistered') === '1') {
+          showVerifyPending('Мы отправили на почту ссылку подтверждения. Откройте письмо, нажмите ссылку, затем вернитесь и нажмите «Я подтвердил»');
+        } else {
+          showAuthForm();
+          setAuthMode(true);
+        }
+      });
+    } catch(e) {
+      setAuthStatus('Не удалось подключиться к Firebase. Проверьте интернет', 'var(--red)');
     }
   });
 </script>
