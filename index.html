@@ -363,6 +363,87 @@
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 
+  /* CABINET BUTTON (top-right in app header) */
+  .cabinet-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border2);
+    background: rgba(124,108,255,0.07);
+    color: var(--accent3);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 14px;
+  }
+  .cabinet-btn:hover {
+    background: rgba(124,108,255,0.15);
+    border-color: rgba(124,108,255,0.4);
+    color: var(--text);
+  }
+
+  /* CABINET MODAL SPECIFICS */
+  .cabinet-field-wrap {
+    position: relative;
+  }
+  .cabinet-field-wrap .form-input {
+    padding-right: 44px;
+  }
+  .eye-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--dim);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+  }
+  .eye-btn:hover { color: var(--muted); }
+
+  .cabinet-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .cabinet-actions .btn {
+    margin-top: 0;
+  }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    box-shadow: none;
+  }
+  .btn-outline:hover {
+    background: rgba(255,255,255,0.04);
+    border-color: var(--muted);
+    color: var(--text);
+    box-shadow: none;
+    transform: translateY(-1px);
+  }
+  .btn-danger {
+    background: linear-gradient(135deg, rgba(251,113,133,0.15) 0%, rgba(251,113,133,0.08) 100%);
+    border: 1px solid rgba(251,113,133,0.3);
+    color: var(--red);
+    box-shadow: none;
+  }
+  .btn-danger:hover {
+    background: rgba(251,113,133,0.2);
+    border-color: rgba(251,113,133,0.5);
+    box-shadow: 0 4px 16px rgba(251,113,133,0.15);
+    transform: translateY(-1px);
+  }
+
   /* DEVICE PICKER */
   .device-wrapper { position: relative; }
 
@@ -588,6 +669,10 @@
         <div class="status-dot"></div>
         <span>Сервис активен</span>
       </div>
+      <button type="button" class="cabinet-btn" onclick="openCabinet()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Ваш кабинет
+      </button>
     </div>
 
     <!-- STEPS + PAGES -->
@@ -756,6 +841,46 @@
   </div>
 </div>
 
+<!-- MODAL: ВАШ КАБИНЕТ -->
+<div class="modal-overlay" id="cabinetOverlay" onclick="if(event.target===this)closeCabinet()">
+  <div class="modal" style="max-width:440px;">
+    <button class="modal-close" onclick="closeCabinet()">✕</button>
+    <div class="modal-title" style="font-size:20px;font-weight:700;color:var(--text);letter-spacing:1px;margin-bottom:4px;">Ваш кабинет</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:24px;letter-spacing:1px;">Данные вашего аккаунта</div>
+
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" id="cabinetEmail" class="form-input" readonly
+        style="background:rgba(124,108,255,0.05);border-color:rgba(124,108,255,0.18);color:var(--muted);cursor:default;">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Пароль</label>
+      <div class="cabinet-field-wrap">
+        <input type="password" id="cabinetPassword" class="form-input" readonly value="********"
+          style="background:rgba(124,108,255,0.05);border-color:rgba(124,108,255,0.18);color:var(--muted);cursor:default;letter-spacing:3px;">
+        <button type="button" class="eye-btn" id="toggleCabinetPassword" onclick="toggleCabinetPassword()" title="Показать/скрыть">
+          <!-- eye icon -->
+          <svg id="eyeIconShow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg id="eyeIconHide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);margin-top:6px;letter-spacing:0.5px;">
+        Firebase не предоставляет доступ к реальному паролю
+      </div>
+    </div>
+
+    <div class="cabinet-actions">
+      <button type="button" class="btn btn-outline" onclick="closeCabinet(); setStep(1);">
+        <span>На главную</span>
+      </button>
+      <button type="button" class="btn btn-danger" onclick="signOutGoogle()">
+        <span>Выйти</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ─── STEPS ───────────────────────────────────────────────────────────────────
 function setStep(n) {
@@ -774,7 +899,8 @@ function setStep(n) {
 // ─── SUBMIT REQUEST ───────────────────────────────────────────────────────────
 async function submitRequest() {
   const emailVal     = document.getElementById('email').value.trim();
-  const deviceVal    = document.getElementById('deviceHidden').value.trim();
+  const deviceVal    = document.getElementById('deviceHidden').value.trim()
+                    || document.getElementById('deviceSearch').value.trim();
   const processorVal = document.getElementById('processor').value;
   const commentVal   = document.querySelector('[name="comment"]').value.trim();
   const status       = document.getElementById('formStatus');
@@ -806,13 +932,11 @@ async function submitRequest() {
       'https://script.google.com/macros/s/AKfycbwPlJUdva3q5fhIL8nv8fZOrj4yRbU5oq6GN6DtOKFSJfPhO2geRYxYsGGuavUx5uXhRA/exec',
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: emailVal, device: deviceVal, processor: processorVal, comment: commentVal })
       }
     );
-    if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
-    if (data.status !== 'success') throw new Error('Server error');
+    if (!data || data.status !== 'success') throw new Error('Server error');
   } catch (e) {
     status.textContent = '⚠ ОШИБКА ОТПРАВКИ — ПОПРОБУЙ ЕЩЁ РАЗ';
     status.style.color = 'var(--red)';
@@ -845,6 +969,8 @@ document.addEventListener('keydown', (e) => {
     closePrivacy();
     var fo = document.getElementById('forgotOverlay');
     if (fo) fo.classList.remove('active');
+    var cab = document.getElementById('cabinetOverlay');
+    if (cab) cab.classList.remove('active');
   }
 });
 
@@ -1178,6 +1304,8 @@ function showAuthForm() {
 function showApp() {
   document.getElementById('authScreen').style.display = 'none';
   document.getElementById('appContent').style.display = '';
+  var cab = document.getElementById('cabinetOverlay');
+  if (cab) cab.classList.remove('active');
 }
 
 function showVerifyPending(hintText) {
@@ -1343,6 +1471,8 @@ window.resendVerification = async function() {
 };
 
 window.signOutGoogle = async function() {
+  var cab = document.getElementById('cabinetOverlay');
+  if (cab) cab.classList.remove('active');
   try {
     var fb = await getFirebaseAuth();
     await fb.signOut(fb.auth);
@@ -1385,7 +1515,49 @@ window.handleForgotPassword = async function() {
   btn.innerHTML = '<span>Отправить инструкцию</span>';
 };
 
-document.addEventListener('DOMContentLoaded', async function() {
+// ─── CABINET ─────────────────────────────────────────────────────────────────
+window.openCabinet = function() {
+  loadCabinet();
+  document.getElementById('cabinetOverlay').classList.add('active');
+};
+
+window.closeCabinet = function() {
+  document.getElementById('cabinetOverlay').classList.remove('active');
+};
+
+function loadCabinet() {
+  getFirebaseAuth().then(function(fb) {
+    var user = fb.auth.currentUser;
+    var emailEl = document.getElementById('cabinetEmail');
+    if (emailEl && user) emailEl.value = user.email || '';
+  }).catch(function(){});
+  var passEl = document.getElementById('cabinetPassword');
+  if (passEl) {
+    passEl.type = 'password';
+    passEl.value = '********';
+  }
+  var showIcon = document.getElementById('eyeIconShow');
+  var hideIcon = document.getElementById('eyeIconHide');
+  if (showIcon) showIcon.style.display = '';
+  if (hideIcon) hideIcon.style.display = 'none';
+}
+
+window.toggleCabinetPassword = function() {
+  var passEl   = document.getElementById('cabinetPassword');
+  var showIcon = document.getElementById('eyeIconShow');
+  var hideIcon = document.getElementById('eyeIconHide');
+  if (!passEl) return;
+  if (passEl.type === 'password') {
+    passEl.type = 'text';
+    if (showIcon) showIcon.style.display = 'none';
+    if (hideIcon) hideIcon.style.display = '';
+  } else {
+    passEl.type = 'password';
+    if (showIcon) showIcon.style.display = '';
+    if (hideIcon) hideIcon.style.display = 'none';
+  }
+};
+
   showAuthForm();
   setAuthMode(false);
 
