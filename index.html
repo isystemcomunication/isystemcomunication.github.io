@@ -638,7 +638,7 @@
       <button type="submit" class="btn" id="authActionBtn"><span>Создать аккаунт</span></button>
     </form>
     <button type="button" class="auth-switch-btn" id="authSwitchBtn" onclick="toggleAuthMode()">Уже есть аккаунт? Войти</button>
-    <div class="status-msg" id="authStatus"></div>
+    <div class="status-msg" id="authStatus" style="height:auto;min-height:16px;line-height:1.5;"></div>
 
     <!-- Verification pending state -->
     <div id="verifyPending" style="display:none;margin-top:16px;padding:20px;background:rgba(76,201,240,0.06);border:1px solid rgba(76,201,240,0.2);border-radius:16px;text-align:center;">
@@ -1335,29 +1335,50 @@ function setAuthMode(signInMode) {
 window.toggleAuthMode = function() { setAuthMode(!isEmailSignInMode); };
 
 window.signInWithGoogle = async function() {
+  console.log('Google sign-in clicked');
   var btn = document.getElementById('authGoogleBtn');
-  btn.disabled = true;
-  btn.style.opacity = '0.7';
+  if (btn) {
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+  }
   setAuthStatus('');
+
   try {
+    console.log('Loading Firebase...');
     var fb = await getFirebaseAuth();
+    console.log('Firebase loaded, opening popup...');
+
     var provider = new fb.GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
+
     var result = await fb.signInWithPopup(fb.auth, provider);
-    if (result.user) showApp();
+    console.log('Google sign-in success:', result.user && result.user.email);
+
+    if (result.user) {
+      showApp();
+    }
   } catch (err) {
-    var msg = {
-      'auth/popup-closed-by-user':   'Окно входа закрыто. Попробуйте ещё раз',
-      'auth/popup-blocked':          'Браузер заблокировал всплывающее окно. Разрешите pop-up и попробуйте снова',
-      'auth/cancelled-popup-request':'Запрос отменён. Попробуйте ещё раз',
-      'auth/network-request-failed': 'Ошибка сети. Проверьте интернет',
-      'auth/unauthorized-domain':    'Домен не авторизован — добавьте его в Firebase Console',
-      'auth/account-exists-with-different-credential': 'Этот email уже используется с другим способом входа'
-    }[err.code] || ('Ошибка: ' + (err.message || err.code));
+    console.error('Google sign-in error:', err);
+    var knownErrors = {
+      'auth/popup-closed-by-user':                     'Окно входа закрыто. Попробуйте ещё раз',
+      'auth/popup-blocked':                            'Браузер заблокировал всплывающее окно. Разрешите pop-up и попробуйте снова',
+      'auth/cancelled-popup-request':                  'Запрос отменён. Попробуйте ещё раз',
+      'auth/network-request-failed':                   'Ошибка сети. Проверьте интернет',
+      'auth/unauthorized-domain':                      'Домен не авторизован — добавьте его в Firebase Console → Authentication → Settings',
+      'auth/account-exists-with-different-credential': 'Этот email уже используется с другим способом входа',
+      'auth/operation-not-allowed':                    'Google-вход не включён в Firebase Console',
+      'auth/internal-error':                           'Внутренняя ошибка Firebase. Попробуйте позже'
+    };
+    var msg = knownErrors[err.code]
+      || ('Ошибка' + (err.code ? ' [' + err.code + ']' : '') + ': ' + (err.message || 'попробуйте ещё раз'));
     setAuthStatus(msg, 'var(--red)');
   }
-  btn.disabled = false;
-  btn.style.opacity = '';
+
+  // Always re-enable button regardless of outcome
+  if (btn) {
+    btn.disabled = false;
+    btn.style.opacity = '';
+  }
 };
 
 function getEmailActionSettings() {
