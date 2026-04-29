@@ -344,161 +344,6 @@
   .modal-price { font-size: 32px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
   .modal-price-sub { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 24px; }
 
-  /* PAY ROWS */
-  .pay-list { display: flex; flex-direction: column; }
-
-  .pay-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 6px;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.15s;
-    border-radius: 10px;
-    margin: 0 -6px;
-  }
-  .pay-row:hover { background: var(--surface2); }
-  .pay-row.active { background: rgba(124,108,255,0.06); border-bottom-color: transparent; }
-
-  .pay-icon {
-    width: 38px; height: 38px;
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; flex-shrink: 0;
-    font-family: 'Share Tech Mono', monospace;
-    font-weight: 700;
-  }
-
-  .pay-row-info { flex: 1; }
-  .pay-row-name { font-size: 15px; font-weight: 600; color: var(--text); }
-  .pay-row-sub { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 600; color: var(--muted); margin-top: 2px; letter-spacing: 0.5px; }
-  .pay-row-amount { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--muted); white-space: nowrap; }
-  .pay-row-arrow { color: var(--dim); font-size: 16px; margin-left: 4px; transition: transform 0.2s; }
-  .pay-row.active .pay-row-arrow { transform: rotate(90deg); color: var(--accent); }
-
-  /* PAY FORM */
-  .pay-form {
-    display: none;
-    background: rgba(124,108,255,0.03);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
-    margin: 4px 0 6px;
-    animation: slideDown 0.2s ease;
-  }
-  .pay-form.active { display: block; }
-
-  /* CRYPTO BOX */
-  .crypto-box {
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 14px;
-  }
-
-  .crypto-label { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
-  .crypto-amount { font-family: 'Share Tech Mono', monospace; font-size: 18px; color: var(--accent); margin-bottom: 12px; }
-  .crypto-addr-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-bottom: 6px; }
-
-  .crypto-addr {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 11px;
-    color: var(--text);
-    word-break: break-all;
-    line-height: 1.7;
-    padding: 10px 12px;
-    background: var(--bg);
-    border: 1px solid var(--border2);
-    border-radius: 12px;
-    margin-bottom: 10px;
-  }
-
-  .copy-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 12px;
-    background: transparent;
-    border: 1px solid var(--border2);
-    border-radius: 10px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 1px;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-  .crypto-note {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    color: var(--dim);
-    line-height: 1.8;
-    letter-spacing: 0.5px;
-    margin-bottom: 14px;
-  }
-
-  /* KEY REVEAL */
-  .key-reveal {
-    display: none;
-    margin-top: 24px;
-    padding: 24px;
-    background: rgba(52,211,153,0.04);
-    border: 1px solid rgba(52,211,153,0.18);
-    border-radius: 12px;
-    text-align: center;
-    animation: fadeIn 0.4s ease;
-  }
-  .key-reveal.active { display: block; }
-
-  .key-label { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-bottom: 14px; }
-  .key-value { font-family: 'Share Tech Mono', monospace; font-size: 18px; font-weight: 700; color: var(--green); letter-spacing: 3px; word-break: break-all; text-shadow: 0 0 20px rgba(52,211,153,0.4); margin-bottom: 12px; }
-  .key-warn { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; }
-
-  /* BUY CARD */
-  .buy-card {
-    background: rgba(12, 18, 35, 0.72);
-    border: 1px solid rgba(134, 151, 255, 0.14);
-    border-radius: 20px;
-    padding: 28px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
-  }
-  .buy-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent2), transparent); opacity: 0.5; }
-
-  .buy-card-tag { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; }
-  .buy-card-price { font-size: 36px; font-weight: 700; color: var(--text); line-height: 1; }
-  .buy-card-sub { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--dim); margin-top: 4px; }
-
-  .btn-buy {
-    flex-shrink: 0;
-    padding: 14px 28px;
-    background: linear-gradient(135deg, #7c6cff 0%, #6f7dff 55%, #5ba8ff 100%);
-    border: 1px solid rgba(255,255,255,0.06);
-    color: white;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.6px;
-    text-transform: none;
-    cursor: pointer;
-    border-radius: 14px;
-    transition: all 0.2s;
-    white-space: nowrap;
-    box-shadow: 0 10px 24px rgba(92,110,255,0.28), inset 0 1px 0 rgba(255,255,255,0.18);
-  }
-  .btn-buy:hover { transform: translateY(-1px); box-shadow: 0 14px 34px rgba(92,110,255,0.34), inset 0 1px 0 rgba(255,255,255,0.18); }
-
   /* PAGES */
   .page { display: none; }
   .page.active { display: block; }
@@ -536,146 +381,6 @@
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-
-  /* NAV TABS */
-  .nav-tabs {
-    display: flex;
-    gap: 8px;
-    background: rgba(12,18,35,0.72);
-    border: 1px solid rgba(134,151,255,0.14);
-    border-radius: 16px;
-    padding: 6px;
-    backdrop-filter: blur(18px);
-  }
-  .nav-tab {
-    flex: 1;
-    padding: 10px 8px;
-    border-radius: 12px;
-    border: none;
-    background: transparent;
-    color: var(--muted);
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-  }
-  .nav-tab.active {
-    background: rgba(124,108,255,0.15);
-    color: var(--accent);
-    border: 1px solid rgba(124,108,255,0.25);
-  }
-  .nav-tab:hover:not(.active) { color: var(--text); background: rgba(255,255,255,0.04); }
-
-  /* CODES PAGE */
-  .codes-search-wrap { position: relative; }
-  .codes-search-wrap .form-input { padding-left: 38px; }
-  .codes-search-icon {
-    position: absolute;
-    left: 13px; top: 50%;
-    transform: translateY(-50%);
-    color: var(--dim);
-    font-size: 15px;
-    pointer-events: none;
-  }
-
-  .code-card {
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: 14px;
-    padding: 18px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    animation: fadeIn 0.3s ease;
-  }
-  .code-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .code-device {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text);
-  }
-  .code-date {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    color: var(--dim);
-    white-space: nowrap;
-    padding-top: 2px;
-  }
-  .code-value-wrap {
-    background: var(--bg);
-    border: 1px solid rgba(124,108,255,0.2);
-    border-radius: 10px;
-    padding: 12px 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  .code-value {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 15px;
-    color: var(--green);
-    letter-spacing: 2px;
-    word-break: break-all;
-    text-shadow: 0 0 14px rgba(52,211,153,0.3);
-  }
-  .code-copy-btn {
-    flex-shrink: 0;
-    background: transparent;
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    color: var(--muted);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.5px;
-  }
-  .code-copy-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-  .code-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-  .code-status.active { color: var(--green); }
-  .code-status.used { color: var(--dim); }
-
-  .codes-empty {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--dim);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 1px;
-    line-height: 2;
-  }
-  .codes-empty-icon { font-size: 32px; margin-bottom: 12px; opacity: 0.4; }
-
-  .codes-hint {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 11px;
-    color: var(--dim);
-    text-align: center;
-    letter-spacing: 0.5px;
-    line-height: 1.8;
-    margin-top: 4px;
-  }
 
   .device-wrapper { position: relative; }
   .device-list {
@@ -716,73 +421,6 @@
     border-bottom: 1px solid var(--border2) !important;
   }
   .device-back:hover { color: var(--accent); background: rgba(0,212,255,0.07); }
-
-  .top-link {
-    position: absolute;
-    top: 20px;
-    padding: 10px 14px;
-    border-radius: 999px;
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(15, 23, 42, 0.7);
-    color: var(--text);
-    text-decoration: none;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    transition: all 0.2s ease;
-    backdrop-filter: blur(10px);
-    z-index: 60;
-  }
-
-  .top-link-left {
-    left: 24px;
-  }
-
-  .top-link-right {
-    right: 24px;
-  }
-
-  .top-link:hover {
-    transform: translateY(-1px);
-    border-color: rgba(124,108,255,0.35);
-    box-shadow: 0 8px 20px rgba(92,110,255,0.18);
-  }
-
-  .code-box {
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: 12px;
-    padding: 16px;
-    margin-top: 14px;
-  }
-
-  .code-empty {
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.6;
-  }
-
-  .code-label {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
-
-  .code-value {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 16px;
-    color: var(--text);
-    word-break: break-all;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 12px;
-  }
 
   /* AUTH SCREEN */
   #authScreen {
@@ -931,9 +569,6 @@
 
 <div id="appContent" style="display:none;">
 
-<a href="#" class="top-link top-link-left" onclick="openCodes(); return false;">Ваши заявки</a>
-<a href="#" class="top-link top-link-right" onclick="openCabinet(); return false;">Ваш кабинет</a>
-
 <div class="container">
 
   <!-- HEADER -->
@@ -949,10 +584,6 @@
     </div>
   </div>
 
-  <!-- NAV TABS -->
-  <div class="nav-tabs">
-    <button class="nav-tab active" id="tabOrder" onclick="switchTab('order')">🔧 Заявка</button>
-  </div>
   <!-- TAB: ЗАЯВКА -->
   <div id="sectionOrder">
   <div class="steps">
@@ -975,19 +606,15 @@
     <div class="card">
       <div class="card-title">Подача заявки на настройку</div>
       <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:20px;font-family:'Rajdhani',sans-serif;">
-        Заполните форму, чтобы направить запрос на помощь с настройкой вашего устройства. После отправки мы рассмотрим заявку и свяжемся с вами через указанный контакт для уточнения деталей.<br>
+        Заполните форму, чтобы направить запрос на помощь с настройкой вашего устройства. После отправки мы рассмотрим заявку и свяжемся с вами по email для уточнения деталей.<br>
         <span style="font-size:12px;color:var(--dim);">Результат зависит от модели устройства и конкретной задачи. Сервис не выполняет обход защитных ограничений производителя или оператора. Данные предоставляются добровольно.</span>
       </div>
-      <form id="requestForm" action="https://formspree.io/f/mwvawjvb" method="POST">
+      <form id="requestForm">
         <div class="form-group">
           <label class="form-label">Email</label>
           <input type="email" name="email" class="form-input" id="email" placeholder="user@example.com" required>
         </div>
-        <div class="form-group">
-          <label class="form-label">Telegram</label>
-          <input type="text" name="telegram" class="form-input" id="username" placeholder="@username или номер" required>
-          <div style="font-size:11px;color:var(--dim);margin-top:6px;">Для связи по заявке</div>
-        </div>
+
         <div class="form-group">
           <label class="form-label">Устройство</label>
           <div class="device-wrapper">
@@ -1001,6 +628,18 @@
             <input type="hidden" name="device" id="deviceHidden">
             <div id="deviceList" class="device-list"></div>
           </div>
+        </div>
+        <!-- Processor field -->
+        <div class="form-group">
+          <label class="form-label">Процессор</label>
+          <select id="processor" name="processor" class="form-select">
+            <option value="">Выберите процессор</option>
+            <option>Snapdragon</option>
+            <option>MediaTek</option>
+            <option>Exynos</option>
+            <option>Unisoc</option>
+            <option>Kirin</option>
+          </select>
         </div>
         <div class="form-group">
           <label class="form-label">Комментарий (необязательно)</label>
@@ -1022,19 +661,19 @@
     <div class="card" style="text-align:center;">
       <div class="confirm-icon">✓</div>
       <div class="confirm-title">Заявка принята</div>
-      <div class="confirm-sub" id="confirmSub">Ваш запрос отправлен. Мы рассмотрим его и свяжемся с вами через указанный контакт для уточнения деталей.</div>
+      <div class="confirm-sub" id="confirmSub">Ваш запрос отправлен. Мы рассмотрим его и свяжемся с вами по email для уточнения деталей.</div>
       <div class="confirm-details">
         <div class="confirm-row">
           <span class="confirm-row-label">Email</span>
           <span class="confirm-row-value" id="confirmEmail">—</span>
         </div>
         <div class="confirm-row">
-          <span class="confirm-row-label">Username</span>
-          <span class="confirm-row-value" id="confirmUser">—</span>
-        </div>
-        <div class="confirm-row">
           <span class="confirm-row-label">Устройство</span>
           <span class="confirm-row-value" id="confirmDevice">—</span>
+        </div>
+        <div class="confirm-row">
+          <span class="confirm-row-label">Процессор</span>
+          <span class="confirm-row-value" id="confirmProcessor">—</span>
         </div>
         <div class="confirm-row">
           <span class="confirm-row-label">Статус</span>
@@ -1047,23 +686,8 @@
 
   </div><!-- end sectionOrder -->
 
-  <!-- TAB: ВАШИ КОДЫ -->
-  <div id="sectionCodes" style="display:none;">
-    <div class="card">
-      <div class="card-title">Найти вашу заявку</div>
-      <div class="form-group">
-        <label class="form-label">Email или Telegram</label>
-        <div class="codes-search-wrap">
-          <span class="codes-search-icon">🔍</span>
-          <input type="text" id="codesQuery" class="form-input" placeholder="user@example.com или @username" autocomplete="off" oninput="searchCodes()">
-        </div>
-        <div class="codes-hint" id="codesHint">Введите email или Telegram, которые указывали при подаче заявки</div>
-      </div>
-      <div id="codesResult"></div>
-    </div>
-  </div>
-
-</div>
+</div><!-- end container -->
+</div><!-- end appContent -->
 
 <!-- FOOTER -->
 <div style="position:fixed;bottom:0;left:0;right:0;text-align:center;padding:14px 0;font-family:'Share Tech Mono',monospace;font-size:11px;color:#64748b;letter-spacing:1px;background:linear-gradient(0deg,rgba(5,8,20,0.95),transparent);z-index:50;">
@@ -1085,7 +709,6 @@
         <p style="color:var(--muted);font-size:15px;line-height:1.7;margin-bottom:8px;">При заполнении формы заявки вы добровольно можете указать следующие данные:</p>
         <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:5px;">
           <li style="color:var(--muted);font-size:15px;display:flex;gap:8px;"><span style="color:var(--accent);">›</span>адрес электронной почты</li>
-          <li style="color:var(--muted);font-size:15px;display:flex;gap:8px;"><span style="color:var(--accent);">›</span>имя пользователя Telegram</li>
           <li style="color:var(--muted);font-size:15px;display:flex;gap:8px;"><span style="color:var(--accent);">›</span>модель устройства</li>
           <li style="color:var(--muted);font-size:15px;display:flex;gap:8px;"><span style="color:var(--accent);">›</span>описание задачи или проблемы</li>
         </ul>
@@ -1096,7 +719,7 @@
 
       <div>
         <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent3);margin-bottom:8px;">⚙️ Зачем нужны данные</div>
-        <p style="color:var(--muted);font-size:15px;line-height:1.7;">Email и Telegram используются <strong style="color:var(--text);">исключительно для обратной связи</strong> по вашей заявке. Модель устройства и описание задачи нужны для корректной обработки обращения. Данные не продаются и не передаются третьим лицам в рекламных целях. Передача возможна только в случаях, прямо предусмотренных применимым законодательством.</p>
+        <p style="color:var(--muted);font-size:15px;line-height:1.7;">Email используется <strong style="color:var(--text);">исключительно для обратной связи</strong> по вашей заявке. Модель устройства и описание задачи нужны для корректной обработки обращения. Данные не продаются и не передаются третьим лицам в рекламных целях. Передача возможна только в случаях, прямо предусмотренных применимым законодательством.</p>
       </div>
 
       <div style="height:1px;background:var(--border);"></div>
@@ -1134,120 +757,6 @@
 <!-- MODAL: ОПЛАТА (временно скрыта) -->
 
 <script>
-  let openForm = null;
-
-  function openCodes() {
-    document.getElementById('codesOverlay').classList.add('active');
-  }
-
-  function closeCodes() {
-    document.getElementById('codesOverlay').classList.remove('active');
-  }
-
-  // false = ключа нет, true = ключ есть
-  const hasUserCode = false;
-
-  function updateCodesModal() {
-    const emptyBlock = document.getElementById('codesEmpty');
-    const readyBlock = document.getElementById('codesReady');
-    if (hasUserCode) {
-      emptyBlock.style.display = 'none';
-      readyBlock.style.display = 'block';
-    } else {
-      emptyBlock.style.display = 'block';
-      readyBlock.style.display = 'none';
-    }
-  }
-
-  function copyUserCode(btn) {
-    const code = document.getElementById('userCodeValue').textContent;
-    navigator.clipboard.writeText(code).then(() => {
-      btn.textContent = '✓ Скопировано';
-      setTimeout(() => { btn.textContent = '⧉ Скопировать ключ'; }, 2000);
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', updateCodesModal);
-
-  // TAB SWITCHING
-  function switchTab(tab) {
-    const isOrder = tab === 'order';
-    document.getElementById('sectionOrder').style.display = isOrder ? '' : 'none';
-    document.getElementById('sectionCodes').style.display = isOrder ? 'none' : '';
-    document.getElementById('tabOrder').classList.toggle('active', isOrder);
-    document.getElementById('tabCodes').classList.toggle('active', !isOrder);
-    if (!isOrder) {
-      document.getElementById('codesQuery').focus();
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  // CODES SEARCH
-  const KEYS = [
-    // Пример (удали или замени на реальные):
-    // { contact: "@testuser", device: "Xiaomi Mi 11", code: "IOSX-A1B2-C3D4-E5F6", date: "2025-01-15", used: false },
-  ];
-
-  window.addKey = function(contact, device, code) {
-    const today = new Date().toISOString().slice(0,10);
-    KEYS.push({ contact: contact.toLowerCase(), device, code, date: today, used: false });
-  };
-
-  function searchCodes() {
-    const q = document.getElementById('codesQuery').value.trim().toLowerCase();
-    const result = document.getElementById('codesResult');
-    const hint = document.getElementById('codesHint');
-
-    if (q.length < 3) {
-      result.innerHTML = '';
-      hint.style.display = '';
-      return;
-    }
-    hint.style.display = 'none';
-
-    const found = KEYS.filter(k => k.contact.toLowerCase().includes(q));
-
-    if (found.length === 0) {
-      result.innerHTML = `
-        <div class="codes-empty">
-          <div class="codes-empty-icon">🔎</div>
-          Заявки не найдены<br>
-          <span style="font-size:10px;">Проверьте правильность email или @username</span>
-        </div>`;
-      return;
-    }
-
-    result.innerHTML = `
-      <div style="font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;">
-        Найдено заявок: ${found.length}
-      </div>
-      <div style="display:flex;flex-direction:column;gap:12px;">
-        ${found.map((k, i) => `
-          <div class="code-card">
-            <div class="code-card-header">
-              <div class="code-device">${k.device}</div>
-              <div class="code-date">${k.date}</div>
-            </div>
-            <div class="code-value-wrap">
-              <div class="code-value" id="cval-${i}">${k.code}</div>
-              <button class="code-copy-btn" onclick="copyCode('cval-${i}', this)">⧉ Копировать</button>
-            </div>
-            <div class="code-status ${k.used ? 'used' : 'active'}">
-              <span>${k.used ? '⬤' : '⬤'}</span>
-              ${k.used ? 'Использован' : 'Активен'}
-            </div>
-          </div>
-        `).join('')}
-      </div>`;
-  }
-
-  function copyCode(id, btn) {
-    const text = document.getElementById(id).textContent;
-    navigator.clipboard.writeText(text).catch(() => {});
-    btn.textContent = '✓ Скопировано';
-    setTimeout(() => btn.textContent = '⧉ Копировать', 2000);
-  }
-
   // STEPS
   function setStep(n) {
     [1,2,3].forEach(i => {
@@ -1262,45 +771,73 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // SUBMIT FORM (Formspree)
+  // SUBMIT REQUEST — Google Sheets via Apps Script
   async function submitRequest() {
-    const email = document.getElementById('email').value.trim();
-    const username = document.getElementById('username').value.trim();
-    const device = document.getElementById('deviceHidden').value.trim();
-    const status = document.getElementById('formStatus');
+    const emailVal     = document.getElementById('email').value.trim();
+    const deviceVal    = document.getElementById('deviceHidden').value.trim();
+    const processorVal = document.getElementById('processor').value;
+    const commentVal   = document.querySelector('[name="comment"]').value.trim();
+    const status       = document.getElementById('formStatus');
+    const submitBtn    = document.querySelector('#requestForm .btn');
 
-    if (!email || !username || !device) {
-      status.textContent = !device && document.getElementById('deviceSearch').value
-        ? '⚠ ВЫБЕРИ УСТРОЙСТВО ИЗ СПИСКА'
-        : '⚠ ЗАПОЛНИ ВСЕ ПОЛЯ';
+    // Clear any previous status on new attempt
+    status.classList.remove('visible');
+
+    // Validation
+    if (!emailVal || !deviceVal || !processorVal) {
+      if (!deviceVal && document.getElementById('deviceSearch').value) {
+        status.textContent = '⚠ ВЫБЕРИ УСТРОЙСТВО ИЗ СПИСКА';
+      } else if (!processorVal) {
+        status.textContent = '⚠ ВЫБЕРИ ПРОЦЕССОР';
+      } else {
+        status.textContent = '⚠ ЗАПОЛНИ ВСЕ ПОЛЯ';
+      }
       status.style.color = 'var(--red)';
       status.classList.add('visible');
       return;
     }
 
+    // Disable button to prevent double submission
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span>ОТПРАВКА...</span>';
     status.textContent = 'ОТПРАВКА...';
     status.style.color = 'var(--muted)';
     status.classList.add('visible');
 
-    const form = document.getElementById('requestForm');
-    const data = new FormData(form);
-
     try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: data,
-        headers: { 'Accept': 'application/json' }
-      });
-      if (!res.ok) throw new Error('Form error');
-    } catch(e) {
+      const res = await fetch(
+        'https://script.google.com/macros/s/AKfycbwPlJUdva3q5fhIL8nv8fZOrj4yRbU5oq6GN6DtOKFSJfPhO2geRYxYsGGuavUx5uXhRA/exec',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: emailVal, device: deviceVal, processor: processorVal, comment: commentVal })
+        }
+      );
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      if (data.status !== 'success') throw new Error('Server error');
+    } catch (e) {
       status.textContent = '⚠ ОШИБКА ОТПРАВКИ — ПОПРОБУЙ ЕЩЁ РАЗ';
       status.style.color = 'var(--red)';
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span>Отправить заявку →</span>';
       return;
     }
 
-    document.getElementById('confirmEmail').textContent = email;
-    document.getElementById('confirmUser').textContent = username;
-    document.getElementById('confirmDevice').textContent = device;
+    // Save values for confirmation screen before resetting
+    document.getElementById('confirmEmail').textContent     = emailVal;
+    document.getElementById('confirmDevice').textContent    = deviceVal;
+    document.getElementById('confirmProcessor').textContent = processorVal;
+
+    // Reset form
+    document.getElementById('requestForm').reset();
+    document.getElementById('deviceHidden').value = '';
+    document.getElementById('deviceSearch').value = '';
+    document.getElementById('deviceSearch').placeholder = 'Например: Samsung S21, Redmi Note 10...';
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<span>Отправить заявку →</span>';
+    status.classList.remove('visible');
+
     setStep(3);
   }
 
@@ -1309,41 +846,13 @@
   // PRIVACY MODAL
   function openPrivacy() { document.getElementById('privacyOverlay').classList.add('active'); }
   function closePrivacy() { document.getElementById('privacyOverlay').classList.remove('active'); }
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closePrivacy(); } });
-
-  // MODAL
-  function openModal() {
-    document.getElementById('modalOverlay').classList.add('active');
-    document.getElementById('keyReveal').classList.remove('active');
-    document.getElementById('payStatus').classList.remove('visible');
-  }
-
-  function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
-  function overlayClick(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
-
-  // TOGGLE PAY FORM
-  function toggleForm(id) {
-    const form = document.getElementById('form-' + id);
-    const row = form.previousElementSibling;
-
-    if (openForm && openForm !== id) {
-      document.getElementById('form-' + openForm).classList.remove('active');
-      document.getElementById('form-' + openForm).previousElementSibling.classList.remove('active');
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closePrivacy();
+      var fo = document.getElementById('forgotOverlay');
+      if (fo) fo.classList.remove('active');
     }
-
-    const isOpen = form.classList.contains('active');
-    form.classList.toggle('active', !isOpen);
-    row.classList.toggle('active', !isOpen);
-    openForm = isOpen ? null : id;
-  }
-
-  // COPY
-  function copyAddr(id, btn) {
-    const text = document.getElementById(id).textContent;
-    navigator.clipboard.writeText(text).catch(() => {});
-    btn.textContent = '✓ Скопировано';
-    setTimeout(() => btn.textContent = '⧉ Скопировать адрес', 2000);
-  }
+  });
 
   // DEVICE SEARCH — smart, curated list ~300 popular models
   const devicesByBrand = {
@@ -1572,52 +1081,6 @@
     }
   });
 
-  function processPayment(type) {
-    const status = document.getElementById('payStatus');
-    const btn = document.getElementById(type + 'Btn');
-
-    btn.textContent = 'ОБРАБОТКА...';
-    status.classList.remove('visible');
-
-    setTimeout(() => {
-      document.getElementById('keyReveal').classList.add('active');
-      btn.textContent = '✓ Запрос принят';
-      status.textContent = '✓ Проверяем транзакцию — ключ придёт на email';
-      status.style.color = 'var(--green)';
-      status.classList.add('visible');
-    }, 1800);
-  }
-
-  function openCabinet() {
-    loadCabinet();
-    document.getElementById('cabinetOverlay').classList.add('active');
-  }
-
-  function closeCabinet() {
-    document.getElementById('cabinetOverlay').classList.remove('active');
-  }
-
-  function saveCabinet() {
-    var telegram = document.getElementById('cabinetTelegram').value.trim();
-    var status   = document.getElementById('cabinetSaveStatus');
-    // Email comes from session — password is NEVER stored in localStorage
-    localStorage.setItem('iosxTelegram', telegram);
-    status.textContent = '✓ Данные сохранены';
-    status.style.color = 'var(--green)';
-    status.classList.add('visible');
-    setTimeout(function() { status.classList.remove('visible'); }, 3000);
-  }
-
-  function loadCabinet() {
-    // Берём email из реального Firebase-пользователя
-    getFirebaseAuth().then(function(fb) {
-      var user = fb.auth.currentUser;
-      var emailEl = document.getElementById('cabinetEmail');
-      if (emailEl && user) emailEl.value = user.email || '';
-    }).catch(function(){});
-    document.getElementById('cabinetPassword').value = '';
-    document.getElementById('cabinetTelegram').value = localStorage.getItem('iosxTelegram') || '';
-  }
 </script>
 
 <script>
@@ -1700,10 +1163,6 @@
   function showApp() {
     document.getElementById('authScreen').style.display = 'none';
     document.getElementById('appContent').style.display = '';
-    var cabinetOverlay = document.getElementById('cabinetOverlay');
-    if (cabinetOverlay) cabinetOverlay.classList.remove('active');
-    var codesOverlay = document.getElementById('codesOverlay');
-    if (codesOverlay) codesOverlay.classList.remove('active');
   }
 
   function showVerifyPending(hintText) {
@@ -1992,75 +1451,6 @@
     }
   });
 </script>
-<!-- MODAL: ВАШИ КОДЫ -->
-<div class="modal-overlay" id="codesOverlay" onclick="if(event.target===this)closeCodes()">
-  <div class="modal" style="max-width:520px;">
-    <button class="modal-close" onclick="closeCodes()">✕</button>
-    <div class="modal-title" style="font-size:18px;margin-bottom:4px;">Ваши заявки</div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:20px;letter-spacing:1px;">
-      История обращений
-    </div>
-
-    <div id="codesEmpty" class="code-box">
-      <div class="code-empty">Заявок пока нет. Заполните форму, чтобы подать запрос.</div>
-    </div>
-
-    <div id="codesReady" class="code-box" style="display:none;">
-      <div class="code-label">Ваш код заявки</div>
-      <div class="code-value" id="userCodeValue">IOSX-7X4P-91KM-2QRT</div>
-      <button class="copy-btn" onclick="copyUserCode(this)">⧉ Скопировать код</button>
-    </div>
-  </div>
-</div>
-<div class="modal-overlay" id="cabinetOverlay" onclick="if(event.target===this)closeCabinet()">
-  <div class="modal" style="max-width:520px;">
-    <button class="modal-close" onclick="closeCabinet()">✕</button>
-
-    <div class="modal-title" style="font-size:18px;margin-bottom:4px;">Ваш кабинет</div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:20px;letter-spacing:1px;">
-      Личные данные
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Email</label>
-      <input type="email" id="cabinetEmail" class="form-input" placeholder="user@example.com">
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Пароль</label>
-      <input type="password" id="cabinetPassword" class="form-input" placeholder="Минимум 8 символов" autocomplete="current-password">
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Telegram</label>
-      <input type="text" id="cabinetTelegram" class="form-input" placeholder="@username">
-      <div style="font-size:11px;color:var(--dim);margin-top:6px;">
-        Укажите Telegram для связи по заявкам
-      </div>
-    </div>
-
-    <button type="button" class="btn" onclick="saveCabinet()" style="margin-bottom:10px;">
-      <span>Сохранить данные →</span>
-    </button>
-
-    <button type="button" onclick="signOutGoogle()" style="
-      width:100%;padding:11px;border-radius:14px;
-      background:transparent;border:1px solid rgba(251,113,133,0.2);
-      color:var(--red);font-family:'Rajdhani',sans-serif;
-      font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;
-      letter-spacing:0.5px;
-    "
-    onmouseover="this.style.background='rgba(251,113,133,0.07)'"
-    onmouseout="this.style.background='transparent'">
-      Выйти
-    </button>
-
-    <div class="status-msg" id="cabinetSaveStatus" style="margin-top:12px;"></div>
-  </div>
-</div>
-
-</div>
-
 
 <!-- MODAL: ВОССТАНОВЛЕНИЕ ПАРОЛЯ -->
 <div class="modal-overlay" id="forgotOverlay" onclick="if(event.target===this)closeForgotPassword()">
