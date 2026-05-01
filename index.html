@@ -903,7 +903,17 @@ function setStep(n) {
 
 // ─── SUBMIT REQUEST ───────────────────────────────────────────────────────────
 async function submitRequest() {
-  const emailVal     = document.getElementById('email').value.trim();
+const fb = await getFirebaseAuth();
+const user = fb.auth.currentUser;
+
+if (!user) {
+  status.textContent = '⚠ ВОЙДИ В АККАУНТ';
+  status.style.color = 'var(--red)';
+  status.classList.add('visible');
+  return;
+}
+
+const emailVal = user.email;
   const deviceVal    = document.getElementById('deviceHidden').value.trim()
                     || document.getElementById('deviceSearch').value.trim();
   const processorVal = document.getElementById('processor').value;
