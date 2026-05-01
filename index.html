@@ -931,7 +931,41 @@ async function submitRequest() {
   status.textContent = 'ОТПРАВКА...';
   status.style.color = 'var(--muted)';
   status.classList.add('visible');
+// нормализация текста
+function cleanText(str) {
+  return (str || '')
+    .toLowerCase()
+    .replace(/[^a-zа-я0-9]/g, '') // убираем всё кроме букв и цифр
+}
 
+// собираем весь текст
+const rawText = emailVal + deviceVal + commentVal;
+const cleaned = cleanText(rawText);
+
+// 🚫 ловим spam spam1 spam2 spam@@ и т.д.
+if (cleaned.includes('spam')) {
+  status.textContent = '⚠ ОБНАРУЖЕН СПАМ';
+  status.style.color = 'var(--red)';
+  status.classList.add('visible');
+  return;
+}
+
+// 🚫 слишком много цифр (частый спам)
+const digits = rawText.replace(/[^0-9]/g, '');
+if (digits.length > 6) {
+  status.textContent = '⚠ ПОДОЗРИТЕЛЬНЫЕ ДАННЫЕ';
+  status.style.color = 'var(--red)';
+  status.classList.add('visible');
+  return;
+}
+
+// 🚫 слишком короткий комментарий (типа "ааа", "123")
+if (commentVal && commentVal.length < 4) {
+  status.textContent = '⚠ ОПИШИ ЗАДАЧУ НОРМАЛЬНО';
+  status.style.color = 'var(--red)';
+  status.classList.add('visible');
+  return;
+}
   try {
     const res = await fetch(
       'https://script.google.com/macros/s/AKfycbwdATcQOkGpuNk4rE29TyFzF_NibL9ZGVmL_WNA2XUgEiocJdQ9sLaGfcDD78ia_xybkQ/exec',
