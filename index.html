@@ -745,8 +745,6 @@
             <div class="form-group">
               <label class="form-label">Комментарий (необязательно)</label>
               <input type="text" name="comment" class="form-input" placeholder="Опишите задачу...">
-            </div>
-
             <button type="button" class="btn" onclick="submitRequest()"><span>Отправить заявку →</span></button>
             <div class="status-msg" id="formStatus"></div>
           </form>
@@ -903,23 +901,24 @@ function setStep(n) {
 
 // ─── SUBMIT REQUEST ───────────────────────────────────────────────────────────
 async function submitRequest() {
-const fb = await getFirebaseAuth();
-const user = fb.auth.currentUser;
+  const status = document.getElementById('formStatus');
+  const submitBtn = document.querySelector('#requestForm .btn');
 
-if (!user) {
-  status.textContent = '⚠ ВОЙДИ В АККАУНТ';
-  status.style.color = 'var(--red)';
-  status.classList.add('visible');
-  return;
-}
+  const fb = await getFirebaseAuth();
+  const user = fb.auth.currentUser;
 
-const emailVal = user.email;
-  const deviceVal    = document.getElementById('deviceHidden').value.trim()
-                    || document.getElementById('deviceSearch').value.trim();
+  if (!user) {
+    status.textContent = '⚠ ВОЙДИ В АККАУНТ';
+    status.style.color = 'var(--red)';
+    status.classList.add('visible');
+    return;
+  }
+
+  const emailVal = user.email;
+  const deviceVal = document.getElementById('deviceHidden').value.trim()
+    || document.getElementById('deviceSearch').value.trim();
   const processorVal = document.getElementById('processor').value;
-  const commentVal   = document.querySelector('[name="comment"]').value.trim();
-  const status       = document.getElementById('formStatus');
-  const submitBtn    = document.querySelector('#requestForm .btn');
+  const commentVal = document.querySelector('[name="comment"]').value.trim();
 
   status.classList.remove('visible');
 
