@@ -869,7 +869,6 @@
         </button>
       </div>
       <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);margin-top:6px;letter-spacing:0.5px;">
-        Firebase не предоставляет доступ к реальному паролю
       </div>
     </div>
 
@@ -975,14 +974,22 @@ if (commentVal && commentVal.length < 4) {
   status.classList.add('visible');
   return;
 }
-  try {
-    const res = await fetch(
-      'https://script.google.com/macros/s/AKfycbwdATcQOkGpuNk4rE29TyFzF_NibL9ZGVmL_WNA2XUgEiocJdQ9sLaGfcDD78ia_xybkQ/exec',
-      {
-        method: 'POST',
-        body: JSON.stringify({ email: emailVal, device: deviceVal, processor: processorVal, comment: commentVal })
-      }
-    );
+ try {
+  const res = await fetch(
+    'https://script.google.com/macros/s/AKfycbwdATcQOkGpuNk4rE29TyFzF_NibL9ZGVmL_WNA2XUgEiocJdQ9sLaGfcDD78ia_xybkQ/exec',
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        email: emailVal,
+        device: deviceVal,
+        processor: processorVal,
+        comment: commentVal,
+        website: '',
+        formTimeMs: 5000
+      })
+    }
+  );
+}
     const data = await res.json();
     if (!data || data.status !== 'success') throw new Error('Server error');
   } catch (e) {
