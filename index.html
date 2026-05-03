@@ -742,14 +742,12 @@
             </div>
 
             <!-- Comment -->
-            <div class="form-group">
-              <label class="form-label">Комментарий (необязательно)</label>
-              <input type="text" name="comment" class="form-input" placeholder="Опишите задачу...">
-            <button type="button" class="btn" onclick="submitRequest()"><span>Отправить заявку →</span></button>
-            <div class="status-msg" id="formStatus"></div>
-          </form>
-        </div>
-      </div>
+           <div class="form-group">
+  <label class="form-label">Комментарий (необязательно)</label>
+  <input type="text" name="comment" class="form-input" placeholder="Опишите задачу...">
+</div>
+
+<button type="button" class="btn" onclick="submitRequest()"><span>Отправить заявку →</span></button>  ы
 
       <!-- PAGE 2: hidden -->
       <div id="page2" class="page"></div>
@@ -974,24 +972,27 @@ if (commentVal && commentVal.length < 4) {
   status.classList.add('visible');
   return;
 }
- try {
-  const res = await fetch(
-    'https://script.google.com/macros/s/AKfycbwdATcQOkGpuNk4rE29TyFzF_NibL9ZGVmL_WNA2XUgEiocJdQ9sLaGfcDD78ia_xybkQ/exec',
-    {
-      method: 'POST',
-      body: JSON.stringify({
-        email: emailVal,
-        device: deviceVal,
-        processor: processorVal,
-        comment: commentVal,
-        website: '',
-        formTimeMs: 5000
-      })
-    }
-  );
-}
+   try {
+ const res = await fetch(
+  'https://script.google.com/macros/s/AKfycbwdATcQOkGpuNk4rE29TyFzF_NibL9ZGVmL_WNA2XUgEiocJdQ9sLaGfcDD78ia_xybkQ/exec',
+  {
+    method: 'POST',
+    body: JSON.stringify({
+      email: emailVal,
+      device: deviceVal,
+      processor: processorVal,
+      comment: commentVal,
+      website: '',
+      formTimeMs: 5000
+    })
+  }
+);
     const data = await res.json();
-    if (!data || data.status !== 'success') throw new Error('Server error');
+
+    if (!data || data.status !== 'success') {
+      throw new Error('Server error');
+    }
+
   } catch (e) {
     status.textContent = '⚠ ОШИБКА ОТПРАВКИ — ПОПРОБУЙ ЕЩЁ РАЗ';
     status.style.color = 'var(--red)';
