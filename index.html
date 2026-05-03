@@ -38,10 +38,28 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* ── AUTH LOADER ───────────────────────────────── */
+  #authLoader {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.3s;
+  }
+  #authLoader.hidden { opacity: 0; pointer-events: none; }
+  .loader-spinner {
+    width: 32px; height: 32px;
+    border: 2px solid var(--border2);
+    border-top-color: var(--text);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
   /* ── AUTH SCREEN ───────────────────────────────── */
   #authScreen {
     min-height: 100dvh;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     padding: 24px 20px 40px;
@@ -750,6 +768,9 @@
 </head>
 <body>
 
+<!-- ── AUTH LOADER ─────────────────────────────────────── -->
+<div id="authLoader"><div class="loader-spinner"></div></div>
+
 <!-- ── UNSAVED CHANGES BAR ─────────────────────────────── -->
 <div class="unsaved-bar" id="unsavedBar">
   <span class="unsaved-bar-text">⚠️ Есть несохранённые данные</span>
@@ -994,6 +1015,12 @@ const CONFIG = {
   EMAIL_KEY: 'iosxEmail',
   REGISTERED_KEY: 'iosxJustRegistered'
 };
+
+function hideLoader() {
+  var loader = document.getElementById('authLoader');
+  if (loader) loader.classList.add('hidden');
+}
+
 // ─── STEPS ──────────────────────────────────────────────
 function setStep(n) {
   [1,2,3].forEach(i => {
@@ -1466,7 +1493,7 @@ function setAuthStatus(message, color)   { setTextStatus('authStatus', message, 
 function setVerifyStatus(message, color) { setTextStatus('verifyStatus', message, color); }
 
 function showAuthForm() {
-  document.getElementById('authScreen').style.display  = '';
+  document.getElementById('authScreen').style.display  = 'flex';
   document.getElementById('appContent').style.display  = 'none';
   document.getElementById('authForm').style.display    = '';
   document.getElementById('authGoogleBtn').style.display = '';
@@ -1485,7 +1512,7 @@ function showApp() {
 }
 
 function showVerifyPending(hintText) {
-  document.getElementById('authScreen').style.display  = '';
+  document.getElementById('authScreen').style.display  = 'flex';
   document.getElementById('appContent').style.display  = 'none';
   document.getElementById('authForm').style.display    = 'none';
   document.getElementById('authGoogleBtn').style.display = 'none';
@@ -1766,28 +1793,53 @@ window.toggleCabinetPassword = function() {
   }
 };
 
+// ─── INIT ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async function() {
-  showAuthForm();
   setAuthMode(false);
 
   var savedEmail = localStorage.getItem(CONFIG.EMAIL_KEY);
   if (savedEmail) document.getElementById('authEmail').value = savedEmail;
 
+  // Таймаут на случай если Firebase тупит
+  var authTimeout = setTimeout(function() {
+    hideLoader();
+    showAuthForm();
+    setAuthStatus('Не удалось подключиться к Firebase. Проверьте интернет', 'var(--red)');
+  }, 8000);
+
   try {
     var fb = await getFirebaseAuth();
     fb.onAuthStateChanged(fb.auth, async function(user) {
-      if (!user) { showAuthForm(); return; }
+      clearTimeout(authTimeout);
+
+      if (!user) {
+        hideLoader();
+        showAuthForm();
+        return;
+      }
+
       await user.reload().catch(function(){});
       user = fb.auth.currentUser;
-      if (user && user.emailVerified) { showApp(); return; }
+
+      if (user && user.emailVerified) {
+        hideLoader();
+        showApp();
+        return;
+      }
+
       if (sessionStorage.getItem(CONFIG.REGISTERED_KEY) === '1') {
+        hideLoader();
         showVerifyPending('Откройте письмо, нажмите ссылку, затем вернитесь и нажмите «Я подтвердил»');
       } else {
+        hideLoader();
         showAuthForm();
         setAuthMode(true);
       }
     });
   } catch(e) {
+    clearTimeout(authTimeout);
+    hideLoader();
+    showAuthForm();
     setAuthStatus('Не удалось подключиться к Firebase. Проверьте интернет', 'var(--red)');
   }
 });
