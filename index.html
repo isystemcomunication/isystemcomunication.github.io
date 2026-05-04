@@ -1,216 +1,90 @@
-  .cabinet-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
-  /* ── STEPS ─────────────────────────────────────── */
-  .steps {
-    display: flex;
-    align-items: center;
-    padding: 24px 24px 20px;
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>IOSx — Device Config Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0a0a0a;
+    --bg2:      #111111;
+    --bg3:      #181818;
+    --surface:  rgba(255,255,255,0.04);
+    --surface2: rgba(255,255,255,0.06);
+    --border:   rgba(255,255,255,0.08);
+    --border2:  rgba(255,255,255,0.13);
+    --text:     #ffffff;
+    --muted:    #888888;
+    --dim:      #555555;
+    --green:    #4ade80;
+    --red:      #f87171;
+    --accent:   #ffffff;
   }
-  .step {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    position: relative;
-  }
-  .step::after {
-    content: '';
-    position: absolute;
-    top: 13px;
-    left: 50%; right: -50%;
-    height: 1px;
-    background: var(--border2);
-    transition: background 0.4s;
-  }
-  .step:last-child::after { display: none; }
-  .step-num {
-    width: 26px; height: 26px;
-    border-radius: 50%;
-    border: 1px solid var(--border2);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--dim);
-    background: var(--bg2);
-    position: relative; z-index: 1;
-    transition: all 0.3s;
-  }
-  .step.active .step-num {
-    border-color: var(--text);
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overscroll-behavior: none; }
+  body {
+    background: var(--bg);
     color: var(--text);
-    background: rgba(255,255,255,0.06);
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    letter-spacing: -0.01em;
+    min-height: 100%;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-  .step.done .step-num {
-    border-color: var(--green);
-    background: rgba(74,222,128,0.08);
-    color: var(--green);
-  }
-  .step.done::after { background: rgba(74,222,128,0.18); }
-  .step-label {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.8px;
-    color: var(--dim);
-    text-transform: uppercase;
-  }
-  .step.active .step-label { color: var(--text); }
-  .step.done .step-label   { color: var(--green); }
-  /* ── PAGE / CARD ───────────────────────────────── */
-  .page { display: none; padding: 0 16px; }
-  .page.active { display: block; }
-  .card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 24px 20px;
-    position: relative;
-    margin-bottom: 12px;
-  }
-  .card-title {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 1.2px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 20px;
+  /* ── AUTH SCREEN ───────────────────────────────── */
+  #authScreen {
+    min-height: 100dvh;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    padding: 24px 20px 40px;
   }
-  .card-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  /* ── HERO ROW ──────────────────────────────────── */
-  .hero-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 16px 18px;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    margin-bottom: 14px;
-  }
-  .status-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--green);
-    flex-shrink: 0;
-    animation: blink 2.4s ease-in-out infinite;
-  }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
-  .hero-text { flex: 1; }
-  .hero-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 2px;
-    letter-spacing: -0.2px;
-  }
-  .hero-sub {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.45;
-    font-weight: 400;
-  }
-  /* ── DEVICE PICKER ─────────────────────────────── */
-  .device-wrapper { position: relative; }
-  .device-list {
-    background: var(--bg3);
-    border: 1px solid var(--border2);
-    max-height: 230px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    margin-top: 4px;
-    border-radius: 14px;
-    position: absolute;
-    left: 0; right: 0;
-    z-index: 200;
-    box-shadow: 0 16px 48px rgba(0,0,0,0.7);
-    display: none;
-  }
-  .device-list.open { display: block; }
-  .device-item {
-    padding: 11px 14px;
-    cursor: pointer;
-    font-family: 'Manrope', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--text);
-    border-radius: 8px;
-    margin: 2px 5px;
-    user-select: none;
-    -webkit-user-select: none;
-    transition: background 0.1s;
-    min-height: 42px;
-    display: flex;
-    align-items: center;
-  }
-  .device-item:active { background: rgba(255,255,255,0.06); }
-  .device-brand-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .auth-card {
     width: 100%;
+    max-width: 440px;
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 24px;
+    padding: 36px 28px 28px;
   }
-  .device-back {
-    color: var(--muted);
-    font-size: 13px;
-    border-bottom: 1px solid var(--border);
-    border-radius: 0;
-    margin: 0;
-    padding: 10px 14px;
-    min-height: 40px;
-  }
-  .device-custom {
-    color: var(--muted);
-    font-size: 13px;
-    border-top: 1px solid var(--border);
-    border-radius: 0 0 10px 10px;
-    margin: 0;
-    padding: 10px 14px;
-  }
-  /* ── CONFIRM PAGE ──────────────────────────────── */
-  .confirm-icon {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    border: 1px solid var(--green);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    margin: 0 auto 16px;
-    color: var(--green);
-    animation: pulse 2.5s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.0); }
-    50%      { box-shadow: 0 0 0 8px rgba(74,222,128,0.08); }
-  }
-  .confirm-title {
-    font-weight: 700;
-    font-size: 12px;
-    letter-spacing: 2px;
-    color: var(--green);
+  .auth-logo {
+    font-family: 'Manrope', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
     text-align: center;
+    letter-spacing: -2.4px;
+    line-height: 1;
     margin-bottom: 6px;
-    text-transform: uppercase;
-    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text);
   }
-  .confirm-sub {
-    font-size: 13px;
-    color: var(--muted);
+  .auth-logo .x { color: var(--muted); }
+  .auth-subtitle {
     text-align: center;
-    margin-bottom: 20px;
-    line-height: 1.55;
+    color: var(--muted);
+    font-size: 14px;
     font-weight: 400;
+    line-height: 1.55;
+    margin-bottom: 28px;
   }
-  .confirm-details {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 4px 16px;
-    margin-bottom: 18px;
-  }
-  .confirm-row {
+  .auth-google-btn {
     display: flex;
-    justify-content: space-between;
+    width: 100%;
     align-items: center;
-    padding: 11px 0;
-    border-bottom: 1px solid var(--border);
+    justify-content: center;
+    gap: 10px;
+    padding: 13px 16px;
+    border-radius: 14px;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text);
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.18s, border-color 0.18s;
+    min-height: 50px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .auth-google-btn:hover  { background: var(--surface2); border-color: rgba(255,255,255,0.22); }
