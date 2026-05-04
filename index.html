@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -8,17 +7,17 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:       #0a0a0a;
-    --bg2:      #111111;
-    --bg3:      #181818;
-    --surface:  rgba(255,255,255,0.04);
-    --surface2: rgba(255,255,255,0.06);
-    --border:   rgba(255,255,255,0.08);
-    --border2:  rgba(255,255,255,0.13);
+    --bg:       #050505;
+    --bg2:      #0b0b0b;
+    --bg3:      #121212;
+    --surface:  rgba(255,255,255,0.045);
+    --surface2: rgba(255,255,255,0.075);
+    --border:   rgba(255,255,255,0.10);
+    --border2:  rgba(255,255,255,0.16);
     --text:     #ffffff;
-    --muted:    #888888;
-    --dim:      #555555;
-    --green:    #4ade80;
+    --muted:    #a1a1a1;
+    --dim:      #666666;
+    --green:    #f5f5f5;
     --red:      #f87171;
     --accent:   #ffffff;
   }
@@ -31,7 +30,7 @@
     background: var(--bg);
     color: var(--text);
     font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
     min-height: 100%;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
@@ -50,18 +49,19 @@
   .auth-card {
     width: 100%;
     max-width: 440px;
-    background: var(--bg2);
-    border: 1px solid var(--border2);
-    border-radius: 24px;
-    padding: 36px 28px 28px;
+    background: #0a0a0a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 38px 28px 28px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.42);
   }
 
   .auth-logo {
     font-family: 'Manrope', sans-serif;
-    font-size: 48px;
+    font-size: 52px;
     font-weight: 800;
     text-align: center;
-    letter-spacing: -2.4px;
+    letter-spacing: 0;
     line-height: 1;
     margin-bottom: 6px;
     color: var(--text);
@@ -74,7 +74,7 @@
     color: var(--muted);
     font-size: 14px;
     font-weight: 400;
-    line-height: 1.55;
+    line-height: 1.65;
     margin-bottom: 28px;
   }
 
@@ -85,20 +85,20 @@
     justify-content: center;
     gap: 10px;
     padding: 13px 16px;
-    border-radius: 14px;
+    border-radius: 8px;
     border: 1px solid var(--border2);
-    background: var(--surface);
+    background: #101010;
     color: var(--text);
     font-family: 'Manrope', sans-serif;
     font-size: 15px;
     font-weight: 500;
     cursor: pointer;
-    transition: background 0.18s, border-color 0.18s;
+    transition: background 0.18s, border-color 0.18s, transform 0.18s;
     min-height: 50px;
     -webkit-tap-highlight-color: transparent;
   }
 
-  .auth-google-btn:hover  { background: var(--surface2); border-color: rgba(255,255,255,0.22); }
+  .auth-google-btn:hover  { background: #151515; border-color: rgba(255,255,255,0.24); transform: translateY(-1px); }
   .auth-google-btn:active { background: rgba(255,255,255,0.10); }
 
   .auth-divider {
@@ -138,16 +138,16 @@
 
   .form-input, .form-select {
     width: 100%;
-    background: var(--bg3);
+    background: #101010;
     border: 1px solid var(--border2);
-    border-radius: 12px;
+    border-radius: 8px;
     padding: 13px 15px;
     color: var(--text);
     font-family: 'Manrope', sans-serif;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 15px;
     outline: none;
-    transition: border-color 0.2s;
+    transition: background 0.2s, border-color 0.2s;
     -webkit-appearance: none; appearance: none;
     min-height: 48px;
   }
@@ -155,7 +155,8 @@
   .form-input::placeholder { color: var(--dim); }
 
   .form-input:focus, .form-select:focus {
-    border-color: rgba(255,255,255,0.35);
+    background: #141414;
+    border-color: rgba(255,255,255,0.44);
   }
 
   .form-select {
@@ -172,22 +173,22 @@
   .btn {
     width: 100%;
     padding: 14px;
-    border-radius: 14px;
+    border-radius: 8px;
     border: none;
     background: var(--text);
     color: #0a0a0a;
     font-family: 'Manrope', sans-serif;
     font-size: 15px;
-    font-weight: 700;
-    letter-spacing: -0.1px;
+    font-weight: 800;
+    letter-spacing: 0;
     cursor: pointer;
-    transition: opacity 0.18s, transform 0.12s;
+    transition: opacity 0.18s, transform 0.18s;
     min-height: 50px;
     position: relative;
     -webkit-tap-highlight-color: transparent;
   }
 
-  .btn:hover  { opacity: 0.9; }
+  .btn:hover  { opacity: 0.92; transform: translateY(-1px); }
   .btn:active { transform: scale(0.98); opacity: 0.85; }
   .btn span { position: relative; z-index: 1; }
 
@@ -245,7 +246,7 @@
     padding: 20px;
     background: rgba(255,255,255,0.03);
     border: 1px solid var(--border2);
-    border-radius: 16px;
+    border-radius: 8px;
     text-align: center;
   }
 
@@ -257,14 +258,14 @@
   }
 
   .app-header {
-    padding: 20px 24px 16px;
+    padding: 18px 24px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: sticky;
     top: 0;
     z-index: 40;
-    background: rgba(10,10,10,0.92);
+    background: rgba(5,5,5,0.88);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
@@ -274,7 +275,7 @@
     font-family: 'Manrope', sans-serif;
     font-size: 28px;
     font-weight: 800;
-    letter-spacing: -1px;
+    letter-spacing: 0;
     line-height: 1;
     color: var(--text);
   }
@@ -286,9 +287,9 @@
     align-items: center;
     gap: 7px;
     padding: 8px 16px;
-    border-radius: 20px;
+    border-radius: 999px;
     border: 1px solid var(--border2);
-    background: transparent;
+    background: rgba(255,255,255,0.03);
     color: var(--muted);
     font-family: 'Manrope', sans-serif;
     font-size: 13px;
@@ -308,7 +309,7 @@
     width: 100%;
     max-width: 540px;
     margin: 0 auto;
-    padding: 24px 16px 20px;
+    padding: 20px 16px 14px;
   }
 
   .step {
@@ -381,12 +382,13 @@
   .page.active { display: block; }
 
   .card {
-    background: var(--bg2);
+    background: #0a0a0a;
     border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 24px 20px;
+    border-radius: 8px;
+    padding: 22px 20px;
     position: relative;
     margin-bottom: 12px;
+    box-shadow: 0 18px 54px rgba(0,0,0,0.24);
   }
 
   .card-title {
@@ -403,22 +405,125 @@
 
   .card-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
+  /* ── SALES HERO ───────────────────────────────── */
+  .sales-hero {
+    padding: 34px 0 20px;
+  }
+
+  .sales-kicker {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .sales-title {
+    font-size: clamp(36px, 9vw, 64px);
+    line-height: 0.98;
+    font-weight: 800;
+    letter-spacing: 0;
+    margin-bottom: 16px;
+  }
+
+  .sales-subtitle {
+    max-width: 460px;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 22px;
+  }
+
+  .sales-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .sales-note {
+    color: var(--dim);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.6px;
+  }
+
+  .trust-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .trust-item {
+    min-height: 82px;
+    padding: 14px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #090909;
+  }
+
+  .trust-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    margin-bottom: 8px;
+  }
+
+  .trust-title {
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.25;
+  }
+
+  .service-strip {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-bottom: 14px;
+  }
+
+  .service-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .service-row:first-child { border-top: 1px solid var(--border); }
+
+  .service-name {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .service-copy {
+    max-width: 230px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.45;
+    text-align: right;
+  }
+
   /* ── HERO ROW ──────────────────────────────────── */
   .hero-row {
     display: flex;
     align-items: center;
     gap: 14px;
     padding: 16px 18px;
-    background: transparent;
+    background: #0a0a0a;
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 8px;
     margin-bottom: 14px;
   }
 
   .status-dot {
     width: 7px; height: 7px;
     border-radius: 50%;
-    background: var(--green);
+    background: #ffffff;
     flex-shrink: 0;
     animation: blink 2.4s ease-in-out infinite;
   }
@@ -432,7 +537,7 @@
     font-weight: 700;
     color: var(--text);
     margin-bottom: 2px;
-    letter-spacing: -0.2px;
+    letter-spacing: 0;
   }
 
   .hero-sub {
@@ -446,13 +551,13 @@
   .device-wrapper { position: relative; }
 
   .device-list {
-    background: var(--bg3);
+    background: #101010;
     border: 1px solid var(--border2);
     max-height: 230px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     margin-top: 4px;
-    border-radius: 14px;
+    border-radius: 8px;
     position: absolute;
     left: 0; right: 0;
     z-index: 200;
@@ -469,7 +574,7 @@
     font-size: 14px;
     font-weight: 400;
     color: var(--text);
-    border-radius: 8px;
+    border-radius: 6px;
     margin: 2px 5px;
     user-select: none;
     -webkit-user-select: none;
@@ -545,9 +650,9 @@
   }
 
   .confirm-details {
-    background: var(--bg3);
+    background: #101010;
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: 8px;
     padding: 4px 16px;
     margin-bottom: 18px;
   }
@@ -596,10 +701,10 @@
   .modal-overlay.active { display: flex; }
 
   .modal {
-    background: var(--bg2);
+    background: #0a0a0a;
     border: 1px solid var(--border2);
     border-top: 1px solid rgba(255,255,255,0.12);
-    border-radius: 24px 24px 0 0;
+    border-radius: 8px 8px 0 0;
     padding: 8px 22px 40px;
     width: 100%;
     max-width: 480px;
@@ -628,7 +733,7 @@
   .modal-close {
     position: absolute;
     top: 18px; right: 18px;
-    background: var(--bg3);
+    background: #111111;
     border: 1px solid var(--border2);
     color: var(--muted);
     width: 28px; height: 28px;
@@ -647,7 +752,7 @@
     font-weight: 700;
     color: var(--text);
     margin-bottom: 4px;
-    letter-spacing: -0.4px;
+    letter-spacing: 0;
   }
 
   .modal-sub {
@@ -698,12 +803,20 @@
     font-size: 10px;
     color: var(--dim);
     letter-spacing: 0.8px;
-    background: linear-gradient(0deg, var(--bg) 60%, transparent);
+    background: var(--bg);
     z-index: 30;
   }
 
   .footer a { color: var(--dim); text-decoration: none; transition: color 0.15s; }
   .footer a:hover { color: var(--muted); }
+
+  @media (max-width: 430px) {
+    .trust-grid { grid-template-columns: 1fr; }
+    .trust-item { min-height: auto; }
+    .service-row { flex-direction: column; gap: 6px; }
+    .service-copy { max-width: none; text-align: left; }
+    .sales-title { font-size: 42px; }
+  }
 
   /* ── SCROLLBAR ─────────────────────────────────── */
   ::-webkit-scrollbar { width: 3px; }
@@ -783,11 +896,54 @@
 
   <!-- PAGE 1 -->
   <div id="page1" class="page active">
+    <section class="sales-hero">
+      <div class="sales-kicker">Android setup service</div>
+      <h1 class="sales-title">Настроим Android под вас.</h1>
+      <p class="sales-subtitle">Поможем подготовить устройство, подобрать подходящее решение и провести настройку без лишних шагов.</p>
+      <div class="sales-actions">
+        <button type="button" class="btn" onclick="document.getElementById('requestForm').scrollIntoView({behavior:'smooth',block:'start'});"><span>Оставить заявку</span></button>
+        <div class="sales-note">Все Android-устройства · связь по email</div>
+      </div>
+    </section>
+
+    <div class="trust-grid">
+      <div class="trust-item">
+        <div class="trust-num">01</div>
+        <div class="trust-title">Быстро разберём задачу</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num">02</div>
+        <div class="trust-title">Подскажем безопасный путь</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num">03</div>
+        <div class="trust-title">Остаёмся на связи</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Что делаем</div>
+      <div class="service-strip">
+        <div class="service-row">
+          <div class="service-name">Консультация</div>
+          <div class="service-copy">Определим модель, процессор и подходящий сценарий настройки.</div>
+        </div>
+        <div class="service-row">
+          <div class="service-name">Подготовка</div>
+          <div class="service-copy">Соберём данные по устройству и объясним следующие шаги.</div>
+        </div>
+        <div class="service-row">
+          <div class="service-name">Сопровождение</div>
+          <div class="service-copy">Свяжемся по email и доведём заявку до понятного результата.</div>
+        </div>
+      </div>
+    </div>
+
     <div class="hero-row">
       <div class="status-dot"></div>
       <div class="hero-text">
-        <div class="hero-title">Настройка Android-устройств</div>
-        <div class="hero-sub">Опишите задачу — мы свяжемся по email</div>
+        <div class="hero-title">Заявка на настройку</div>
+        <div class="hero-sub">Заполните форму — мы свяжемся по email</div>
       </div>
     </div>
 
@@ -988,10 +1144,16 @@ async function submitRequest() {
 
   try {
     const res = await fetch(
-      'https://script.google.com/macros/s/AKfycbwPlJUdva3q5fhIL8nv8fZOrj4yRbU5oq6GN6DtOKFSJfPhO2geRYxYsGGuavUx5uXhRA/exec',
+      'https://script.google.com/macros/s/AKfycbwdATcQOkGpuNk4rE29TyFzF_NibL9ZGVmL_WNA2XUgEiocJdQ9sLaGfcDD78ia_xybkQ/exec',
       {
         method: 'POST',
-        body: JSON.stringify({ email: emailVal, device: deviceVal, processor: processorVal, comment: commentVal })
+        body: JSON.stringify({
+          email: emailVal,
+          device: deviceVal,
+          processor: processorVal,
+          comment: commentVal,
+          pageUrl: window.location.href
+        })
       }
     );
     const data = await res.json();
