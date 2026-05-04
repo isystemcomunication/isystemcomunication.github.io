@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -304,7 +305,10 @@
   .steps {
     display: flex;
     align-items: center;
-    padding: 24px 24px 20px;
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 24px 16px 20px;
   }
 
   .step {
@@ -367,7 +371,13 @@
   .step.done .step-label   { color: var(--green); }
 
   /* ── PAGE / CARD ───────────────────────────────── */
-  .page { display: none; padding: 0 16px; }
+  .page {
+    display: none;
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
   .page.active { display: block; }
 
   .card {
