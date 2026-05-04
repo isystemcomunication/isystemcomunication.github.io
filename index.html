@@ -1,1678 +1,216 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IOSx — Device Config Tool</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #060b1a;
-    --surface: rgba(15, 23, 42, 0.82);
-    --surface2: rgba(21, 32, 61, 0.9);
-    --border: rgba(120, 140, 200, 0.12);
-    --border2: rgba(120, 140, 200, 0.22);
-    --accent: #7c6cff;
-    --accent2: #4cc9f0;
-    --accent3: #8ea0ff;
-    --text: #eef2ff;
-    --muted: #94a3b8;
-    --dim: #64748b;
-    --green: #34d399;
-    --red: #fb7185;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background:
-      radial-gradient(circle at 60% 8%, rgba(124,108,255,0.28), transparent 28%),
-      radial-gradient(circle at 62% 62%, rgba(76,201,240,0.18), transparent 20%),
-      radial-gradient(circle at 45% 78%, rgba(124,108,255,0.12), transparent 22%),
-      linear-gradient(180deg, #08101f 0%, #060b1a 45%, #050814 100%);
-    color: var(--text);
-    font-family: 'Rajdhani', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 60px 24px 100px;
-    display: flex;
-    flex-direction: column;
-    gap: 48px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* HEADER */
-  .header { text-align: center; padding: 20px 0 8px; }
-
-  .logo {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: clamp(52px, 12vw, 90px);
-    font-weight: 700;
-    letter-spacing: 2px;
-    line-height: 1;
-    color: var(--text);
-    position: relative;
-    display: inline-block;
-  }
-
-  .logo .x {
-    color: var(--accent);
-    text-shadow: 0 0 28px rgba(124,108,255,0.35);
-  }
-
-  .tagline {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 14px;
-    letter-spacing: 1px;
-    color: var(--muted);
-    text-transform: none;
-    margin-top: 12px;
-  }
-
-  .status-bar {
+  .cabinet-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
+  /* ── STEPS ─────────────────────────────────────── */
+  .steps {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 18px;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--muted);
+    padding: 24px 24px 20px;
   }
-
-  .status-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 8px var(--green);
-    animation: blink 2s ease-in-out infinite;
-  }
-
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-  /* STEPS */
-  .steps { display: flex; align-items: center; padding: 0 4px; }
-
   .step {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     position: relative;
   }
-
   .step::after {
     content: '';
     position: absolute;
-    top: 14px;
+    top: 13px;
     left: 50%; right: -50%;
     height: 1px;
     background: var(--border2);
     transition: background 0.4s;
   }
-
   .step:last-child::after { display: none; }
-
   .step-num {
-    width: 28px; height: 28px;
+    width: 26px; height: 26px;
     border-radius: 50%;
     border: 1px solid var(--border2);
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 11px;
-    color: var(--muted);
-    background: var(--surface);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    background: var(--bg2);
     position: relative; z-index: 1;
     transition: all 0.3s;
   }
-
-  .step.active .step-num { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 22px rgba(124,108,255,0.18); }
-  .step.done .step-num { border-color: var(--green); background: rgba(52,211,153,0.08); color: #9ff0cb; }
-  .step.done::after { background: rgba(52,211,153,0.2); }
-
+  .step.active .step-num {
+    border-color: var(--text);
+    color: var(--text);
+    background: rgba(255,255,255,0.06);
+  }
+  .step.done .step-num {
+    border-color: var(--green);
+    background: rgba(74,222,128,0.08);
+    color: var(--green);
+  }
+  .step.done::after { background: rgba(74,222,128,0.18); }
   .step-label {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
     color: var(--dim);
     text-transform: uppercase;
-    text-align: center;
   }
-
-  .step.active .step-label { color: var(--accent); }
-  .step.done .step-label { color: var(--green); }
-
-  /* CARD */
+  .step.active .step-label { color: var(--text); }
+  .step.done .step-label   { color: var(--green); }
+  /* ── PAGE / CARD ───────────────────────────────── */
+  .page { display: none; padding: 0 16px; }
+  .page.active { display: block; }
   .card {
-    background: rgba(12, 18, 35, 0.72);
-    border: 1px solid rgba(134, 151, 255, 0.14);
+    background: var(--bg2);
+    border: 1px solid var(--border);
     border-radius: 20px;
-    padding: 36px 32px;
+    padding: 24px 20px;
     position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+    margin-bottom: 12px;
   }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    opacity: 0.4;
-  }
-
   .card-title {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.2px;
     color: var(--muted);
     text-transform: uppercase;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
   }
-
-  .card-title::after { content: ''; flex: 1; height: 1px; background: rgba(120,140,200,0.1); }
-
-  /* FORM */
-  .form-group { margin-bottom: 16px; }
-
-  .form-label {
-    display: block;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 6px;
+  .card-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  /* ── HERO ROW ──────────────────────────────────── */
+  .hero-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 14px;
   }
-
-  .form-input, .form-select {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: 14px;
-    padding: 11px 14px;
-    color: var(--text);
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 600;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    -webkit-appearance: none; appearance: none;
-    font-size: 15px;
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    flex-shrink: 0;
+    animation: blink 2.4s ease-in-out infinite;
   }
-
-  .form-input::placeholder { color: var(--dim); font-weight: 400; }
-  .form-input:focus, .form-select:focus { border-color: rgba(124,108,255,0.55); box-shadow: 0 0 0 4px rgba(124,108,255,0.10); }
-
-  .form-select {
-    cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b80' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 14px center;
-    padding-right: 36px;
-  }
-
-  .form-select option, .form-select optgroup { background: #13131a; color: var(--text); }
-
-  /* BUTTON */
-  .btn {
-    width: 100%;
-    padding: 14px;
-    border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.06);
-    background: linear-gradient(135deg, #7c6cff 0%, #6f7dff 55%, #5ba8ff 100%);
-    color: white;
-    font-family: 'Rajdhani', sans-serif;
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+  .hero-text { flex: 1; }
+  .hero-title {
     font-size: 14px;
     font-weight: 700;
-    letter-spacing: 0.6px;
-    text-transform: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 6px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 10px 24px rgba(92,110,255,0.28), inset 0 1px 0 rgba(255,255,255,0.18);
+    color: var(--text);
+    margin-bottom: 2px;
+    letter-spacing: -0.2px;
   }
-
-  .btn:hover { transform: translateY(-1px); box-shadow: 0 14px 34px rgba(92,110,255,0.34), inset 0 1px 0 rgba(255,255,255,0.18); }
-  .btn span { position: relative; z-index: 1; }
-
-  /* STATUS */
-  .status-msg {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 11px;
-    text-align: center;
-    margin-top: 12px;
-    height: 16px;
-    opacity: 0;
-    transition: opacity 0.3s;
-    letter-spacing: 1px;
-  }
-  .status-msg.visible { opacity: 1; }
-
-  /* DIVIDER */
-  .divider { display: flex; align-items: center; gap: 14px; }
-  .divider-line { flex: 1; height: 1px; background: var(--border); }
-  .divider-text { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 600; color: var(--dim); letter-spacing: 2px; }
-
-  /* MODAL */
-  .modal-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.92);
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    backdrop-filter: blur(6px);
-  }
-  .modal-overlay.active { display: flex; }
-
-  .modal {
-    background: rgba(12, 18, 35, 0.72);
-    border: 1px solid rgba(134, 151, 255, 0.14);
-    border-radius: 20px;
-    padding: 32px 28px;
-    width: 100%;
-    max-width: 480px;
-    position: relative;
-    animation: modalIn 0.25s ease both;
-    max-height: 90vh;
-    overflow-y: auto;
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
-  }
-
-  .modal::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent2), transparent);
-  }
-
-  .modal-close {
-    position: absolute;
-    top: 12px; right: 12px;
-    background: none;
-    border: 1px solid var(--border2);
-    color: var(--muted);
-    width: 28px; height: 28px;
-    border-radius: 10px;
-    cursor: pointer;
+  .hero-sub {
     font-size: 12px;
-    font-family: 'Rajdhani', sans-serif;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-  }
-  .modal-close:hover { border-color: var(--muted); color: var(--text); }
-
-  .modal-title { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
-
-  /* PAGES */
-  .page { display: none; }
-  .page.active { display: block; }
-
-  /* CONFIRM */
-  .confirm-icon {
-    width: 64px; height: 64px;
-    border-radius: 50%;
-    border: 2px solid var(--green);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px;
-    margin: 0 auto 20px;
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%,100% { box-shadow: 0 0 20px rgba(52,211,153,0.15); }
-    50% { box-shadow: 0 0 30px rgba(52,211,153,0.3); }
-  }
-
-  .confirm-title { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 4px; color: var(--green); text-align: center; margin-bottom: 8px; text-transform: uppercase; }
-  .confirm-sub { font-size: 14px; color: var(--muted); text-align: center; margin-bottom: 28px; line-height: 1.6; }
-
-  .confirm-details { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 20px; }
-
-  .confirm-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
-  .confirm-row:last-child { border-bottom: none; }
-  .confirm-row-label { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; }
-  .confirm-row-value { font-weight: 600; color: var(--text); text-align: right; max-width: 60%; word-break: break-word; }
-
-  @keyframes modalIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-
-  /* CABINET BUTTON (top-right in app header) */
-  .cabinet-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 8px 16px;
-    border-radius: 12px;
-    border: 1px solid var(--border2);
-    background: rgba(124,108,255,0.07);
-    color: var(--accent3);
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 14px;
-  }
-  .cabinet-btn:hover {
-    background: rgba(124,108,255,0.15);
-    border-color: rgba(124,108,255,0.4);
-    color: var(--text);
-  }
-
-  /* CABINET MODAL SPECIFICS */
-  .cabinet-field-wrap {
-    position: relative;
-  }
-  .cabinet-field-wrap .form-input {
-    padding-right: 44px;
-  }
-  .eye-btn {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: var(--dim);
-    cursor: pointer;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    transition: color 0.2s;
-  }
-  .eye-btn:hover { color: var(--muted); }
-
-  .cabinet-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 24px;
-  }
-  .cabinet-actions .btn {
-    margin-top: 0;
-  }
-  .btn-outline {
-    background: transparent;
-    border: 1px solid var(--border2);
     color: var(--muted);
-    box-shadow: none;
+    line-height: 1.45;
+    font-weight: 400;
   }
-  .btn-outline:hover {
-    background: rgba(255,255,255,0.04);
-    border-color: var(--muted);
-    color: var(--text);
-    box-shadow: none;
-    transform: translateY(-1px);
-  }
-  .btn-danger {
-    background: linear-gradient(135deg, rgba(251,113,133,0.15) 0%, rgba(251,113,133,0.08) 100%);
-    border: 1px solid rgba(251,113,133,0.3);
-    color: var(--red);
-    box-shadow: none;
-  }
-  .btn-danger:hover {
-    background: rgba(251,113,133,0.2);
-    border-color: rgba(251,113,133,0.5);
-    box-shadow: 0 4px 16px rgba(251,113,133,0.15);
-    transform: translateY(-1px);
-  }
-
-  /* DEVICE PICKER */
+  /* ── DEVICE PICKER ─────────────────────────────── */
   .device-wrapper { position: relative; }
-
   .device-list {
-    background: rgba(13, 20, 39, 0.98);
-    border: 1px solid rgba(124,108,255,0.22);
-    max-height: 260px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    max-height: 230px;
     overflow-y: auto;
-    margin-top: 6px;
-    border-radius: 16px;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 4px;
+    border-radius: 14px;
     position: absolute;
     left: 0; right: 0;
     z-index: 200;
-    box-shadow: 0 20px 48px rgba(0,0,0,0.5);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.7);
     display: none;
   }
-
   .device-list.open { display: block; }
-
   .device-item {
-    padding: 12px 16px;
+    padding: 11px 14px;
     cursor: pointer;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
     color: var(--text);
-    border-radius: 10px;
-    margin: 3px 6px;
+    border-radius: 8px;
+    margin: 2px 5px;
     user-select: none;
     -webkit-user-select: none;
-    transition: background 0.12s, color 0.12s;
+    transition: background 0.1s;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
   }
-
-  .device-item:hover,
-  .device-item:active { background: rgba(124,108,255,0.14); color: #ffffff; }
-
+  .device-item:active { background: rgba(255,255,255,0.06); }
   .device-brand-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
   }
-
   .device-back {
-    color: var(--accent2);
+    color: var(--muted);
     font-size: 13px;
-    border-bottom: 1px solid var(--border2);
+    border-bottom: 1px solid var(--border);
     border-radius: 0;
     margin: 0;
-    padding: 10px 16px;
+    padding: 10px 14px;
+    min-height: 40px;
   }
-
-  .device-back:hover { background: rgba(76,201,240,0.08); color: var(--accent2); }
-
-  .device-item-divider {
-    height: 1px;
-    background: var(--border);
-    margin: 4px 10px;
-  }
-
   .device-custom {
     color: var(--muted);
     font-size: 13px;
     border-top: 1px solid var(--border);
     border-radius: 0 0 10px 10px;
     margin: 0;
-    padding: 10px 16px;
+    padding: 10px 14px;
   }
-
-  .device-custom:hover { background: rgba(76,201,240,0.06); color: var(--accent2); }
-
-  /* AUTH SCREEN */
-  #authScreen {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 28px 20px;
-    position: relative;
-    z-index: 1;
+  /* ── CONFIRM PAGE ──────────────────────────────── */
+  .confirm-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    border: 1px solid var(--green);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin: 0 auto 16px;
+    color: var(--green);
+    animation: pulse 2.5s ease-in-out infinite;
   }
-
-  .auth-card {
-    width: 100%;
-    max-width: 460px;
-    background: rgba(12, 18, 35, 0.78);
-    border: 1px solid rgba(134, 151, 255, 0.16);
-    border-radius: 22px;
-    padding: 30px 24px;
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.0); }
+    50%      { box-shadow: 0 0 0 8px rgba(74,222,128,0.08); }
   }
-
-  .auth-title {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 34px;
+  .confirm-title {
     font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--green);
     text-align: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    font-family: 'IBM Plex Mono', monospace;
   }
-
-  .auth-subtitle {
-    text-align: center;
+  .confirm-sub {
+    font-size: 13px;
     color: var(--muted);
-    font-size: 15px;
-    margin-bottom: 24px;
-    line-height: 1.6;
+    text-align: center;
+    margin-bottom: 20px;
+    line-height: 1.55;
+    font-weight: 400;
   }
-
-  .auth-google-btn {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 13px 16px;
+  .confirm-details {
+    background: var(--bg3);
+    border: 1px solid var(--border);
     border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.04);
-    color: var(--text);
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    pointer-events: auto;
-    position: relative;
-    z-index: 2;
+    padding: 4px 16px;
+    margin-bottom: 18px;
   }
-
-  .auth-google-btn:hover {
-    background: rgba(255,255,255,0.08);
-    border-color: rgba(124,108,255,0.4);
-  }
-
-  .auth-divider {
+  .confirm-row {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
-    margin: 16px 0;
-  }
-
-  .auth-divider::before,
-  .auth-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .auth-divider span {
-    color: var(--dim);
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 700;
-    letter-spacing: 1px;
-  }
-
-  .auth-switch-btn {
-    margin-top: 12px;
-    width: 100%;
-    background: transparent;
-    border: none;
-    color: var(--accent2);
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    padding: 8px 4px;
-  }
-
-  .auth-switch-btn:hover { color: var(--accent3); }
-</style>
-</head>
-<body>
-
-<div id="authScreen">
-  <div class="auth-card">
-    <div class="auth-title">Добро пожаловать!</div>
-    <div class="auth-subtitle">Зарегистрируйтесь или войдите, чтобы подать заявку на помощь с настройкой Android-устройства</div>
-    <button type="button" class="auth-google-btn" id="authGoogleBtn">
-      <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-9 20-20 0-1.3-.1-2.7-.4-4z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 19 13 24 13c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-5l-6.2-5.2C29.4 35.6 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-8H6.3C9.6 35.7 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.4-2.5 4.5-4.6 5.8l6.2 5.2C40.7 35.3 44 30 44 24c0-1.3-.1-2.7-.4-4z"/></svg>
-      Продолжить через Google
-    </button>
-    <div class="auth-divider"><span>или</span></div>
-    <form id="authForm" autocomplete="on" onsubmit="handleEmailAuth(); return false;" style="margin:0;">
-      <div class="form-group">
-        <label class="form-label">Gmail</label>
-        <input type="email" id="authEmail" name="email" class="form-input" placeholder="user@gmail.com" autocomplete="email" inputmode="email">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Пароль</label>
-        <input type="password" id="authPassword" name="password" class="form-input" placeholder="Минимум 8 символов" minlength="8" autocomplete="current-password">
-      </div>
-      <div id="forgotPasswordWrap" style="display:none;text-align:right;margin-top:-6px;margin-bottom:10px;">
-        <button type="button" onclick="openForgotPassword()" style="background:none;border:none;color:var(--accent2);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;cursor:pointer;padding:4px 0;letter-spacing:0.3px;transition:color 0.2s;" onmouseover="this.style.color='var(--accent3)'" onmouseout="this.style.color='var(--accent2)'">Забыли пароль?</button>
-      </div>
-      <button type="submit" class="btn" id="authActionBtn"><span>Создать аккаунт</span></button>
-    </form>
-    <button type="button" class="auth-switch-btn" id="authSwitchBtn" onclick="toggleAuthMode()">Уже есть аккаунт? Войти</button>
-    <div class="status-msg" id="authStatus" style="height:auto;min-height:16px;line-height:1.5;"></div>
-
-    <!-- Verification pending state -->
-    <div id="verifyPending" style="display:none;margin-top:16px;padding:20px;background:rgba(76,201,240,0.06);border:1px solid rgba(76,201,240,0.2);border-radius:16px;text-align:center;">
-      <div style="font-size:28px;margin-bottom:10px;">✉️</div>
-      <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;">Подтвердите email</div>
-      <div style="font-family:'Rajdhani',sans-serif;font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:18px;" id="verifyEmailHint">Письмо подтверждения отправлено на вашу почту</div>
-      <button type="button" class="btn" onclick="checkEmailVerified()" id="verifyCheckBtn" style="margin-bottom:10px;">
-        <span>Я подтвердил →</span>
-      </button>
-      <button type="button" onclick="resendVerification()" id="verifyResendBtn" style="width:100%;padding:10px;border-radius:14px;background:transparent;border:1px solid rgba(76,201,240,0.2);color:var(--accent2);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;" onmouseover="this.style.background='rgba(76,201,240,0.07)'" onmouseout="this.style.background='transparent'">
-        Отправить письмо ещё раз
-      </button>
-      <div class="status-msg" id="verifyStatus" style="margin-top:10px;height:auto;min-height:14px;line-height:1.5;"></div>
-    </div>
-  </div>
-</div>
-
-<div id="appContent" style="display:none;">
-  <div class="container">
-
-    <!-- HEADER -->
-    <div class="header">
-      <div class="logo">
-        IOS<span class="x">x</span>
-      </div>
-      <div class="tagline">Сервис подачи заявок на настройку Android-устройств</div>
-      <div class="status-bar">
-        <div class="status-dot"></div>
-        <span>Сервис активен</span>
-      </div>
-      <button type="button" class="cabinet-btn" onclick="openCabinet()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        Ваш кабинет
-      </button>
-    </div>
-
-    <!-- STEPS + PAGES -->
-    <div id="sectionOrder">
-      <div class="steps">
-        <div class="step active" id="step1">
-          <div class="step-num">01</div>
-          <div class="step-label">Заявка</div>
-        </div>
-        <div class="step" id="step2">
-          <div class="step-num">02</div>
-          <div class="step-label">Оплата</div>
-        </div>
-        <div class="step" id="step3">
-          <div class="step-num">03</div>
-          <div class="step-label">Готово</div>
-        </div>
-      </div>
-
-      <!-- PAGE 1: Form -->
-      <div id="page1" class="page active">
-        <div class="card">
-          <div class="card-title">Подача заявки на настройку</div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:20px;font-family:'Rajdhani',sans-serif;">
-            Заполните форму, чтобы направить запрос на помощь с настройкой вашего устройства. После отправки мы рассмотрим заявку и свяжемся с вами по email для уточнения деталей.<br>
-            <span style="font-size:12px;color:var(--dim);">Результат зависит от модели устройства и конкретной задачи. Сервис не выполняет обход защитных ограничений производителя или оператора.</span>
-          </div>
-          <form id="requestForm">
-            <div class="form-group">
-              <label class="form-label">Email</label>
-              <input type="email" name="email" class="form-input" id="email" placeholder="user@example.com" required>
-            </div>
-
-            <!-- Device picker -->
-            <div class="form-group">
-              <label class="form-label">Устройство</label>
-              <div class="device-wrapper" id="deviceWrapper">
-                <input
-                  type="text"
-                  id="deviceSearch"
-                  class="form-input"
-                  placeholder="Например: Samsung S21, Redmi Note 10..."
-                  autocomplete="off"
-                  spellcheck="false"
-                >
-                <input type="hidden" name="device" id="deviceHidden">
-                <div id="deviceList" class="device-list"></div>
-              </div>
-            </div>
-
-            <!-- Processor -->
-            <div class="form-group">
-              <label class="form-label">Процессор</label>
-              <select id="processor" name="processor" class="form-select">
-                <option value="">Выберите процессор</option>
-                <option>Snapdragon</option>
-                <option>MediaTek</option>
-                <option>Exynos</option>
-                <option>Unisoc</option>
-                <option>Kirin</option>
-              </select>
-            </div>
-
-            <!-- Comment -->
-           <div class="form-group">
-  <label class="form-label">Комментарий (необязательно)</label>
-  <input type="text" name="comment" class="form-input" placeholder="Опишите задачу...">
-</div>
-
-<button type="button" class="btn" onclick="submitRequest()"><span>Отправить заявку →</span></button> 
-
-      <!-- PAGE 2: hidden -->
-      <div id="page2" class="page"></div>
-
-      <!-- PAGE 3: Confirmation -->
-      <div id="page3" class="page">
-        <div class="card" style="text-align:center;">
-          <div class="confirm-icon">✓</div>
-          <div class="confirm-title">Заявка принята</div>
-          <div class="confirm-sub" id="confirmSub">Ваш запрос отправлен. Мы рассмотрим его и свяжемся с вами по email для уточнения деталей.</div>
-          <div class="confirm-details">
-            <div class="confirm-row">
-              <span class="confirm-row-label">Email</span>
-              <span class="confirm-row-value" id="confirmEmail">—</span>
-            </div>
-            <div class="confirm-row">
-              <span class="confirm-row-label">Устройство</span>
-              <span class="confirm-row-value" id="confirmDevice">—</span>
-            </div>
-            <div class="confirm-row">
-              <span class="confirm-row-label">Процессор</span>
-              <span class="confirm-row-value" id="confirmProcessor">—</span>
-            </div>
-            <div class="confirm-row">
-              <span class="confirm-row-label">Статус</span>
-              <span class="confirm-row-value" style="color:var(--green)">✓ Принято</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div><!-- end sectionOrder -->
-
-  </div><!-- end container -->
-</div><!-- end appContent -->
-
-<!-- FOOTER -->
-<div style="position:fixed;bottom:0;left:0;right:0;text-align:center;padding:14px 0;font-family:'Share Tech Mono',monospace;font-size:11px;color:#64748b;letter-spacing:1px;background:linear-gradient(0deg,rgba(5,8,20,0.95),transparent);z-index:50;">
-  <a href="#" onclick="openPrivacy();return false;" style="color:#64748b;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#7c6cff'" onmouseout="this.style.color='#64748b'">Политика конфиденциальности</a>
-  &nbsp;·&nbsp; IOSx · Сервис настройки Android-устройств
-</div>
-
-<!-- MODAL: ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ -->
-<div class="modal-overlay" id="privacyOverlay" onclick="if(event.target===this)closePrivacy()" style="z-index:1100;">
-  <div class="modal" style="max-width:580px;max-height:80vh;overflow-y:auto;">
-    <button class="modal-close" onclick="closePrivacy()">✕</button>
-    <div class="modal-title" style="font-size:18px;margin-bottom:4px;">Политика конфиденциальности</div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:24px;letter-spacing:1px;">Последнее обновление: 2025</div>
-    <div style="display:flex;flex-direction:column;gap:22px;">
-      <div>
-        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent3);margin-bottom:8px;">🔒 Что мы собираем</div>
-        <p style="color:var(--muted);font-size:15px;line-height:1.7;margin-bottom:8px;">При заполнении формы заявки вы добровольно можете указать следующие данные:</p>
-        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:5px;">
-          <li style="color:var(--muted);font-size:15px;display:flex;gap:8px;"><span style="color:var(--accent);">›</span>адрес электронной почты</li>
-          <li style="color:var(--muted);font-size:15px;display:flex;gap:8px;"><span style="color:var(--accent);">›</span>модель устройства</li>
-          <li style="color:var(--muted);font-size:15px;display:flex;gap:8px;"><span style="color:var(--accent);">›</span>описание задачи или проблемы</li>
-        </ul>
-        <p style="color:var(--muted);font-size:15px;line-height:1.7;margin-top:8px;"><strong style="color:var(--accent3);">Все данные предоставляются исключительно добровольно.</strong></p>
-      </div>
-      <div style="height:1px;background:var(--border);"></div>
-      <div>
-        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent3);margin-bottom:8px;">⚙️ Зачем нужны данные</div>
-        <p style="color:var(--muted);font-size:15px;line-height:1.7;">Email используется <strong style="color:var(--text);">исключительно для обратной связи</strong> по вашей заявке. Данные не продаются и не передаются третьим лицам в рекламных целях.</p>
-      </div>
-      <div style="height:1px;background:var(--border);"></div>
-      <div>
-        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent3);margin-bottom:8px;">⚠️ Ограничения сервиса</div>
-        <p style="color:var(--muted);font-size:15px;line-height:1.7;">Сервис помогает с общими вопросами настройки Android-устройств. <strong style="color:var(--text);">Мы не обходим защитные ограничения производителей, операторов или платформ.</strong></p>
-      </div>
-      <div style="height:1px;background:var(--border);"></div>
-      <div>
-        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent3);margin-bottom:8px;">✉️ Связь</div>
-        <p style="color:var(--muted);font-size:15px;line-height:1.7;">По вопросам, связанным с обработкой данных или удалением ваших сведений, вы можете обратиться через контакты, указанные на сайте.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: ВОССТАНОВЛЕНИЕ ПАРОЛЯ -->
-<div class="modal-overlay" id="forgotOverlay" onclick="if(event.target===this)closeForgotPassword()">
-  <div class="modal" style="max-width:460px;">
-    <button class="modal-close" onclick="closeForgotPassword()">✕</button>
-    <div class="modal-title" style="font-size:18px;margin-bottom:4px;">Восстановление доступа</div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:24px;letter-spacing:1px;">Укажите email, указанный при регистрации</div>
-    <div class="form-group">
-      <label class="form-label">Email</label>
-      <input type="email" id="forgotEmail" class="form-input" placeholder="user@gmail.com" autocomplete="email" inputmode="email">
-    </div>
-    <button type="button" class="btn" onclick="handleForgotPassword()" id="forgotBtn">
-      <span>Отправить инструкцию</span>
-    </button>
-    <div class="status-msg" id="forgotStatus" style="margin-top:14px;height:auto;min-height:16px;line-height:1.5;"></div>
-  </div>
-</div>
-
-<!-- MODAL: ВАШ КАБИНЕТ -->
-<div class="modal-overlay" id="cabinetOverlay" onclick="if(event.target===this)closeCabinet()">
-  <div class="modal" style="max-width:440px;">
-    <button class="modal-close" onclick="closeCabinet()">✕</button>
-    <div class="modal-title" style="font-size:20px;font-weight:700;color:var(--text);letter-spacing:1px;margin-bottom:4px;">Ваш кабинет</div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:24px;letter-spacing:1px;">Данные вашего аккаунта</div>
-
-    <div class="form-group">
-      <label class="form-label">Email</label>
-      <input type="email" id="cabinetEmail" class="form-input" readonly
-        style="background:rgba(124,108,255,0.05);border-color:rgba(124,108,255,0.18);color:var(--muted);cursor:default;">
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Пароль</label>
-      <div class="cabinet-field-wrap">
-        <input type="password" id="cabinetPassword" class="form-input" readonly value="********"
-          style="background:rgba(124,108,255,0.05);border-color:rgba(124,108,255,0.18);color:var(--muted);cursor:default;letter-spacing:3px;">
-        <button type="button" class="eye-btn" id="toggleCabinetPassword" onclick="toggleCabinetPassword()" title="Показать/скрыть">
-          <!-- eye icon -->
-          <svg id="eyeIconShow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          <svg id="eyeIconHide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-        </button>
-      </div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);margin-top:6px;letter-spacing:0.5px;">
-      </div>
-    </div>
-
-    <div class="cabinet-actions">
-      <button type="button" class="btn btn-outline" onclick="closeCabinet(); setStep(1);">
-        <span>На главную</span>
-      </button>
-      <button type="button" class="btn btn-danger" onclick="signOutGoogle()">
-        <span>Выйти</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<script>
-// ─── STEPS ───────────────────────────────────────────────────────────────────
-function setStep(n) {
-  [1,2,3].forEach(i => {
-    const el = document.getElementById('step' + i);
-    el.classList.remove('active','done');
-    if (i < n) el.classList.add('done');
-    if (i === n) el.classList.add('active');
-  });
-  ['page1','page2','page3'].forEach((id,i) => {
-    document.getElementById(id).classList.toggle('active', i+1 === n);
-  });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// ─── SUBMIT REQUEST ───────────────────────────────────────────────────────────
-async function submitRequest() {
-  const status = document.getElementById('formStatus');
-  const submitBtn = document.querySelector('#requestForm .btn');
-
-  const fb = await getFirebaseAuth();
-  const user = fb.auth.currentUser;
-
-  if (!user) {
-    status.textContent = '⚠ ВОЙДИ В АККАУНТ';
-    status.style.color = 'var(--red)';
-    status.classList.add('visible');
-    return;
-  }
-
-  const emailVal = user.email;
-  const deviceVal = document.getElementById('deviceHidden').value.trim()
-    || document.getElementById('deviceSearch').value.trim();
-  const processorVal = document.getElementById('processor').value;
-  const commentVal = document.querySelector('[name="comment"]').value.trim();
-
-  status.classList.remove('visible');
-
-  if (!emailVal || !deviceVal || !processorVal) {
-    if (!deviceVal) {
-      status.textContent = '⚠ ВЫБЕРИ УСТРОЙСТВО ИЗ СПИСКА';
-    } else if (!processorVal) {
-      status.textContent = '⚠ ВЫБЕРИ ПРОЦЕССОР';
-    } else {
-      status.textContent = '⚠ ЗАПОЛНИ ВСЕ ПОЛЯ';
-    }
-    status.style.color = 'var(--red)';
-    status.classList.add('visible');
-    return;
-  }
-
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = '<span>ОТПРАВКА...</span>';
-  status.textContent = 'ОТПРАВКА...';
-  status.style.color = 'var(--muted)';
-  status.classList.add('visible');
-// нормализация текста
-function cleanText(str) {
-  return (str || '')
-    .toLowerCase()
-    .replace(/[^a-zа-я0-9]/g, '') // убираем всё кроме букв и цифр
-}
-
-// собираем весь текст
-const rawText = emailVal + deviceVal + commentVal;
-const cleaned = cleanText(rawText);
-
-// 🚫 ловим spam spam1 spam2 spam@@ и т.д.
-if (cleaned.includes('spam')) {
-  status.textContent = '⚠ ОБНАРУЖЕН СПАМ';
-  status.style.color = 'var(--red)';
-  status.classList.add('visible');
-  return;
-}
-
-// 🚫 слишком много цифр (частый спам)
-const digits = rawText.replace(/[^0-9]/g, '');
-if (digits.length > 6) {
-  status.textContent = '⚠ ПОДОЗРИТЕЛЬНЫЕ ДАННЫЕ';
-  status.style.color = 'var(--red)';
-  status.classList.add('visible');
-  return;
-}
-
-// 🚫 слишком короткий комментарий (типа "ааа", "123")
-if (commentVal && commentVal.length < 4) {
-  status.textContent = '⚠ ОПИШИ ЗАДАЧУ НОРМАЛЬНО';
-  status.style.color = 'var(--red)';
-  status.classList.add('visible');
-  return;
-}
-   try {
- const res = await fetch(
-  'https://script.google.com/macros/s/AKfycbwdATcQOkGpuNk4rE29TyFzF_NibL9ZGVmL_WNA2XUgEiocJdQ9sLaGfcDD78ia_xybkQ/exec',
-  {
-    method: 'POST',
-    body: JSON.stringify({
-      email: emailVal,
-      device: deviceVal,
-      processor: processorVal,
-      comment: commentVal,
-      website: '',
-      formTimeMs: 5000
-    })
-  }
-);
-    const data = await res.json();
-
-    if (!data || data.status !== 'success') {
-      throw new Error('Server error');
-    }
-
-  } catch (e) {
-    status.textContent = '⚠ ОШИБКА ОТПРАВКИ — ПОПРОБУЙ ЕЩЁ РАЗ';
-    status.style.color = 'var(--red)';
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = '<span>Отправить заявку →</span>';
-    return;
-  }
-
-  document.getElementById('confirmEmail').textContent     = emailVal;
-  document.getElementById('confirmDevice').textContent    = deviceVal;
-  document.getElementById('confirmProcessor').textContent = processorVal;
-
-  document.getElementById('requestForm').reset();
-  deviceHidden.value = '';
-  deviceSearch.value = '';
-  deviceSearch.placeholder = 'Например: Samsung S21, Redmi Note 10...';
-  submitBtn.disabled = false;
-  submitBtn.innerHTML = '<span>Отправить заявку →</span>';
-  status.classList.remove('visible');
-
-  setStep(3);
-}
-
-// ─── PRIVACY MODAL ────────────────────────────────────────────────────────────
-function openPrivacy() { document.getElementById('privacyOverlay').classList.add('active'); }
-function closePrivacy() { document.getElementById('privacyOverlay').classList.remove('active'); }
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    closePrivacy();
-    var fo = document.getElementById('forgotOverlay');
-    if (fo) fo.classList.remove('active');
-    var cab = document.getElementById('cabinetOverlay');
-    if (cab) cab.classList.remove('active');
-  }
-});
-
-// ─── DEVICE PICKER ────────────────────────────────────────────────────────────
-const devicesByBrand = {
-  "Xiaomi": [
-    "Xiaomi 11T","Xiaomi 11T Pro",
-    "Xiaomi 12","Xiaomi 12 Lite","Xiaomi 12 Pro","Xiaomi 12T","Xiaomi 12T Pro",
-    "Xiaomi 13","Xiaomi 13 Lite","Xiaomi 13 Pro","Xiaomi 13T","Xiaomi 13T Pro",
-    "Xiaomi 14","Xiaomi 14 Pro","Xiaomi 14 Ultra","Xiaomi 14T","Xiaomi 14T Pro",
-    "Xiaomi 15","Xiaomi 15 Pro","Xiaomi 15 Ultra",
-    "Xiaomi MIX 4","Xiaomi MIX Fold","Xiaomi MIX Fold 2","Xiaomi MIX Fold 3",
-    "Xiaomi Pad 6","Xiaomi Pad 6 Pro"
-  ],
-  "Redmi": [
-    "Redmi 9","Redmi 9A","Redmi 9C","Redmi 9T",
-    "Redmi 10","Redmi 10A","Redmi 10C",
-    "Redmi 12","Redmi 12C","Redmi 12 5G",
-    "Redmi 13","Redmi 13C","Redmi 13 5G",
-    "Redmi Note 9","Redmi Note 9 Pro","Redmi Note 9S",
-    "Redmi Note 10","Redmi Note 10 Pro","Redmi Note 10S","Redmi Note 10 5G",
-    "Redmi Note 11","Redmi Note 11 Pro","Redmi Note 11S","Redmi Note 11 5G",
-    "Redmi Note 12","Redmi Note 12 Pro","Redmi Note 12 Pro+","Redmi Note 12S","Redmi Note 12 5G","Redmi Note 12 Turbo",
-    "Redmi Note 13","Redmi Note 13 Pro","Redmi Note 13 Pro+","Redmi Note 13 5G",
-    "Redmi K60","Redmi K60 Pro","Redmi K70","Redmi K70 Pro"
-  ],
-  "POCO": [
-    "POCO F3","POCO F4","POCO F4 GT","POCO F5","POCO F5 Pro","POCO F6","POCO F6 Pro",
-    "POCO X3","POCO X3 NFC","POCO X3 Pro","POCO X4 GT","POCO X4 Pro 5G",
-    "POCO X5","POCO X5 Pro","POCO X6","POCO X6 Pro","POCO X6 Neo",
-    "POCO M3","POCO M3 Pro","POCO M4","POCO M4 Pro","POCO M4 5G","POCO M5","POCO M5s","POCO M6 Pro",
-    "POCO C40","POCO C50","POCO C55","POCO C65"
-  ],
-  "Samsung Galaxy S": [
-    "Samsung Galaxy S20","Samsung Galaxy S20+","Samsung Galaxy S20 Ultra",
-    "Samsung Galaxy S21","Samsung Galaxy S21+","Samsung Galaxy S21 Ultra",
-    "Samsung Galaxy S21 FE",
-    "Samsung Galaxy S22","Samsung Galaxy S22+","Samsung Galaxy S22 Ultra",
-    "Samsung Galaxy S23","Samsung Galaxy S23+","Samsung Galaxy S23 Ultra",
-    "Samsung Galaxy S23 FE",
-    "Samsung Galaxy S24","Samsung Galaxy S24+","Samsung Galaxy S24 Ultra",
-    "Samsung Galaxy S24 FE",
-    "Samsung Galaxy S25","Samsung Galaxy S25+","Samsung Galaxy S25 Ultra"
-  ],
-  "Samsung Galaxy A": [
-    "Samsung Galaxy A03","Samsung Galaxy A03s","Samsung Galaxy A04","Samsung Galaxy A04s",
-    "Samsung Galaxy A13","Samsung Galaxy A13 5G","Samsung Galaxy A14","Samsung Galaxy A14 5G",
-    "Samsung Galaxy A23","Samsung Galaxy A23 5G","Samsung Galaxy A24",
-    "Samsung Galaxy A33 5G","Samsung Galaxy A34","Samsung Galaxy A34 5G",
-    "Samsung Galaxy A52","Samsung Galaxy A52s","Samsung Galaxy A53 5G","Samsung Galaxy A54",
-    "Samsung Galaxy A55","Samsung Galaxy A55 5G",
-    "Samsung Galaxy A73 5G","Samsung Galaxy A74"
-  ],
-  "Samsung Galaxy M/F": [
-    "Samsung Galaxy M13","Samsung Galaxy M14","Samsung Galaxy M23","Samsung Galaxy M33",
-    "Samsung Galaxy M34","Samsung Galaxy M53","Samsung Galaxy M54",
-    "Samsung Galaxy F14","Samsung Galaxy F23","Samsung Galaxy F34","Samsung Galaxy F54"
-  ],
-  "Samsung Galaxy Z": [
-    "Samsung Galaxy Z Fold 3","Samsung Galaxy Z Fold 4","Samsung Galaxy Z Fold 5","Samsung Galaxy Z Fold 6",
-    "Samsung Galaxy Z Flip 3","Samsung Galaxy Z Flip 4","Samsung Galaxy Z Flip 5","Samsung Galaxy Z Flip 6"
-  ]
-};
-
-const allDevices = Object.values(devicesByBrand).flat();
-
-const deviceSearch = document.getElementById('deviceSearch');
-const deviceList   = document.getElementById('deviceList');
-const deviceHidden = document.getElementById('deviceHidden');
-
-// Track whether the dropdown is intentionally open
-let _dropdownOpen = false;
-let _preventClose = false; // set to true during mousedown on a list item
-
-function openDropdown() {
-  _dropdownOpen = true;
-  deviceList.classList.add('open');
-}
-
-function closeDropdown() {
-  _dropdownOpen = false;
-  deviceList.classList.remove('open');
-}
-
-// Confirm final device value on close if user typed something
-function finalizeDevice() {
-  const typed = deviceSearch.value.trim();
-  if (typed && !deviceHidden.value) {
-    deviceHidden.value = typed;
-  }
-}
-
-// Score a device name against query for smart ranking
-function scoreDevice(name, query) {
-  const n = name.toLowerCase();
-  const q = query.toLowerCase().trim();
-  if (n === q) return 100;
-  if (n.startsWith(q)) return 80;
-  const words = q.split(/\s+/);
-  if (words.every(w => n.includes(w))) return 60;
-  if (n.includes(q)) return 50;
-  if (words.some(w => n.includes(w))) return 20;
-  return 0;
-}
-
-// Select a device: fill both inputs and close
-function selectDevice(name) {
-  deviceSearch.value = name;
-  deviceHidden.value = name;
-  closeDropdown();
-  // Visual feedback
-  deviceSearch.style.borderColor = 'var(--green)';
-  setTimeout(() => { deviceSearch.style.borderColor = ''; }, 1200);
-}
-
-// Build a clickable div that uses mousedown (fires before blur)
-function makeItem(cls, html, onSelect) {
-  const div = document.createElement('div');
-  div.className = 'device-item' + (cls ? ' ' + cls : '');
-  div.innerHTML = html;
-  // Use mousedown so it fires before the blur event on deviceSearch
-  div.addEventListener('mousedown', (e) => {
-    e.preventDefault(); // prevent blur
-    onSelect();
-  });
-  // Touch support
-  div.addEventListener('touchend', (e) => {
-    e.preventDefault();
-    onSelect();
-  });
-  return div;
-}
-
-function renderBrandList() {
-  deviceList.innerHTML = '';
-  Object.keys(devicesByBrand).forEach(brand => {
-    const count = devicesByBrand[brand].length;
-    const div = makeItem('', `<div class="device-brand-row"><span>${brand}</span><span style="color:var(--dim);font-size:12px;font-family:'Share Tech Mono',monospace">${count} моделей ›</span></div>`, () => {
-      renderBrandDevices(brand);
-    });
-    deviceList.appendChild(div);
-  });
-  // "Other device" option
-  const other = makeItem('device-custom', '✏ Другое устройство — ввести вручную', () => {
-    deviceSearch.value = '';
-    deviceHidden.value = '';
-    closeDropdown();
-    deviceSearch.placeholder = 'Введите название вашего устройства...';
-    deviceSearch.focus();
-  });
-  deviceList.appendChild(other);
-  openDropdown();
-}
-
-function renderBrandDevices(brand) {
-  deviceList.innerHTML = '';
-  // Back button
-  const back = makeItem('device-back', '‹ Назад к брендам', () => {
-    renderBrandList();
-  });
-  deviceList.appendChild(back);
-
-  devicesByBrand[brand].forEach(device => {
-    const div = makeItem('', device, () => {
-      selectDevice(device);
-    });
-    deviceList.appendChild(div);
-  });
-  openDropdown();
-}
-
-function renderSearchResults(query) {
-  deviceList.innerHTML = '';
-  const q = query.toLowerCase().trim();
-
-  const results = allDevices
-    .map(d => ({ name: d, score: scoreDevice(d, q) }))
-    .filter(r => r.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 25);
-
-  if (results.length === 0) {
-    const info = document.createElement('div');
-    info.className = 'device-item';
-    info.style.color = 'var(--muted)';
-    info.style.pointerEvents = 'none';
-    info.textContent = '🔍 Совпадений нет';
-    deviceList.appendChild(info);
-
-    const typed = deviceSearch.value.trim();
-    if (typed) {
-      deviceHidden.value = typed;
-      const custom = makeItem('device-custom', `✏ Использовать «${typed}» как название устройства`, () => {
-        selectDevice(typed);
-      });
-      deviceList.appendChild(custom);
-    }
-  } else {
-    const typed = deviceSearch.value.trim();
-    // Allow custom value at any time
-    deviceHidden.value = typed;
-
-    results.forEach(r => {
-      const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const highlighted = r.name.replace(
-        new RegExp('(' + escaped + ')', 'gi'),
-        '<span style="color:var(--accent);font-weight:700">$1</span>'
-      );
-      const div = makeItem('', highlighted, () => {
-        selectDevice(r.name);
-      });
-      deviceList.appendChild(div);
-    });
-
-    // Custom option if typed text doesn't exactly match a result
-    if (typed && !allDevices.some(d => d.toLowerCase() === typed.toLowerCase())) {
-      const custom = makeItem('device-custom', `✏ Использовать «${typed}» (ввод вручную)`, () => {
-        selectDevice(typed);
-      });
-      deviceList.appendChild(custom);
-    }
-  }
-
-  openDropdown();
-}
-
-// ── Events ──
-deviceSearch.addEventListener('focus', () => {
-  const val = deviceSearch.value.trim();
-  if (val) {
-    renderSearchResults(val);
-  } else {
-    renderBrandList();
-  }
-});
-
-deviceSearch.addEventListener('blur', () => {
-  // Small delay so mousedown on list items can fire first
-  setTimeout(() => {
-    finalizeDevice();
-    closeDropdown();
-  }, 150);
-});
-
-deviceSearch.addEventListener('input', () => {
-  const val = deviceSearch.value.trim();
-  // Update hidden value immediately so user can always submit with typed text
-  deviceHidden.value = val;
-  if (!val) {
-    renderBrandList();
-  } else {
-    renderSearchResults(val);
-  }
-});
-
-// Close on outside click
-document.addEventListener('click', (e) => {
-  if (!deviceSearch.contains(e.target) && !deviceList.contains(e.target)) {
-    finalizeDevice();
-    closeDropdown();
-  }
-});
-</script>
-
-<script>
-// ─── FIREBASE AUTH ────────────────────────────────────────────────────────────
-var _fbAuth = null;
-
-async function getFirebaseAuth() {
-  if (_fbAuth) return _fbAuth;
-
-  var firebaseConfig = {
-    apiKey:            "AIzaSyDpjJemT5tAxPmuLEmqtib5yKuw8_shKok",
-    authDomain:        "iosx-71a9d.firebaseapp.com",
-    projectId:         "iosx-71a9d",
-    storageBucket:     "iosx-71a9d.firebasestorage.app",
-    messagingSenderId: "99982710026",
-    appId:             "1:99982710026:web:7957b7a3c051ad96ac16f3"
-  };
-
-  var appModule  = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
-  var authModule = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
-
-  var app  = appModule.getApps().length ? appModule.getApps()[0] : appModule.initializeApp(firebaseConfig);
-  var auth = authModule.getAuth(app);
-  auth.languageCode = 'ru';
-
-  _fbAuth = {
-    auth,
-    createUserWithEmailAndPassword: authModule.createUserWithEmailAndPassword,
-    signInWithEmailAndPassword:     authModule.signInWithEmailAndPassword,
-    sendEmailVerification:          authModule.sendEmailVerification,
-    sendPasswordResetEmail:         authModule.sendPasswordResetEmail,
-    onAuthStateChanged:             authModule.onAuthStateChanged,
-    signOut:                        authModule.signOut,
-    GoogleAuthProvider:             authModule.GoogleAuthProvider,
-    signInWithPopup:                authModule.signInWithPopup
-  };
-
-  return _fbAuth;
-}
-
-function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email || '');
-}
-
-var isEmailSignInMode = false;
-
-function setTextStatus(id, message, color) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = message || '';
-  el.style.color = color || 'var(--muted)';
-  el.classList.toggle('visible', !!message);
-}
-
-function setAuthStatus(message, color)   { setTextStatus('authStatus', message, color); }
-function setVerifyStatus(message, color) { setTextStatus('verifyStatus', message, color); }
-
-function showAuthForm() {
-  document.getElementById('authScreen').style.display  = '';
-  document.getElementById('appContent').style.display  = 'none';
-  document.getElementById('authForm').style.display    = '';
-  document.getElementById('authGoogleBtn').style.display = '';
-  var divider = document.querySelector('.auth-divider');
-  if (divider) divider.style.display = '';
-  document.getElementById('authSwitchBtn').style.display = '';
-  document.getElementById('verifyPending').style.display = 'none';
-}
-
-function showApp() {
-  document.getElementById('authScreen').style.display = 'none';
-  document.getElementById('appContent').style.display = '';
-  var cab = document.getElementById('cabinetOverlay');
-  if (cab) cab.classList.remove('active');
-}
-
-function showVerifyPending(hintText) {
-  document.getElementById('authScreen').style.display  = '';
-  document.getElementById('appContent').style.display  = 'none';
-  document.getElementById('authForm').style.display    = 'none';
-  document.getElementById('authGoogleBtn').style.display = 'none';
-  var divider = document.querySelector('.auth-divider');
-  if (divider) divider.style.display = 'none';
-  document.getElementById('authSwitchBtn').style.display = 'none';
-  document.getElementById('verifyPending').style.display = '';
-  document.getElementById('verifyEmailHint').textContent = hintText || 'Письмо подтверждения отправлено на вашу почту';
-  setAuthStatus('');
-  setVerifyStatus('');
-}
-
-function setAuthMode(signInMode) {
-  isEmailSignInMode = !!signInMode;
-  document.getElementById('authActionBtn').innerHTML = isEmailSignInMode ? '<span>Войти</span>' : '<span>Создать аккаунт</span>';
-  document.getElementById('authSwitchBtn').textContent = isEmailSignInMode ? 'Нет аккаунта? Создать' : 'Уже есть аккаунт? Войти';
-  document.getElementById('authPassword').autocomplete = isEmailSignInMode ? 'current-password' : 'new-password';
-  var forgotWrap = document.getElementById('forgotPasswordWrap');
-  if (forgotWrap) forgotWrap.style.display = isEmailSignInMode ? 'block' : 'none';
-  setAuthStatus('');
-}
-
-window.toggleAuthMode = function() { setAuthMode(!isEmailSignInMode); };
-
-window.signInWithGoogle = async function() {
-  console.log('Google sign-in clicked');
-  var btn = document.getElementById('authGoogleBtn');
-  if (btn) {
-    btn.disabled = true;
-    btn.style.opacity = '0.7';
-  }
-  setAuthStatus('');
-
-  try {
-    console.log('Loading Firebase...');
-    var fb = await getFirebaseAuth();
-    console.log('Firebase loaded, opening popup...');
-
-    var provider = new fb.GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
-
-    var result = await fb.signInWithPopup(fb.auth, provider);
-    console.log('Google sign-in success:', result.user && result.user.email);
-
-    if (result.user) {
-      showApp();
-    }
-  } catch (err) {
-    console.error('Google sign-in error:', err);
-    var knownErrors = {
-      'auth/popup-closed-by-user':                     'Окно входа закрыто. Попробуйте ещё раз',
-      'auth/popup-blocked':                            'Браузер заблокировал всплывающее окно. Разрешите pop-up и попробуйте снова',
-      'auth/cancelled-popup-request':                  'Запрос отменён. Попробуйте ещё раз',
-      'auth/network-request-failed':                   'Ошибка сети. Проверьте интернет',
-      'auth/unauthorized-domain':                      'Домен не авторизован — добавьте его в Firebase Console → Authentication → Settings',
-      'auth/account-exists-with-different-credential': 'Этот email уже используется с другим способом входа',
-      'auth/operation-not-allowed':                    'Google-вход не включён в Firebase Console',
-      'auth/internal-error':                           'Внутренняя ошибка Firebase. Попробуйте позже'
-    };
-    var msg = knownErrors[err.code]
-      || ('Ошибка' + (err.code ? ' [' + err.code + ']' : '') + ': ' + (err.message || 'попробуйте ещё раз'));
-    setAuthStatus(msg, 'var(--red)');
-  }
-
-  // Always re-enable button regardless of outcome
-  if (btn) {
-    btn.disabled = false;
-    btn.style.opacity = '';
-  }
-};
-
-// Attach Google button click after DOM + signInWithGoogle are both ready
-document.addEventListener('DOMContentLoaded', function() {
-  var googleBtn = document.getElementById('authGoogleBtn');
-  if (googleBtn) {
-    googleBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      window.signInWithGoogle();
-    });
-  }
-});
-
-function getEmailActionSettings() {
-  var cleanUrl = window.location.origin && window.location.origin !== 'null'
-    ? window.location.origin + window.location.pathname
-    : 'https://isystemcomunication.github.io/IOSx.github.io/';
-  return { url: cleanUrl, handleCodeInApp: false };
-}
-
-async function sendVerificationToCurrentUser() {
-  var fb   = await getFirebaseAuth();
-  var user = fb.auth.currentUser;
-  if (!user) throw new Error('no_user');
-  await fb.sendEmailVerification(user, getEmailActionSettings());
-}
-
-window.handleEmailAuth = async function() {
-  var btn      = document.getElementById('authActionBtn');
-  var email    = document.getElementById('authEmail').value.trim().toLowerCase();
-  var password = document.getElementById('authPassword').value;
-
-  if (!email || !password) { setAuthStatus('Пожалуйста, заполните email и пароль', 'var(--red)'); return; }
-  if (!isValidEmail(email)) { setAuthStatus('Введите корректный email', 'var(--red)'); return; }
-  if (password.length < 8)  { setAuthStatus('Пароль должен быть минимум 8 символов', 'var(--red)'); return; }
-
-  btn.disabled = true;
-  btn.innerHTML = '<span>Проверяем...</span>';
-  setAuthStatus('');
-
-  try {
-    var fb = await getFirebaseAuth();
-
-    if (isEmailSignInMode) {
-      var loginResult = await fb.signInWithEmailAndPassword(fb.auth, email, password);
-      localStorage.setItem('iosxEmail', email);
-      if (!loginResult.user.emailVerified) {
-        showVerifyPending('Сначала подтвердите email по ссылке из письма, затем нажмите «Я подтвердил»');
-        btn.disabled = false;
-        btn.innerHTML = '<span>Войти</span>';
-        return;
-      }
-      showApp();
-      return;
-    }
-
-    var registerResult = await fb.createUserWithEmailAndPassword(fb.auth, email, password);
-    localStorage.setItem('iosxEmail', email);
-    sessionStorage.setItem('iosxJustRegistered', '1');
-    await fb.sendEmailVerification(registerResult.user, getEmailActionSettings());
-    showVerifyPending('Мы отправили на почту ссылку подтверждения. Откройте письмо, нажмите ссылку, затем вернитесь и нажмите «Я подтвердил»');
-
-  } catch (err) {
-    var msg = {
-      'auth/email-already-in-use':   'Этот email уже зарегистрирован. Нажмите «Уже есть аккаунт? Войти»',
-      'auth/user-not-found':         'Аккаунт не найден. Создайте аккаунт',
-      'auth/wrong-password':         'Неверный пароль',
-      'auth/invalid-credential':     'Неверный email или пароль',
-      'auth/invalid-email':          'Введите корректный email',
-      'auth/weak-password':          'Пароль должен быть минимум 8 символов',
-      'auth/too-many-requests':      'Слишком много попыток. Подождите немного',
-      'auth/network-request-failed': 'Ошибка сети. Проверьте интернет'
-    }[err.code] || 'Ошибка: ' + (err.message || 'попробуйте ещё раз');
-    setAuthStatus(msg, 'var(--red)');
-  }
-
-  btn.disabled = false;
-  btn.innerHTML = isEmailSignInMode ? '<span>Войти</span>' : '<span>Создать аккаунт</span>';
-};
-
-window.checkEmailVerified = async function() {
-  var btn = document.getElementById('verifyCheckBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span>Проверяем...</span>';
-  setVerifyStatus('');
-
-  try {
-    var fb   = await getFirebaseAuth();
-    var user = fb.auth.currentUser;
-    if (!user) throw new Error('no_user');
-    await user.reload();
-    user = fb.auth.currentUser;
-    if (user && user.emailVerified) {
-      sessionStorage.removeItem('iosxJustRegistered');
-      setVerifyStatus('Email подтверждён', 'var(--green)');
-      showApp();
-      return;
-    }
-    setVerifyStatus('Email ещё не подтверждён. Откройте письмо и нажмите ссылку', 'var(--red)');
-  } catch (e) {
-    setVerifyStatus('Ошибка проверки. Войдите заново или попробуйте позже', 'var(--red)');
-  }
-
-  btn.disabled = false;
-  btn.innerHTML = '<span>Я подтвердил →</span>';
-};
-
-window.resendVerification = async function() {
-  var btn = document.getElementById('verifyResendBtn');
-  btn.disabled = true;
-  setVerifyStatus('Отправляем письмо...', 'var(--muted)');
-  try {
-    await sendVerificationToCurrentUser();
-    setVerifyStatus('Письмо отправлено ещё раз. Проверьте входящие и спам', 'var(--green)');
-  } catch (err) {
-    var msg = err.code === 'auth/too-many-requests'
-      ? 'Слишком много запросов. Подождите немного'
-      : 'Не удалось отправить письмо. Попробуйте войти заново';
-    setVerifyStatus(msg, 'var(--red)');
-  }
-  btn.disabled = false;
-};
-
-window.signOutGoogle = async function() {
-  var cab = document.getElementById('cabinetOverlay');
-  if (cab) cab.classList.remove('active');
-  try {
-    var fb = await getFirebaseAuth();
-    await fb.signOut(fb.auth);
-  } catch(e) {}
-  sessionStorage.removeItem('iosxJustRegistered');
-  showAuthForm();
-  setAuthMode(false);
-  setAuthStatus('');
-};
-
-window.openForgotPassword = function() {
-  var authEmail  = document.getElementById('authEmail');
-  var forgotEmail = document.getElementById('forgotEmail');
-  if (authEmail && forgotEmail && authEmail.value) forgotEmail.value = authEmail.value;
-  setTextStatus('forgotStatus', '');
-  document.getElementById('forgotOverlay').classList.add('active');
-  setTimeout(function() { if (forgotEmail) forgotEmail.focus(); }, 100);
-};
-
-window.closeForgotPassword = function() {
-  document.getElementById('forgotOverlay').classList.remove('active');
-};
-
-window.handleForgotPassword = async function() {
-  var email = document.getElementById('forgotEmail').value.trim().toLowerCase();
-  var btn   = document.getElementById('forgotBtn');
-  if (!email)              { setTextStatus('forgotStatus', 'Введите email', 'var(--red)'); return; }
-  if (!isValidEmail(email)){ setTextStatus('forgotStatus', 'Введите корректный email', 'var(--red)'); return; }
-
-  btn.disabled = true;
-  btn.innerHTML = '<span>Отправляем...</span>';
-  try {
-    var fb = await getFirebaseAuth();
-    await fb.sendPasswordResetEmail(fb.auth, email);
-    setTextStatus('forgotStatus', 'Ссылка восстановления отправлена на почту', 'var(--green)');
-  } catch(e) {
-    setTextStatus('forgotStatus', 'Ошибка отправки. Проверьте email и попробуйте ещё раз', 'var(--red)');
-  }
-  btn.disabled = false;
-  btn.innerHTML = '<span>Отправить инструкцию</span>';
-};
-
-// ─── CABINET ─────────────────────────────────────────────────────────────────
-window.openCabinet = function() {
-  loadCabinet();
-  document.getElementById('cabinetOverlay').classList.add('active');
-};
-
-window.closeCabinet = function() {
-  document.getElementById('cabinetOverlay').classList.remove('active');
-};
-
-function loadCabinet() {
-  getFirebaseAuth().then(function(fb) {
-    var user = fb.auth.currentUser;
-    var emailEl = document.getElementById('cabinetEmail');
-    if (emailEl && user) emailEl.value = user.email || '';
-  }).catch(function(){});
-  var passEl = document.getElementById('cabinetPassword');
-  if (passEl) {
-    passEl.type = 'password';
-    passEl.value = '********';
-  }
-  var showIcon = document.getElementById('eyeIconShow');
-  var hideIcon = document.getElementById('eyeIconHide');
-  if (showIcon) showIcon.style.display = '';
-  if (hideIcon) hideIcon.style.display = 'none';
-}
-
-window.toggleCabinetPassword = function() {
-  var passEl   = document.getElementById('cabinetPassword');
-  var showIcon = document.getElementById('eyeIconShow');
-  var hideIcon = document.getElementById('eyeIconHide');
-  if (!passEl) return;
-  if (passEl.type === 'password') {
-    passEl.type = 'text';
-    if (showIcon) showIcon.style.display = 'none';
-    if (hideIcon) hideIcon.style.display = '';
-  } else {
-    passEl.type = 'password';
-    if (showIcon) showIcon.style.display = '';
-    if (hideIcon) hideIcon.style.display = 'none';
-  }
-};
-
-document.addEventListener('DOMContentLoaded', async function() {
-  showAuthForm();
-  setAuthMode(false);
-
-  var savedEmail = localStorage.getItem('iosxEmail');
-  if (savedEmail) document.getElementById('authEmail').value = savedEmail;
-
-  try {
-    var fb = await getFirebaseAuth();
-    fb.onAuthStateChanged(fb.auth, async function(user) {
-      if (!user) { showAuthForm(); return; }
-      await user.reload().catch(function(){});
-      user = fb.auth.currentUser;
-      if (user && user.emailVerified) { showApp(); return; }
-      if (sessionStorage.getItem('iosxJustRegistered') === '1') {
-        showVerifyPending('Мы отправили на почту ссылку подтверждения. Откройте письмо, нажмите ссылку, затем вернитесь и нажмите «Я подтвердил»');
-      } else {
-        showAuthForm();
-        setAuthMode(true);
-      }
-    });
-  } catch(e) {
-    setAuthStatus('Не удалось подключиться к Firebase. Проверьте интернет', 'var(--red)');
-  }
-});
-</script>
-
-</body>
-</html>
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
