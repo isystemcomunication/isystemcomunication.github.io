@@ -21,8 +21,11 @@
     --red:      #f87171;
     --accent:   #ffffff;
   }
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   html, body { height: 100%; overscroll-behavior: none; }
+
   body {
     background: var(--bg);
     color: var(--text);
@@ -33,6 +36,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
   /* ── AUTH SCREEN ───────────────────────────────── */
   #authScreen {
     min-height: 100dvh;
@@ -41,6 +45,7 @@
     justify-content: center;
     padding: 24px 20px 40px;
   }
+
   .auth-card {
     width: 100%;
     max-width: 440px;
@@ -49,6 +54,7 @@
     border-radius: 24px;
     padding: 36px 28px 28px;
   }
+
   .auth-logo {
     font-family: 'Manrope', sans-serif;
     font-size: 48px;
@@ -59,7 +65,9 @@
     margin-bottom: 6px;
     color: var(--text);
   }
+
   .auth-logo .x { color: var(--muted); }
+
   .auth-subtitle {
     text-align: center;
     color: var(--muted);
@@ -68,6 +76,7 @@
     line-height: 1.55;
     margin-bottom: 28px;
   }
+
   .auth-google-btn {
     display: flex;
     width: 100%;
@@ -87,4 +96,1536 @@
     min-height: 50px;
     -webkit-tap-highlight-color: transparent;
   }
+
   .auth-google-btn:hover  { background: var(--surface2); border-color: rgba(255,255,255,0.22); }
+  .auth-google-btn:active { background: rgba(255,255,255,0.10); }
+
+  .auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .auth-divider::before, .auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .auth-divider span {
+    color: var(--dim);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  /* ── FORM ELEMENTS ─────────────────────────────── */
+  .form-group { margin-bottom: 14px; }
+
+  .form-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+
+  .form-input, .form-select {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    padding: 13px 15px;
+    color: var(--text);
+    font-family: 'Manrope', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none; appearance: none;
+    min-height: 48px;
+  }
+
+  .form-input::placeholder { color: var(--dim); }
+
+  .form-input:focus, .form-select:focus {
+    border-color: rgba(255,255,255,0.35);
+  }
+
+  .form-select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23555' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    padding-right: 38px;
+  }
+
+  .form-select option, .form-select optgroup { background: #1a1a1a; color: var(--text); }
+
+  /* ── BUTTONS ───────────────────────────────────── */
+  .btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    background: var(--text);
+    color: #0a0a0a;
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.1px;
+    cursor: pointer;
+    transition: opacity 0.18s, transform 0.12s;
+    min-height: 50px;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn:hover  { opacity: 0.9; }
+  .btn:active { transform: scale(0.98); opacity: 0.85; }
+  .btn span { position: relative; z-index: 1; }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+  }
+
+  .btn-outline:hover { border-color: rgba(255,255,255,0.25); color: var(--text); opacity: 1; }
+
+  .btn-danger {
+    background: transparent;
+    border: 1px solid rgba(248,113,113,0.25);
+    color: var(--red);
+  }
+
+  .btn-danger:hover { background: rgba(248,113,113,0.06); border-color: rgba(248,113,113,0.4); opacity: 1; }
+
+  .auth-switch-btn {
+    margin-top: 12px;
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 4px;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.15s;
+  }
+
+  .auth-switch-btn:hover { color: var(--text); }
+
+  .status-msg {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-align: center;
+    margin-top: 10px;
+    min-height: 14px;
+    opacity: 0;
+    transition: opacity 0.25s;
+    letter-spacing: 0.3px;
+    line-height: 1.5;
+  }
+
+  .status-msg.visible { opacity: 1; }
+
+  /* ── VERIFY PENDING ────────────────────────────── */
+  #verifyPending {
+    display: none;
+    margin-top: 16px;
+    padding: 20px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    text-align: center;
+  }
+
+  /* ── APP HEADER ────────────────────────────────── */
+  #appContent {
+    display: none;
+    min-height: 100dvh;
+    padding-bottom: 64px;
+  }
+
+  .app-header {
+    padding: 20px 24px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .app-logo {
+    font-family: 'Manrope', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .app-logo .x { color: var(--muted); }
+
+  .cabinet-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    min-height: 36px;
+    transition: color 0.15s, border-color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .cabinet-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
+
+  /* ── STEPS ─────────────────────────────────────── */
+  .steps {
+    display: flex;
+    align-items: center;
+    padding: 24px 24px 20px;
+  }
+
+  .step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+  }
+
+  .step::after {
+    content: '';
+    position: absolute;
+    top: 13px;
+    left: 50%; right: -50%;
+    height: 1px;
+    background: var(--border2);
+    transition: background 0.4s;
+  }
+
+  .step:last-child::after { display: none; }
+
+  .step-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    background: var(--bg2);
+    position: relative; z-index: 1;
+    transition: all 0.3s;
+  }
+
+  .step.active .step-num {
+    border-color: var(--text);
+    color: var(--text);
+    background: rgba(255,255,255,0.06);
+  }
+
+  .step.done .step-num {
+    border-color: var(--green);
+    background: rgba(74,222,128,0.08);
+    color: var(--green);
+  }
+
+  .step.done::after { background: rgba(74,222,128,0.18); }
+
+  .step-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+
+  .step.active .step-label { color: var(--text); }
+  .step.done .step-label   { color: var(--green); }
+
+  /* ── PAGE / CARD ───────────────────────────────── */
+  .page { display: none; padding: 0 16px; }
+  .page.active { display: block; }
+
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px 20px;
+    position: relative;
+    margin-bottom: 12px;
+  }
+
+  .card-title {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── HERO ROW ──────────────────────────────────── */
+  .hero-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 14px;
+  }
+
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    flex-shrink: 0;
+    animation: blink 2.4s ease-in-out infinite;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+
+  .hero-text { flex: 1; }
+
+  .hero-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 2px;
+    letter-spacing: -0.2px;
+  }
+
+  .hero-sub {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.45;
+    font-weight: 400;
+  }
+
+  /* ── DEVICE PICKER ─────────────────────────────── */
+  .device-wrapper { position: relative; }
+
+  .device-list {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    max-height: 230px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 4px;
+    border-radius: 14px;
+    position: absolute;
+    left: 0; right: 0;
+    z-index: 200;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.7);
+    display: none;
+  }
+
+  .device-list.open { display: block; }
+
+  .device-item {
+    padding: 11px 14px;
+    cursor: pointer;
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text);
+    border-radius: 8px;
+    margin: 2px 5px;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: background 0.1s;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+  }
+
+  .device-item:active { background: rgba(255,255,255,0.06); }
+
+  .device-brand-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .device-back {
+    color: var(--muted);
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    margin: 0;
+    padding: 10px 14px;
+    min-height: 40px;
+  }
+
+  .device-custom {
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    border-radius: 0 0 10px 10px;
+    margin: 0;
+    padding: 10px 14px;
+  }
+
+  /* ── CONFIRM PAGE ──────────────────────────────── */
+  .confirm-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    border: 1px solid var(--green);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin: 0 auto 16px;
+    color: var(--green);
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.0); }
+    50%      { box-shadow: 0 0 0 8px rgba(74,222,128,0.08); }
+  }
+
+  .confirm-title {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--green);
+    text-align: center;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .confirm-sub {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 20px;
+    line-height: 1.55;
+    font-weight: 400;
+  }
+
+  .confirm-details {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 4px 16px;
+    margin-bottom: 18px;
+  }
+
+  .confirm-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .confirm-row:last-child { border-bottom: none; }
+
+  .confirm-row-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+
+  .confirm-row-value {
+    font-weight: 500;
+    color: var(--text);
+    text-align: right;
+    max-width: 60%;
+    word-break: break-word;
+    font-size: 13px;
+  }
+
+  /* ── MODAL / BOTTOM SHEET ──────────────────────── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 100;
+    align-items: flex-end;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-top: 1px solid rgba(255,255,255,0.12);
+    border-radius: 24px 24px 0 0;
+    padding: 8px 22px 40px;
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+    animation: sheetIn 0.3s cubic-bezier(.32,1.2,.6,1) both;
+    max-height: 90dvh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 4px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 2px;
+    margin: 10px auto 20px;
+  }
+
+  @keyframes sheetIn {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 18px; right: 18px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+    transition: color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .modal-close:hover { color: var(--text); }
+
+  .modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+    letter-spacing: -0.4px;
+  }
+
+  .modal-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    margin-bottom: 22px;
+    letter-spacing: 1px;
+  }
+
+  /* ── CABINET ───────────────────────────────────── */
+  .cabinet-field-wrap { position: relative; }
+  .cabinet-field-wrap .form-input { padding-right: 44px; }
+
+  .eye-btn {
+    position: absolute;
+    right: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--dim);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .eye-btn:hover { color: var(--muted); }
+
+  .cabinet-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .cabinet-actions .btn { margin-top: 0; }
+
+  /* ── FOOTER ────────────────────────────────────── */
+  .footer {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    text-align: center;
+    padding: 10px 0 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 0.8px;
+    background: linear-gradient(0deg, var(--bg) 60%, transparent);
+    z-index: 30;
+  }
+
+  .footer a { color: var(--dim); text-decoration: none; transition: color 0.15s; }
+  .footer a:hover { color: var(--muted); }
+
+  /* ── SCROLLBAR ─────────────────────────────────── */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- ── AUTH SCREEN ──────────────────────────────────────── -->
+<div id="authScreen">
+  <div class="auth-card">
+    <div class="auth-logo">IOS<span class="x">x</span></div>
+    <div class="auth-subtitle">Настройка Android-устройств — подайте заявку за 30 секунд</div>
+
+    <button type="button" class="auth-google-btn" id="authGoogleBtn">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-9 20-20 0-1.3-.1-2.7-.4-4z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 19 13 24 13c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-5l-6.2-5.2C29.4 35.6 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-8H6.3C9.6 35.7 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.4-2.5 4.5-4.6 5.8l6.2 5.2C40.7 35.3 44 30 44 24c0-1.3-.1-2.7-.4-4z"/></svg>
+      Войти через Google
+    </button>
+
+    <div class="auth-divider"><span>или</span></div>
+
+    <form id="authForm" autocomplete="on" onsubmit="handleEmailAuth(); return false;">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" id="authEmail" name="email" class="form-input" placeholder="user@gmail.com" autocomplete="email" inputmode="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Пароль</label>
+        <input type="password" id="authPassword" name="password" class="form-input" placeholder="Минимум 8 символов" minlength="8" autocomplete="current-password">
+      </div>
+      <div id="forgotPasswordWrap" style="display:none;text-align:right;margin-top:-6px;margin-bottom:12px;">
+        <button type="button" onclick="openForgotPassword()" style="background:none;border:none;color:var(--muted);font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer;padding:4px 0;transition:color 0.15s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Забыли пароль?</button>
+      </div>
+      <button type="submit" class="btn" id="authActionBtn"><span>Создать аккаунт</span></button>
+    </form>
+
+    <button type="button" class="auth-switch-btn" id="authSwitchBtn" onclick="toggleAuthMode()">Уже есть аккаунт? Войти</button>
+    <div class="status-msg" id="authStatus"></div>
+
+    <div id="verifyPending">
+      <div style="font-size:26px;margin-bottom:10px;">✉️</div>
+      <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;letter-spacing:-0.2px;">Подтвердите email</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:18px;" id="verifyEmailHint">Письмо отправлено на вашу почту</div>
+      <button type="button" class="btn" onclick="checkEmailVerified()" id="verifyCheckBtn" style="margin-bottom:10px;"><span>Я подтвердил →</span></button>
+      <button type="button" onclick="resendVerification()" id="verifyResendBtn" style="width:100%;padding:11px;border-radius:12px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer;min-height:42px;transition:color 0.15s,border-color 0.15s;" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,0.25)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border2)'">Отправить снова</button>
+      <div class="status-msg" id="verifyStatus" style="margin-top:8px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── APP CONTENT ──────────────────────────────────────── -->
+<div id="appContent">
+
+  <div class="app-header">
+    <div class="app-logo">IOS<span class="x">x</span></div>
+    <button type="button" class="cabinet-btn" onclick="openCabinet()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Кабинет
+    </button>
+  </div>
+
+  <div class="steps">
+    <div class="step active" id="step1">
+      <div class="step-num">01</div>
+      <div class="step-label">Заявка</div>
+    </div>
+    <div class="step" id="step2">
+      <div class="step-num">02</div>
+      <div class="step-label">Ожидание</div>
+    </div>
+    <div class="step" id="step3">
+      <div class="step-num">03</div>
+      <div class="step-label">Готово</div>
+    </div>
+  </div>
+
+  <!-- PAGE 1 -->
+  <div id="page1" class="page active">
+    <div class="hero-row">
+      <div class="status-dot"></div>
+      <div class="hero-text">
+        <div class="hero-title">Настройка Android-устройств</div>
+        <div class="hero-sub">Опишите задачу — мы свяжемся по email</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <form id="requestForm">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-input" id="email" placeholder="user@example.com" required inputmode="email">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Устройство</label>
+          <div class="device-wrapper" id="deviceWrapper">
+            <input type="text" id="deviceSearch" class="form-input" placeholder="Samsung S21, Redmi Note 10..." autocomplete="off" spellcheck="false">
+            <input type="hidden" name="device" id="deviceHidden">
+            <div id="deviceList" class="device-list"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Процессор</label>
+          <select id="processor" name="processor" class="form-select">
+            <option value="">Выберите процессор</option>
+            <option>Snapdragon</option>
+            <option>MediaTek</option>
+            <option>Exynos</option>
+            <option>Unisoc</option>
+            <option>Kirin</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Комментарий <span style="color:var(--dim);font-weight:400;letter-spacing:0;">(необязательно)</span></label>
+          <input type="text" name="comment" class="form-input" placeholder="Опишите задачу...">
+        </div>
+
+        <button type="button" class="btn" onclick="submitRequest()"><span>Отправить заявку →</span></button>
+        <div class="status-msg" id="formStatus"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PAGE 2 (hidden) -->
+  <div id="page2" class="page"></div>
+
+  <!-- PAGE 3 -->
+  <div id="page3" class="page">
+    <div class="card" style="text-align:center;">
+      <div class="confirm-icon">✓</div>
+      <div class="confirm-title">Заявка принята</div>
+      <div class="confirm-sub">Мы рассмотрим запрос и свяжемся с вами по email.</div>
+      <div class="confirm-details">
+        <div class="confirm-row">
+          <span class="confirm-row-label">Email</span>
+          <span class="confirm-row-value" id="confirmEmail">—</span>
+        </div>
+        <div class="confirm-row">
+          <span class="confirm-row-label">Устройство</span>
+          <span class="confirm-row-value" id="confirmDevice">—</span>
+        </div>
+        <div class="confirm-row">
+          <span class="confirm-row-label">Процессор</span>
+          <span class="confirm-row-value" id="confirmProcessor">—</span>
+        </div>
+        <div class="confirm-row">
+          <span class="confirm-row-label">Статус</span>
+          <span class="confirm-row-value" style="color:var(--green)">✓ Принято</span>
+        </div>
+      </div>
+      <button type="button" class="btn" onclick="setStep(1)"><span>Подать ещё одну заявку</span></button>
+    </div>
+  </div>
+
+</div><!-- end appContent -->
+
+<!-- Footer -->
+<div class="footer">
+  <a href="#" onclick="openPrivacy();return false;">Политика конфиденциальности</a>
+  &nbsp;·&nbsp; IOSx
+</div>
+
+<!-- ── MODAL: ПОЛИТИКА ──────────────────────────────────── -->
+<div class="modal-overlay" id="privacyOverlay" onclick="if(event.target===this)closePrivacy()" style="z-index:1100;">
+  <div class="modal" style="max-width:480px;">
+    <button class="modal-close" onclick="closePrivacy()">✕</button>
+    <div class="modal-title">Конфиденциальность</div>
+    <div class="modal-sub">Последнее обновление: 2025</div>
+    <div style="display:flex;flex-direction:column;gap:20px;">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Что мы собираем</div>
+        <p style="color:var(--muted);font-size:14px;line-height:1.65;">Email, модель устройства и описание задачи — только добровольно.</p>
+      </div>
+      <div style="height:1px;background:var(--border);"></div>
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Зачем</div>
+        <p style="color:var(--muted);font-size:14px;line-height:1.65;">Email — исключительно для обратной связи. Данные не продаются третьим лицам.</p>
+      </div>
+      <div style="height:1px;background:var(--border);"></div>
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Ограничения</div>
+        <p style="color:var(--muted);font-size:14px;line-height:1.65;">Сервис не обходит защитные ограничения производителей и операторов.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL: КАБИНЕТ ───────────────────────────────────── -->
+<div class="modal-overlay" id="cabinetOverlay" onclick="if(event.target===this)closeCabinet()">
+  <div class="modal" style="max-width:440px;">
+    <button class="modal-close" onclick="closeCabinet()">✕</button>
+    <div class="modal-title">Ваш кабинет</div>
+    <div class="modal-sub">Данные аккаунта</div>
+
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" id="cabinetEmail" class="form-input" readonly style="background:transparent;border-color:var(--border);color:var(--muted);cursor:default;">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Пароль</label>
+      <div class="cabinet-field-wrap">
+        <input type="password" id="cabinetPassword" class="form-input" readonly value="********" style="background:transparent;border-color:var(--border);color:var(--muted);cursor:default;letter-spacing:3px;">
+        <button type="button" class="eye-btn" id="toggleCabinetPassword" onclick="toggleCabinetPassword()" title="Показать/скрыть">
+          <svg id="eyeIconShow" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg id="eyeIconHide" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);margin-top:5px;letter-spacing:0.3px;">Firebase не предоставляет доступ к реальному паролю</div>
+    </div>
+
+    <div class="cabinet-actions">
+      <button type="button" class="btn btn-outline" onclick="closeCabinet(); setStep(1);"><span>Главная</span></button>
+      <button type="button" class="btn btn-danger" onclick="signOutGoogle()"><span>Выйти</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL: ВОССТАНОВЛЕНИЕ ────────────────────────────── -->
+<div class="modal-overlay" id="forgotOverlay" onclick="if(event.target===this)closeForgotPassword()">
+  <div class="modal" style="max-width:440px;">
+    <button class="modal-close" onclick="closeForgotPassword()">✕</button>
+    <div class="modal-title">Восстановление доступа</div>
+    <div class="modal-sub">Укажите email при регистрации</div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" id="forgotEmail" class="form-input" placeholder="user@gmail.com" autocomplete="email" inputmode="email">
+    </div>
+    <button type="button" class="btn" onclick="handleForgotPassword()" id="forgotBtn"><span>Отправить инструкцию</span></button>
+    <div class="status-msg" id="forgotStatus" style="margin-top:12px;"></div>
+  </div>
+</div>
+
+<script>
+// ─── STEPS ────────────────────────────────────────────────
+function setStep(n) {
+  [1,2,3].forEach(i => {
+    const el = document.getElementById('step' + i);
+    el.classList.remove('active','done');
+    if (i < n) el.classList.add('done');
+    if (i === n) el.classList.add('active');
+  });
+  ['page1','page2','page3'].forEach((id,i) => {
+    document.getElementById(id).classList.toggle('active', i+1 === n);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── SUBMIT REQUEST ───────────────────────────────────────
+async function submitRequest() {
+  const emailVal     = document.getElementById('email').value.trim();
+  const deviceVal    = document.getElementById('deviceHidden').value.trim()
+                    || document.getElementById('deviceSearch').value.trim();
+  const processorVal = document.getElementById('processor').value;
+  const commentVal   = document.querySelector('[name="comment"]').value.trim();
+  const status       = document.getElementById('formStatus');
+  const submitBtn    = document.querySelector('#requestForm .btn');
+
+  status.classList.remove('visible');
+
+  if (!emailVal || !deviceVal || !processorVal) {
+    if (!deviceVal) {
+      status.textContent = '⚠ Выбери устройство из списка';
+    } else if (!processorVal) {
+      status.textContent = '⚠ Выбери процессор';
+    } else {
+      status.textContent = '⚠ Заполни все поля';
+    }
+    status.style.color = 'var(--red)';
+    status.classList.add('visible');
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span>Отправка...</span>';
+  status.textContent = 'Отправка...';
+  status.style.color = 'var(--muted)';
+  status.classList.add('visible');
+
+  try {
+    const res = await fetch(
+      'https://script.google.com/macros/s/AKfycbwPlJUdva3q5fhIL8nv8fZOrj4yRbU5oq6GN6DtOKFSJfPhO2geRYxYsGGuavUx5uXhRA/exec',
+      {
+        method: 'POST',
+        body: JSON.stringify({ email: emailVal, device: deviceVal, processor: processorVal, comment: commentVal })
+      }
+    );
+    const data = await res.json();
+    if (!data || data.status !== 'success') throw new Error('Server error');
+  } catch (e) {
+    status.textContent = '⚠ Ошибка отправки — попробуй ещё раз';
+    status.style.color = 'var(--red)';
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<span>Отправить заявку →</span>';
+    return;
+  }
+
+  document.getElementById('confirmEmail').textContent     = emailVal;
+  document.getElementById('confirmDevice').textContent    = deviceVal;
+  document.getElementById('confirmProcessor').textContent = processorVal;
+
+  document.getElementById('requestForm').reset();
+  deviceHidden.value = '';
+  deviceSearch.value = '';
+  deviceSearch.placeholder = 'Samsung S21, Redmi Note 10...';
+  submitBtn.disabled = false;
+  submitBtn.innerHTML = '<span>Отправить заявку →</span>';
+  status.classList.remove('visible');
+
+  setStep(3);
+}
+
+// ─── MODALS ───────────────────────────────────────────────
+function openPrivacy()  { document.getElementById('privacyOverlay').classList.add('active'); }
+function closePrivacy() { document.getElementById('privacyOverlay').classList.remove('active'); }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    ['privacyOverlay','forgotOverlay','cabinetOverlay'].forEach(id => {
+      document.getElementById(id)?.classList.remove('active');
+    });
+  }
+});
+
+// ─── DEVICE PICKER ────────────────────────────────────────
+const devicesByBrand = {
+  "Xiaomi": [
+    "Xiaomi 11T","Xiaomi 11T Pro",
+    "Xiaomi 12","Xiaomi 12 Lite","Xiaomi 12 Pro","Xiaomi 12T","Xiaomi 12T Pro",
+    "Xiaomi 13","Xiaomi 13 Lite","Xiaomi 13 Pro","Xiaomi 13T","Xiaomi 13T Pro",
+    "Xiaomi 14","Xiaomi 14 Pro","Xiaomi 14 Ultra","Xiaomi 14T","Xiaomi 14T Pro",
+    "Xiaomi 15","Xiaomi 15 Pro","Xiaomi 15 Ultra",
+    "Xiaomi MIX 4","Xiaomi MIX Fold","Xiaomi MIX Fold 2","Xiaomi MIX Fold 3",
+    "Xiaomi Pad 6","Xiaomi Pad 6 Pro"
+  ],
+  "Redmi": [
+    "Redmi 9","Redmi 9A","Redmi 9C","Redmi 9T",
+    "Redmi 10","Redmi 10A","Redmi 10C",
+    "Redmi 12","Redmi 12C","Redmi 12 5G",
+    "Redmi 13","Redmi 13C","Redmi 13 5G",
+    "Redmi Note 9","Redmi Note 9 Pro","Redmi Note 9S",
+    "Redmi Note 10","Redmi Note 10 Pro","Redmi Note 10S","Redmi Note 10 5G",
+    "Redmi Note 11","Redmi Note 11 Pro","Redmi Note 11S","Redmi Note 11 5G",
+    "Redmi Note 12","Redmi Note 12 Pro","Redmi Note 12 Pro+","Redmi Note 12S","Redmi Note 12 5G","Redmi Note 12 Turbo",
+    "Redmi Note 13","Redmi Note 13 Pro","Redmi Note 13 Pro+","Redmi Note 13 5G",
+    "Redmi K60","Redmi K60 Pro","Redmi K70","Redmi K70 Pro"
+  ],
+  "POCO": [
+    "POCO F3","POCO F4","POCO F4 GT","POCO F5","POCO F5 Pro","POCO F6","POCO F6 Pro",
+    "POCO X3","POCO X3 NFC","POCO X3 Pro","POCO X4 GT","POCO X4 Pro 5G",
+    "POCO X5","POCO X5 Pro","POCO X6","POCO X6 Pro","POCO X6 Neo",
+    "POCO M3","POCO M3 Pro","POCO M4","POCO M4 Pro","POCO M4 5G","POCO M5","POCO M5s","POCO M6 Pro",
+    "POCO C40","POCO C50","POCO C55","POCO C65"
+  ],
+  "Samsung Galaxy S": [
+    "Samsung Galaxy S20","Samsung Galaxy S20+","Samsung Galaxy S20 Ultra",
+    "Samsung Galaxy S21","Samsung Galaxy S21+","Samsung Galaxy S21 Ultra",
+    "Samsung Galaxy S21 FE",
+    "Samsung Galaxy S22","Samsung Galaxy S22+","Samsung Galaxy S22 Ultra",
+    "Samsung Galaxy S23","Samsung Galaxy S23+","Samsung Galaxy S23 Ultra",
+    "Samsung Galaxy S23 FE",
+    "Samsung Galaxy S24","Samsung Galaxy S24+","Samsung Galaxy S24 Ultra",
+    "Samsung Galaxy S24 FE",
+    "Samsung Galaxy S25","Samsung Galaxy S25+","Samsung Galaxy S25 Ultra"
+  ],
+  "Samsung Galaxy A": [
+    "Samsung Galaxy A03","Samsung Galaxy A03s","Samsung Galaxy A04","Samsung Galaxy A04s",
+    "Samsung Galaxy A13","Samsung Galaxy A13 5G","Samsung Galaxy A14","Samsung Galaxy A14 5G",
+    "Samsung Galaxy A23","Samsung Galaxy A23 5G","Samsung Galaxy A24",
+    "Samsung Galaxy A33 5G","Samsung Galaxy A34","Samsung Galaxy A34 5G",
+    "Samsung Galaxy A52","Samsung Galaxy A52s","Samsung Galaxy A53 5G","Samsung Galaxy A54",
+    "Samsung Galaxy A55","Samsung Galaxy A55 5G",
+    "Samsung Galaxy A73 5G","Samsung Galaxy A74"
+  ],
+  "Samsung Galaxy M/F": [
+    "Samsung Galaxy M13","Samsung Galaxy M14","Samsung Galaxy M23","Samsung Galaxy M33",
+    "Samsung Galaxy M34","Samsung Galaxy M53","Samsung Galaxy M54",
+    "Samsung Galaxy F14","Samsung Galaxy F23","Samsung Galaxy F34","Samsung Galaxy F54"
+  ],
+  "Samsung Galaxy Z": [
+    "Samsung Galaxy Z Fold 3","Samsung Galaxy Z Fold 4","Samsung Galaxy Z Fold 5","Samsung Galaxy Z Fold 6",
+    "Samsung Galaxy Z Flip 3","Samsung Galaxy Z Flip 4","Samsung Galaxy Z Flip 5","Samsung Galaxy Z Flip 6"
+  ]
+};
+
+const allDevices = Object.values(devicesByBrand).flat();
+
+const deviceSearch = document.getElementById('deviceSearch');
+const deviceList   = document.getElementById('deviceList');
+const deviceHidden = document.getElementById('deviceHidden');
+
+let _dropdownOpen = false;
+
+function openDropdown()  { _dropdownOpen = true;  deviceList.classList.add('open'); }
+function closeDropdown() { _dropdownOpen = false; deviceList.classList.remove('open'); }
+
+function finalizeDevice() {
+  const typed = deviceSearch.value.trim();
+  if (typed && !deviceHidden.value) {
+    deviceHidden.value = typed;
+  }
+}
+
+function scoreDevice(name, query) {
+  const n = name.toLowerCase();
+  const q = query.toLowerCase().trim();
+  if (n === q) return 100;
+  if (n.startsWith(q)) return 80;
+  const words = q.split(/\s+/);
+  if (words.every(w => n.includes(w))) return 60;
+  if (n.includes(q)) return 50;
+  if (words.some(w => n.includes(w))) return 20;
+  return 0;
+}
+
+function selectDevice(name) {
+  deviceSearch.value = name;
+  deviceHidden.value = name;
+  closeDropdown();
+  deviceSearch.style.borderColor = 'rgba(74,222,128,0.5)';
+  setTimeout(() => { deviceSearch.style.borderColor = ''; }, 1200);
+}
+
+function makeItem(cls, html, onSelect) {
+  const div = document.createElement('div');
+  div.className = 'device-item' + (cls ? ' ' + cls : '');
+  div.innerHTML = html;
+  div.addEventListener('mousedown', (e) => { e.preventDefault(); onSelect(); });
+  div.addEventListener('touchend',  (e) => { e.preventDefault(); onSelect(); });
+  return div;
+}
+
+function renderBrandList() {
+  deviceList.innerHTML = '';
+  Object.keys(devicesByBrand).forEach(brand => {
+    const count = devicesByBrand[brand].length;
+    const div = makeItem('', `<div class="device-brand-row"><span>${brand}</span><span style="color:var(--dim);font-size:11px;font-family:'IBM Plex Mono',monospace">${count} ›</span></div>`, () => {
+      renderBrandDevices(brand);
+    });
+    deviceList.appendChild(div);
+  });
+  const other = makeItem('device-custom', '✏ Ввести вручную', () => {
+    deviceSearch.value = '';
+    deviceHidden.value = '';
+    closeDropdown();
+    deviceSearch.placeholder = 'Введите название устройства...';
+    deviceSearch.focus();
+  });
+  deviceList.appendChild(other);
+  openDropdown();
+}
+
+function renderBrandDevices(brand) {
+  deviceList.innerHTML = '';
+  const back = makeItem('device-back', '‹ Назад', () => {
+    renderBrandList();
+  });
+  deviceList.appendChild(back);
+
+  devicesByBrand[brand].forEach(device => {
+    const div = makeItem('', device, () => {
+      selectDevice(device);
+    });
+    deviceList.appendChild(div);
+  });
+  openDropdown();
+}
+
+function renderSearchResults(query) {
+  deviceList.innerHTML = '';
+  const q = query.toLowerCase().trim();
+
+  const results = allDevices
+    .map(d => ({ name: d, score: scoreDevice(d, q) }))
+    .filter(r => r.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 25);
+
+  if (results.length === 0) {
+    const info = document.createElement('div');
+    info.className = 'device-item';
+    info.style.color = 'var(--muted)';
+    info.style.pointerEvents = 'none';
+    info.textContent = '🔍 Совпадений нет';
+    deviceList.appendChild(info);
+
+    const typed = deviceSearch.value.trim();
+    if (typed) {
+      deviceHidden.value = typed;
+      const custom = makeItem('device-custom', `✏ Использовать «${typed}»`, () => {
+        selectDevice(typed);
+      });
+      deviceList.appendChild(custom);
+    }
+  } else {
+    const typed = deviceSearch.value.trim();
+    deviceHidden.value = typed;
+
+    results.forEach(r => {
+      const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const highlighted = r.name.replace(
+        new RegExp('(' + escaped + ')', 'gi'),
+        '<span style="color:var(--text);font-weight:600">$1</span>'
+      );
+      const div = makeItem('', highlighted, () => {
+        selectDevice(r.name);
+      });
+      deviceList.appendChild(div);
+    });
+
+    if (typed && !allDevices.some(d => d.toLowerCase() === typed.toLowerCase())) {
+      const custom = makeItem('device-custom', `✏ Использовать «${typed}» (ввод вручную)`, () => {
+        selectDevice(typed);
+      });
+      deviceList.appendChild(custom);
+    }
+  }
+
+  openDropdown();
+}
+
+deviceSearch.addEventListener('focus', () => {
+  const val = deviceSearch.value.trim();
+  if (val) renderSearchResults(val);
+  else renderBrandList();
+});
+
+deviceSearch.addEventListener('blur', () => {
+  setTimeout(() => {
+    finalizeDevice();
+    closeDropdown();
+  }, 150);
+});
+
+deviceSearch.addEventListener('input', () => {
+  const val = deviceSearch.value.trim();
+  deviceHidden.value = val;
+  if (!val) renderBrandList();
+  else renderSearchResults(val);
+});
+
+document.addEventListener('click', (e) => {
+  if (!deviceSearch.contains(e.target) && !deviceList.contains(e.target)) {
+    finalizeDevice();
+    closeDropdown();
+  }
+});
+</script>
+
+<script>
+// ─── FIREBASE AUTH ────────────────────────────────────────
+var _fbAuth = null;
+
+async function getFirebaseAuth() {
+  if (_fbAuth) return _fbAuth;
+
+  var firebaseConfig = {
+    apiKey:            "AIzaSyDpjJemT5tAxPmuLEmqtib5yKuw8_shKok",
+    authDomain:        "iosx-71a9d.firebaseapp.com",
+    projectId:         "iosx-71a9d",
+    storageBucket:     "iosx-71a9d.firebasestorage.app",
+    messagingSenderId: "99982710026",
+    appId:             "1:99982710026:web:7957b7a3c051ad96ac16f3"
+  };
+
+  var appModule  = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+  var authModule = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+
+  var app  = appModule.getApps().length ? appModule.getApps()[0] : appModule.initializeApp(firebaseConfig);
+  var auth = authModule.getAuth(app);
+  auth.languageCode = 'ru';
+
+  _fbAuth = {
+    auth,
+    createUserWithEmailAndPassword: authModule.createUserWithEmailAndPassword,
+    signInWithEmailAndPassword:     authModule.signInWithEmailAndPassword,
+    sendEmailVerification:          authModule.sendEmailVerification,
+    sendPasswordResetEmail:         authModule.sendPasswordResetEmail,
+    onAuthStateChanged:             authModule.onAuthStateChanged,
+    signOut:                        authModule.signOut,
+    GoogleAuthProvider:             authModule.GoogleAuthProvider,
+    signInWithPopup:                authModule.signInWithPopup
+  };
+
+  return _fbAuth;
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email || '');
+}
+
+var isEmailSignInMode = false;
+
+function setTextStatus(id, message, color) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = message || '';
+  el.style.color = color || 'var(--muted)';
+  el.classList.toggle('visible', !!message);
+}
+
+function setAuthStatus(message, color)   { setTextStatus('authStatus', message, color); }
+function setVerifyStatus(message, color) { setTextStatus('verifyStatus', message, color); }
+
+function showAuthForm() {
+  document.getElementById('authScreen').style.display  = '';
+  document.getElementById('appContent').style.display  = 'none';
+  document.getElementById('authForm').style.display    = '';
+  document.getElementById('authGoogleBtn').style.display = '';
+  var divider = document.querySelector('.auth-divider');
+  if (divider) divider.style.display = '';
+  document.getElementById('authSwitchBtn').style.display = '';
+  document.getElementById('verifyPending').style.display = 'none';
+}
+
+function showApp() {
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('appContent').style.display = 'block';
+  var cab = document.getElementById('cabinetOverlay');
+  if (cab) cab.classList.remove('active');
+}
+
+function showVerifyPending(hintText) {
+  document.getElementById('authScreen').style.display  = '';
+  document.getElementById('appContent').style.display  = 'none';
+  document.getElementById('authForm').style.display    = 'none';
+  document.getElementById('authGoogleBtn').style.display = 'none';
+  var divider = document.querySelector('.auth-divider');
+  if (divider) divider.style.display = 'none';
+  document.getElementById('authSwitchBtn').style.display = 'none';
+  document.getElementById('verifyPending').style.display = '';
+  document.getElementById('verifyEmailHint').textContent = hintText || 'Письмо подтверждения отправлено на вашу почту';
+  setAuthStatus('');
+  setVerifyStatus('');
+}
+
+function setAuthMode(signInMode) {
+  isEmailSignInMode = !!signInMode;
+  document.getElementById('authActionBtn').innerHTML = isEmailSignInMode ? '<span>Войти</span>' : '<span>Создать аккаунт</span>';
+  document.getElementById('authSwitchBtn').textContent = isEmailSignInMode ? 'Нет аккаунта? Создать' : 'Уже есть аккаунт? Войти';
+  document.getElementById('authPassword').autocomplete = isEmailSignInMode ? 'current-password' : 'new-password';
+  var forgotWrap = document.getElementById('forgotPasswordWrap');
+  if (forgotWrap) forgotWrap.style.display = isEmailSignInMode ? 'block' : 'none';
+  setAuthStatus('');
+}
+
+window.toggleAuthMode = function() { setAuthMode(!isEmailSignInMode); };
+
+window.signInWithGoogle = async function() {
+  console.log('Google sign-in clicked');
+  var btn = document.getElementById('authGoogleBtn');
+  if (btn) {
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+  }
+  setAuthStatus('');
+
+  try {
+    console.log('Loading Firebase...');
+    var fb = await getFirebaseAuth();
+    console.log('Firebase loaded, opening popup...');
+
+    var provider = new fb.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+
+    var result = await fb.signInWithPopup(fb.auth, provider);
+    console.log('Google sign-in success:', result.user && result.user.email);
+
+    if (result.user) {
+      showApp();
+    }
+  } catch (err) {
+    console.error('Google sign-in error:', err);
+    var knownErrors = {
+      'auth/popup-closed-by-user':                     'Окно закрыто. Попробуйте ещё раз',
+      'auth/popup-blocked':                            'Браузер заблокировал pop-up. Разрешите и повторите',
+      'auth/cancelled-popup-request':                  'Запрос отменён',
+      'auth/network-request-failed':                   'Ошибка сети. Проверьте интернет',
+      'auth/unauthorized-domain':                      'Домен не авторизован в Firebase Console',
+      'auth/account-exists-with-different-credential': 'Email уже используется с другим способом входа',
+      'auth/operation-not-allowed':                    'Google-вход не включён в Firebase Console',
+      'auth/internal-error':                           'Внутренняя ошибка Firebase. Попробуйте позже'
+    };
+    var msg = knownErrors[err.code]
+      || ('Ошибка' + (err.code ? ' [' + err.code + ']' : '') + ': ' + (err.message || 'попробуйте ещё раз'));
+    setAuthStatus(msg, 'var(--red)');
+  }
+
+  if (btn) {
+    btn.disabled = false;
+    btn.style.opacity = '';
+  }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  var googleBtn = document.getElementById('authGoogleBtn');
+  if (googleBtn) {
+    googleBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.signInWithGoogle();
+    });
+  }
+});
+
+function getEmailActionSettings() {
+  var cleanUrl = window.location.origin && window.location.origin !== 'null'
+    ? window.location.origin + window.location.pathname
+    : 'https://isystemcomunication.github.io/IOSx.github.io/';
+  return { url: cleanUrl, handleCodeInApp: false };
+}
+
+async function sendVerificationToCurrentUser() {
+  var fb   = await getFirebaseAuth();
+  var user = fb.auth.currentUser;
+  if (!user) throw new Error('no_user');
+  await fb.sendEmailVerification(user, getEmailActionSettings());
+}
+
+window.handleEmailAuth = async function() {
+  var btn      = document.getElementById('authActionBtn');
+  var email    = document.getElementById('authEmail').value.trim().toLowerCase();
+  var password = document.getElementById('authPassword').value;
+
+  if (!email || !password) { setAuthStatus('Заполните email и пароль', 'var(--red)'); return; }
+  if (!isValidEmail(email)) { setAuthStatus('Введите корректный email', 'var(--red)'); return; }
+  if (password.length < 8)  { setAuthStatus('Пароль минимум 8 символов', 'var(--red)'); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span>Проверяем...</span>';
+  setAuthStatus('');
+
+  try {
+    var fb = await getFirebaseAuth();
+
+    if (isEmailSignInMode) {
+      var loginResult = await fb.signInWithEmailAndPassword(fb.auth, email, password);
+      localStorage.setItem('iosxEmail', email);
+      if (!loginResult.user.emailVerified) {
+        showVerifyPending('Подтвердите email по ссылке из письма, затем нажмите «Я подтвердил»');
+        btn.disabled = false;
+        btn.innerHTML = '<span>Войти</span>';
+        return;
+      }
+      showApp();
+      return;
+    }
+
+    var registerResult = await fb.createUserWithEmailAndPassword(fb.auth, email, password);
+    localStorage.setItem('iosxEmail', email);
+    sessionStorage.setItem('iosxJustRegistered', '1');
+    await fb.sendEmailVerification(registerResult.user, getEmailActionSettings());
+    showVerifyPending('Откройте письмо, нажмите ссылку, затем вернитесь и нажмите «Я подтвердил»');
+
+  } catch (err) {
+    var msg = {
+      'auth/email-already-in-use':   'Этот email уже зарегистрирован. Войдите',
+      'auth/user-not-found':         'Аккаунт не найден. Создайте аккаунт',
+      'auth/wrong-password':         'Неверный пароль',
+      'auth/invalid-credential':     'Неверный email или пароль',
+      'auth/invalid-email':          'Введите корректный email',
+      'auth/weak-password':          'Пароль минимум 8 символов',
+      'auth/too-many-requests':      'Слишком много попыток. Подождите',
+      'auth/network-request-failed': 'Ошибка сети. Проверьте интернет'
+    }[err.code] || 'Ошибка: ' + (err.message || 'попробуйте ещё раз');
+    setAuthStatus(msg, 'var(--red)');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = isEmailSignInMode ? '<span>Войти</span>' : '<span>Создать аккаунт</span>';
+};
+
+window.checkEmailVerified = async function() {
+  var btn = document.getElementById('verifyCheckBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span>Проверяем...</span>';
+  setVerifyStatus('');
+
+  try {
+    var fb   = await getFirebaseAuth();
+    var user = fb.auth.currentUser;
+    if (!user) throw new Error('no_user');
+    await user.reload();
+    user = fb.auth.currentUser;
+    if (user && user.emailVerified) {
+      sessionStorage.removeItem('iosxJustRegistered');
+      setVerifyStatus('Email подтверждён', 'var(--green)');
+      showApp();
+      return;
+    }
+    setVerifyStatus('Email ещё не подтверждён. Откройте письмо', 'var(--red)');
+  } catch (e) {
+    setVerifyStatus('Ошибка проверки. Попробуйте позже', 'var(--red)');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<span>Я подтвердил →</span>';
+};
+
+window.resendVerification = async function() {
+  var btn = document.getElementById('verifyResendBtn');
+  btn.disabled = true;
+  setVerifyStatus('Отправляем...', 'var(--muted)');
+  try {
+    await sendVerificationToCurrentUser();
+    setVerifyStatus('Письмо отправлено. Проверьте входящие и спам', 'var(--green)');
+  } catch (err) {
+    var msg = err.code === 'auth/too-many-requests'
+      ? 'Слишком много запросов. Подождите'
+      : 'Ошибка отправки. Войдите заново';
+    setVerifyStatus(msg, 'var(--red)');
+  }
+  btn.disabled = false;
+};
+
+window.signOutGoogle = async function() {
+  var cab = document.getElementById('cabinetOverlay');
+  if (cab) cab.classList.remove('active');
+  try {
+    var fb = await getFirebaseAuth();
+    await fb.signOut(fb.auth);
+  } catch(e) {}
+  sessionStorage.removeItem('iosxJustRegistered');
+  showAuthForm();
+  setAuthMode(false);
+  setAuthStatus('');
+};
+
+window.openForgotPassword = function() {
+  var authEmail   = document.getElementById('authEmail');
+  var forgotEmail = document.getElementById('forgotEmail');
+  if (authEmail && forgotEmail && authEmail.value) forgotEmail.value = authEmail.value;
+  setTextStatus('forgotStatus', '');
+  document.getElementById('forgotOverlay').classList.add('active');
+  setTimeout(function() { if (forgotEmail) forgotEmail.focus(); }, 100);
+};
+
+window.closeForgotPassword = function() {
+  document.getElementById('forgotOverlay').classList.remove('active');
+};
+
+window.handleForgotPassword = async function() {
+  var email = document.getElementById('forgotEmail').value.trim().toLowerCase();
+  var btn   = document.getElementById('forgotBtn');
+  if (!email)               { setTextStatus('forgotStatus', 'Введите email', 'var(--red)'); return; }
+  if (!isValidEmail(email)) { setTextStatus('forgotStatus', 'Введите корректный email', 'var(--red)'); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span>Отправляем...</span>';
+  try {
+    var fb = await getFirebaseAuth();
+    await fb.sendPasswordResetEmail(fb.auth, email);
+    setTextStatus('forgotStatus', 'Ссылка восстановления отправлена на почту', 'var(--green)');
+  } catch(e) {
+    setTextStatus('forgotStatus', 'Ошибка. Проверьте email и попробуйте снова', 'var(--red)');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<span>Отправить инструкцию</span>';
+};
+
+// ─── CABINET ─────────────────────────────────────────────
+window.openCabinet = function() {
+  loadCabinet();
+  document.getElementById('cabinetOverlay').classList.add('active');
+};
+
+window.closeCabinet = function() {
+  document.getElementById('cabinetOverlay').classList.remove('active');
+};
+
+function loadCabinet() {
+  getFirebaseAuth().then(function(fb) {
+    var user = fb.auth.currentUser;
+    var emailEl = document.getElementById('cabinetEmail');
+    if (emailEl && user) emailEl.value = user.email || '';
+  }).catch(function(){});
+  var passEl = document.getElementById('cabinetPassword');
+  if (passEl) {
+    passEl.type = 'password';
+    passEl.value = '********';
+  }
+  var showIcon = document.getElementById('eyeIconShow');
+  var hideIcon = document.getElementById('eyeIconHide');
+  if (showIcon) showIcon.style.display = '';
+  if (hideIcon) hideIcon.style.display = 'none';
+}
+
+window.toggleCabinetPassword = function() {
+  var passEl   = document.getElementById('cabinetPassword');
+  var showIcon = document.getElementById('eyeIconShow');
+  var hideIcon = document.getElementById('eyeIconHide');
+  if (!passEl) return;
+  if (passEl.type === 'password') {
+    passEl.type = 'text';
+    if (showIcon) showIcon.style.display = 'none';
+    if (hideIcon) hideIcon.style.display = '';
+  } else {
+    passEl.type = 'password';
+    if (showIcon) showIcon.style.display = '';
+    if (hideIcon) hideIcon.style.display = 'none';
+  }
+};
+
+document.addEventListener('DOMContentLoaded', async function() {
+  showAuthForm();
+  setAuthMode(false);
+
+  var savedEmail = localStorage.getItem('iosxEmail');
+  if (savedEmail) document.getElementById('authEmail').value = savedEmail;
+
+  try {
+    var fb = await getFirebaseAuth();
+    fb.onAuthStateChanged(fb.auth, async function(user) {
+      if (!user) { showAuthForm(); return; }
+      await user.reload().catch(function(){});
+      user = fb.auth.currentUser;
+      if (user && user.emailVerified) { showApp(); return; }
+      if (sessionStorage.getItem('iosxJustRegistered') === '1') {
+        showVerifyPending('Откройте письмо, нажмите ссылку, затем вернитесь и нажмите «Я подтвердил»');
+      } else {
+        showAuthForm();
+        setAuthMode(true);
+      }
+    });
+  } catch(e) {
+    setAuthStatus('Не удалось подключиться к Firebase. Проверьте интернет', 'var(--red)');
+  }
+});
+</script>
+
+</body>
+</html>
