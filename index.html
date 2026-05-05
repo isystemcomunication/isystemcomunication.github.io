@@ -433,7 +433,42 @@
     color: var(--muted);
     font-size: 16px;
     line-height: 1.7;
-    margin-bottom: 22px;
+    margin-bottom: 18px;
+  }
+
+  .sales-price {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .sales-price-old {
+    color: var(--dim);
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+  }
+
+  .sales-price-new {
+    color: var(--text);
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 0.9;
+  }
+
+  .sales-price-tag {
+    align-self: center;
+    border: 1px solid var(--border2);
+    border-radius: 999px;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    padding: 7px 10px;
+    text-transform: uppercase;
   }
 
   .sales-actions {
@@ -901,6 +936,11 @@
       <div class="sales-kicker">Android setup service</div>
       <h1 class="sales-title">Настроим Android под вас.</h1>
       <p class="sales-subtitle">Оставьте заявку на настройку Android-устройства. Дальше вы перейдёте в Telegram-бота для оплаты и проверки перед сбросом.</p>
+      <div class="sales-price" aria-label="Цена настройки Android">
+        <div class="sales-price-old">499 ₽</div>
+        <div class="sales-price-new">299 ₽</div>
+        <div class="sales-price-tag">бета</div>
+      </div>
       <div class="sales-actions">
         <button type="button" class="btn" onclick="document.getElementById('requestForm').scrollIntoView({behavior:'smooth',block:'start'});"><span>Оставить заявку</span></button>
         <div class="sales-note">Все Android-устройства · после заявки — Telegram-бот для оплаты</div>
@@ -1014,7 +1054,7 @@
           <span class="confirm-row-value" style="color:var(--green)">✓ Принято</span>
         </div>
       </div>
-      <button type="button" class="btn" onclick="setStep(1)"><span>Подать ещё одну заявку</span></button>
+      <button type="button" class="btn" onclick="openTelegramBot()"><span>Перейти в Telegram-бот для оплаты</span></button>
     </div>
   </div>
 
@@ -1110,6 +1150,10 @@ function setStep(n) {
     document.getElementById(id).classList.toggle('active', i+1 === n);
   });
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function openTelegramBot() {
+  alert('Telegram-бот скоро будет подключён');
 }
 
 // ─── SUBMIT REQUEST ───────────────────────────────────────
