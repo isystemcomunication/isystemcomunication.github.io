@@ -61,6 +61,42 @@
     box-shadow: 0 24px 80px rgba(0,0,0,0.42);
   }
 
+  .lang-switch {
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .auth-lang {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+
+  .lang-btn {
+    min-width: 38px;
+    min-height: 26px;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--dim);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .lang-btn.active {
+    background: #ffffff;
+    color: #050505;
+  }
+
   .auth-logo {
     display: flex;
     align-items: center;
@@ -297,6 +333,12 @@
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
   .app-logo {
@@ -884,6 +926,9 @@
   .footer a:hover { color: var(--muted); }
 
   @media (max-width: 430px) {
+    .app-header { padding: 16px 14px 14px; }
+    .header-actions { gap: 6px; }
+    .app-header .lang-switch { display: none; }
     .trust-grid { grid-template-columns: 1fr; }
     .trust-item { min-height: auto; }
     .service-row { flex-direction: column; gap: 6px; }
@@ -902,15 +947,22 @@
 <!-- ── AUTH SCREEN ──────────────────────────────────────── -->
 <div id="authScreen">
   <div class="auth-card">
+    <div class="auth-lang">
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" class="lang-btn" data-lang="ru" onclick="setLanguage('ru')">RU</button>
+        <button type="button" class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
+        <button type="button" class="lang-btn" data-lang="zh" onclick="setLanguage('zh')">中文</button>
+      </div>
+    </div>
     <div class="auth-logo">IOS<span class="x">x</span><span class="beta-badge">BETA</span></div>
-    <div class="auth-subtitle">Настройка Android-устройств — подайте заявку за 30 секунд</div>
+    <div class="auth-subtitle" data-i18n="auth.subtitle">Настройка Android-устройств — подайте заявку за 30 секунд</div>
 
     <button type="button" class="auth-google-btn" id="authGoogleBtn">
       <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-9 20-20 0-1.3-.1-2.7-.4-4z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 19 13 24 13c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-5l-6.2-5.2C29.4 35.6 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-8H6.3C9.6 35.7 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.4-2.5 4.5-4.6 5.8l6.2 5.2C40.7 35.3 44 30 44 24c0-1.3-.1-2.7-.4-4z"/></svg>
-      Войти через Google
+      <span data-i18n="auth.google">Войти через Google</span>
     </button>
 
-    <div class="auth-divider"><span>или</span></div>
+    <div class="auth-divider"><span data-i18n="auth.or">или</span></div>
 
     <form id="authForm" autocomplete="on" onsubmit="handleEmailAuth(); return false;">
       <div class="form-group">
@@ -918,11 +970,11 @@
         <input type="email" id="authEmail" name="email" class="form-input" placeholder="user@gmail.com" autocomplete="email" inputmode="email">
       </div>
       <div class="form-group">
-        <label class="form-label">Пароль</label>
-        <input type="password" id="authPassword" name="password" class="form-input" placeholder="Минимум 8 символов" minlength="8" autocomplete="current-password">
+        <label class="form-label" data-i18n="form.password">Пароль</label>
+        <input type="password" id="authPassword" name="password" class="form-input" data-i18n-placeholder="placeholder.password" placeholder="Минимум 8 символов" minlength="8" autocomplete="current-password">
       </div>
       <div id="forgotPasswordWrap" style="display:none;text-align:right;margin-top:-6px;margin-bottom:12px;">
-        <button type="button" onclick="openForgotPassword()" style="background:none;border:none;color:var(--muted);font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer;padding:4px 0;transition:color 0.15s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Забыли пароль?</button>
+        <button type="button" onclick="openForgotPassword()" data-i18n="auth.forgot" style="background:none;border:none;color:var(--muted);font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer;padding:4px 0;transition:color 0.15s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Забыли пароль?</button>
       </div>
       <button type="submit" class="btn" id="authActionBtn"><span>Создать аккаунт</span></button>
     </form>
@@ -932,10 +984,10 @@
 
     <div id="verifyPending">
       <div style="font-size:26px;margin-bottom:10px;">✉️</div>
-      <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;letter-spacing:-0.2px;">Подтвердите email</div>
-      <div style="font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:18px;" id="verifyEmailHint">Письмо отправлено на вашу почту</div>
-      <button type="button" class="btn" onclick="checkEmailVerified()" id="verifyCheckBtn" style="margin-bottom:10px;"><span>Я подтвердил →</span></button>
-      <button type="button" onclick="resendVerification()" id="verifyResendBtn" style="width:100%;padding:11px;border-radius:12px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer;min-height:42px;transition:color 0.15s,border-color 0.15s;" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,0.25)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border2)'">Отправить снова</button>
+      <div data-i18n="verify.title" style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;letter-spacing:-0.2px;">Подтвердите email</div>
+      <div data-i18n="verify.sent" style="font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:18px;" id="verifyEmailHint">Письмо отправлено на вашу почту</div>
+      <button type="button" class="btn" onclick="checkEmailVerified()" id="verifyCheckBtn" style="margin-bottom:10px;"><span data-i18n="verify.check">Я подтвердил →</span></button>
+      <button type="button" onclick="resendVerification()" id="verifyResendBtn" data-i18n="verify.resend" style="width:100%;padding:11px;border-radius:12px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer;min-height:42px;transition:color 0.15s,border-color 0.15s;" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,0.25)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border2)'">Отправить снова</button>
       <div class="status-msg" id="verifyStatus" style="margin-top:8px;"></div>
     </div>
   </div>
@@ -946,73 +998,80 @@
 
   <div class="app-header">
     <div class="app-logo">IOS<span class="x">x</span><span class="beta-badge">BETA</span></div>
-    <button type="button" class="cabinet-btn" onclick="openCabinet()">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-      Кабинет
-    </button>
+    <div class="header-actions">
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" class="lang-btn" data-lang="ru" onclick="setLanguage('ru')">RU</button>
+        <button type="button" class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
+        <button type="button" class="lang-btn" data-lang="zh" onclick="setLanguage('zh')">中文</button>
+      </div>
+      <button type="button" class="cabinet-btn" onclick="openCabinet()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span data-i18n="nav.cabinet">Кабинет</span>
+      </button>
+    </div>
   </div>
 
   <div class="steps">
     <div class="step active" id="step1">
       <div class="step-num">01</div>
-      <div class="step-label">Заявка</div>
+      <div class="step-label" data-i18n="steps.request">Заявка</div>
     </div>
     <div class="step" id="step2">
       <div class="step-num">02</div>
-      <div class="step-label">Ожидание</div>
+      <div class="step-label" data-i18n="steps.waiting">Ожидание</div>
     </div>
     <div class="step" id="step3">
       <div class="step-num">03</div>
-      <div class="step-label">Готово</div>
+      <div class="step-label" data-i18n="steps.done">Готово</div>
     </div>
   </div>
 
   <!-- PAGE 1 -->
   <div id="page1" class="page active">
     <section class="sales-hero">
-      <div class="sales-kicker">Android setup service</div>
-      <h1 class="sales-title">Настроим Android под вас.</h1>
-      <p class="sales-subtitle">Оставьте заявку на настройку Android-устройства. Дальше вы перейдёте в Telegram-бота для оплаты и проверки перед сбросом.</p>
+      <div class="sales-kicker" data-i18n="hero.kicker">Android setup service</div>
+      <h1 class="sales-title" data-i18n="hero.title">Настроим Android под вас.</h1>
+      <p class="sales-subtitle" data-i18n="hero.subtitle">Оставьте заявку на настройку Android-устройства. Дальше вы перейдёте в Telegram-бота для оплаты и проверки перед сбросом.</p>
       <div class="sales-price" aria-label="Цена настройки Android">
         <div class="sales-price-old">499 ₽</div>
         <div class="sales-price-new">299 ₽</div>
-        <div class="sales-price-tag">бета</div>
+        <div class="sales-price-tag" data-i18n="hero.beta">бета</div>
       </div>
       <div class="sales-actions">
-        <button type="button" class="btn" onclick="document.getElementById('requestForm').scrollIntoView({behavior:'smooth',block:'start'});"><span>Оставить заявку</span></button>
-        <div class="sales-note">Все Android-устройства · после заявки — Telegram-бот для оплаты</div>
+        <button type="button" class="btn" onclick="document.getElementById('requestForm').scrollIntoView({behavior:'smooth',block:'start'});"><span data-i18n="hero.cta">Оставить заявку</span></button>
+        <div class="sales-note" data-i18n="hero.note">Все Android-устройства · после заявки — Telegram-бот для оплаты</div>
       </div>
     </section>
 
     <div class="trust-grid">
       <div class="trust-item">
         <div class="trust-num">01</div>
-        <div class="trust-title">Проверим готовность</div>
+        <div class="trust-title" data-i18n="trust.ready">Проверим готовность</div>
       </div>
       <div class="trust-item">
         <div class="trust-num">02</div>
-        <div class="trust-title">Не дадим потерять данные</div>
+        <div class="trust-title" data-i18n="trust.data">Не дадим потерять данные</div>
       </div>
       <div class="trust-item">
         <div class="trust-num">03</div>
-        <div class="trust-title">Оплата в Telegram</div>
+        <div class="trust-title" data-i18n="trust.payment">Оплата в Telegram</div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">Как проходит</div>
+      <div class="card-title" data-i18n="flow.title">Как проходит</div>
       <div class="service-strip">
         <div class="service-row">
-          <div class="service-name">Заявка</div>
-          <div class="service-copy">Вы указываете устройство, процессор и задачу на сайте.</div>
+          <div class="service-name" data-i18n="flow.requestTitle">Заявка</div>
+          <div class="service-copy" data-i18n="flow.requestCopy">Вы указываете устройство, процессор и задачу на сайте.</div>
         </div>
         <div class="service-row">
-          <div class="service-name">Telegram-бот</div>
-          <div class="service-copy">После заявки переходите в бота, оплачиваете и проходите короткую проверку.</div>
+          <div class="service-name" data-i18n="flow.botTitle">Telegram-бот</div>
+          <div class="service-copy" data-i18n="flow.botCopy">После заявки переходите в бота, оплачиваете и проходите короткую проверку.</div>
         </div>
         <div class="service-row">
-          <div class="service-name">Сброс</div>
-          <div class="service-copy">Если проверка показывает риск потери данных, сначала сохраняем важное.</div>
+          <div class="service-name" data-i18n="flow.resetTitle">Сброс</div>
+          <div class="service-copy" data-i18n="flow.resetCopy">Если проверка показывает риск потери данных, сначала сохраняем важное.</div>
         </div>
       </div>
     </div>
@@ -1020,8 +1079,8 @@
     <div class="hero-row">
       <div class="status-dot"></div>
       <div class="hero-text">
-        <div class="hero-title">Заявка на настройку</div>
-        <div class="hero-sub">Заполните форму — дальше оплата в Telegram-боте</div>
+        <div class="hero-title" data-i18n="formBox.title">Заявка на настройку</div>
+        <div class="hero-sub" data-i18n="formBox.sub">Заполните форму — дальше оплата в Telegram-боте</div>
       </div>
     </div>
 
@@ -1033,7 +1092,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">Устройство</label>
+          <label class="form-label" data-i18n="form.device">Устройство</label>
           <div class="device-wrapper" id="deviceWrapper">
             <input type="text" id="deviceSearch" class="form-input" placeholder="Samsung S21, Redmi Note 10..." autocomplete="off" spellcheck="false">
             <input type="hidden" name="device" id="deviceHidden">
@@ -1042,9 +1101,9 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">Процессор <span style="color:var(--dim);font-weight:400;letter-spacing:0;">(необязательно)</span></label>
+          <label class="form-label"><span data-i18n="form.processor">Процессор</span> <span data-i18n="form.optional" style="color:var(--dim);font-weight:400;letter-spacing:0;">(необязательно)</span></label>
           <select id="processor" name="processor" class="form-select">
-            <option>Не знаю</option>
+            <option value="Не знаю" data-i18n="processor.unknown">Не знаю</option>
             <option>Snapdragon</option>
             <option>MediaTek</option>
             <option>Exynos</option>
@@ -1054,11 +1113,11 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">Комментарий <span style="color:var(--dim);font-weight:400;letter-spacing:0;">(необязательно)</span></label>
-          <input type="text" name="comment" class="form-input" placeholder="Опишите задачу...">
+          <label class="form-label"><span data-i18n="form.comment">Комментарий</span> <span data-i18n="form.optional" style="color:var(--dim);font-weight:400;letter-spacing:0;">(необязательно)</span></label>
+          <input type="text" name="comment" class="form-input" data-i18n-placeholder="placeholder.comment" placeholder="Опишите задачу...">
         </div>
 
-        <button type="button" class="btn" onclick="submitRequest()"><span>Отправить заявку →</span></button>
+        <button type="button" class="btn" onclick="submitRequest()"><span data-i18n="form.submit">Отправить заявку →</span></button>
         <div class="status-msg" id="formStatus"></div>
       </form>
     </div>
@@ -1071,27 +1130,27 @@
   <div id="page3" class="page">
     <div class="card" style="text-align:center;">
       <div class="confirm-icon">✓</div>
-      <div class="confirm-title">Заявка создана</div>
-      <div class="confirm-sub">Следующий шаг — перейти в Telegram-бот для оплаты и продолжения.</div>
+      <div class="confirm-title" data-i18n="confirm.title">Заявка создана</div>
+      <div class="confirm-sub" data-i18n="confirm.sub">Следующий шаг — перейти в Telegram-бот для оплаты и продолжения.</div>
       <div class="confirm-details">
         <div class="confirm-row">
           <span class="confirm-row-label">Email</span>
           <span class="confirm-row-value" id="confirmEmail">—</span>
         </div>
         <div class="confirm-row">
-          <span class="confirm-row-label">Устройство</span>
+          <span class="confirm-row-label" data-i18n="form.device">Устройство</span>
           <span class="confirm-row-value" id="confirmDevice">—</span>
         </div>
         <div class="confirm-row">
-          <span class="confirm-row-label">Процессор</span>
+          <span class="confirm-row-label" data-i18n="form.processor">Процессор</span>
           <span class="confirm-row-value" id="confirmProcessor">—</span>
         </div>
         <div class="confirm-row">
-          <span class="confirm-row-label">Статус</span>
-          <span class="confirm-row-value" style="color:var(--green)">✓ Принято</span>
+          <span class="confirm-row-label" data-i18n="confirm.statusLabel">Статус</span>
+          <span class="confirm-row-value" data-i18n="confirm.statusValue" style="color:var(--green)">✓ Принято</span>
         </div>
       </div>
-      <button type="button" class="btn" onclick="openTelegramBot()"><span>Перейти в Telegram-бот для оплаты</span></button>
+      <button type="button" class="btn" onclick="openTelegramBot()"><span data-i18n="confirm.telegram">Перейти в Telegram-бот для оплаты</span></button>
     </div>
   </div>
 
@@ -1099,7 +1158,7 @@
 
 <!-- Footer -->
 <div class="footer">
-  <a href="#" onclick="openPrivacy();return false;">Политика конфиденциальности</a>
+  <a href="#" onclick="openPrivacy();return false;" data-i18n="footer.privacy">Политика конфиденциальности</a>
   &nbsp;·&nbsp; IOSx
 </div>
 
@@ -1107,22 +1166,22 @@
 <div class="modal-overlay" id="privacyOverlay" onclick="if(event.target===this)closePrivacy()" style="z-index:1100;">
   <div class="modal" style="max-width:480px;">
     <button class="modal-close" onclick="closePrivacy()">✕</button>
-    <div class="modal-title">Конфиденциальность</div>
-    <div class="modal-sub">Последнее обновление: 2025</div>
+    <div class="modal-title" data-i18n="privacy.title">Конфиденциальность</div>
+    <div class="modal-sub" data-i18n="privacy.updated">Последнее обновление: 2025</div>
     <div style="display:flex;flex-direction:column;gap:20px;">
       <div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Что мы собираем</div>
-        <p style="color:var(--muted);font-size:14px;line-height:1.65;">Email, модель устройства и описание задачи — только добровольно.</p>
+        <div data-i18n="privacy.collectTitle" style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Что мы собираем</div>
+        <p data-i18n="privacy.collectCopy" style="color:var(--muted);font-size:14px;line-height:1.65;">Email, модель устройства и описание задачи — только добровольно.</p>
       </div>
       <div style="height:1px;background:var(--border);"></div>
       <div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Зачем</div>
-        <p style="color:var(--muted);font-size:14px;line-height:1.65;">Email используется для аккаунта, заявки и восстановления доступа. Данные не продаются третьим лицам.</p>
+        <div data-i18n="privacy.whyTitle" style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Зачем</div>
+        <p data-i18n="privacy.whyCopy" style="color:var(--muted);font-size:14px;line-height:1.65;">Email используется для аккаунта, заявки и восстановления доступа. Данные не продаются третьим лицам.</p>
       </div>
       <div style="height:1px;background:var(--border);"></div>
       <div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Ограничения</div>
-        <p style="color:var(--muted);font-size:14px;line-height:1.65;">Сервис не обходит защитные ограничения производителей и операторов.</p>
+        <div data-i18n="privacy.limitsTitle" style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Ограничения</div>
+        <p data-i18n="privacy.limitsCopy" style="color:var(--muted);font-size:14px;line-height:1.65;">Сервис не обходит защитные ограничения производителей и операторов.</p>
       </div>
     </div>
   </div>
@@ -1132,8 +1191,8 @@
 <div class="modal-overlay" id="cabinetOverlay" onclick="if(event.target===this)closeCabinet()">
   <div class="modal" style="max-width:440px;">
     <button class="modal-close" onclick="closeCabinet()">✕</button>
-    <div class="modal-title">Ваш кабинет</div>
-    <div class="modal-sub">Данные аккаунта</div>
+    <div class="modal-title" data-i18n="cabinet.title">Ваш кабинет</div>
+    <div class="modal-sub" data-i18n="cabinet.sub">Данные аккаунта</div>
 
     <div class="form-group">
       <label class="form-label">Email</label>
@@ -1141,8 +1200,8 @@
     </div>
 
     <div class="cabinet-actions">
-      <button type="button" class="btn btn-outline" onclick="closeCabinet(); setStep(1);"><span>Главная</span></button>
-      <button type="button" class="btn btn-danger" onclick="signOutGoogle()"><span>Выйти</span></button>
+      <button type="button" class="btn btn-outline" onclick="closeCabinet(); setStep(1);"><span data-i18n="cabinet.home">Главная</span></button>
+      <button type="button" class="btn btn-danger" onclick="signOutGoogle()"><span data-i18n="cabinet.logout">Выйти</span></button>
     </div>
   </div>
 </div>
@@ -1151,18 +1210,340 @@
 <div class="modal-overlay" id="forgotOverlay" onclick="if(event.target===this)closeForgotPassword()">
   <div class="modal" style="max-width:440px;">
     <button class="modal-close" onclick="closeForgotPassword()">✕</button>
-    <div class="modal-title">Восстановление доступа</div>
-    <div class="modal-sub">Укажите email при регистрации</div>
+    <div class="modal-title" data-i18n="forgot.title">Восстановление доступа</div>
+    <div class="modal-sub" data-i18n="forgot.sub">Укажите email при регистрации</div>
     <div class="form-group">
       <label class="form-label">Email</label>
       <input type="email" id="forgotEmail" class="form-input" placeholder="user@gmail.com" autocomplete="email" inputmode="email">
     </div>
-    <button type="button" class="btn" onclick="handleForgotPassword()" id="forgotBtn"><span>Отправить инструкцию</span></button>
+    <button type="button" class="btn" onclick="handleForgotPassword()" id="forgotBtn"><span data-i18n="forgot.submit">Отправить инструкцию</span></button>
     <div class="status-msg" id="forgotStatus" style="margin-top:12px;"></div>
   </div>
 </div>
 
 <script>
+// ─── LANGUAGE ─────────────────────────────────────────────
+const translations = {
+  ru: {
+    "auth.subtitle": "Настройка Android-устройств — подайте заявку за 30 секунд",
+    "auth.google": "Войти через Google",
+    "auth.or": "или",
+    "auth.forgot": "Забыли пароль?",
+    "auth.create": "Создать аккаунт",
+    "auth.signIn": "Войти",
+    "auth.toSignIn": "Уже есть аккаунт? Войти",
+    "auth.toCreate": "Нет аккаунта? Создать",
+    "form.password": "Пароль",
+    "placeholder.password": "Минимум 8 символов",
+    "verify.title": "Подтвердите email",
+    "verify.sent": "Письмо отправлено на вашу почту",
+    "verify.check": "Я подтвердил →",
+    "verify.resend": "Отправить снова",
+    "nav.cabinet": "Кабинет",
+    "steps.request": "Заявка",
+    "steps.waiting": "Ожидание",
+    "steps.done": "Готово",
+    "hero.kicker": "Android setup service",
+    "hero.title": "Настроим Android под вас.",
+    "hero.subtitle": "Оставьте заявку на настройку Android-устройства. Дальше вы перейдёте в Telegram-бота для оплаты и проверки перед сбросом.",
+    "hero.beta": "бета",
+    "hero.cta": "Оставить заявку",
+    "hero.note": "Все Android-устройства · после заявки — Telegram-бот для оплаты",
+    "trust.ready": "Проверим готовность",
+    "trust.data": "Не дадим потерять данные",
+    "trust.payment": "Оплата в Telegram",
+    "flow.title": "Как проходит",
+    "flow.requestTitle": "Заявка",
+    "flow.requestCopy": "Вы указываете устройство, процессор и задачу на сайте.",
+    "flow.botTitle": "Telegram-бот",
+    "flow.botCopy": "После заявки переходите в бота, оплачиваете и проходите короткую проверку.",
+    "flow.resetTitle": "Сброс",
+    "flow.resetCopy": "Если проверка показывает риск потери данных, сначала сохраняем важное.",
+    "formBox.title": "Заявка на настройку",
+    "formBox.sub": "Заполните форму — дальше оплата в Telegram-боте",
+    "form.device": "Устройство",
+    "form.processor": "Процессор",
+    "form.optional": "(необязательно)",
+    "form.comment": "Комментарий",
+    "form.submit": "Отправить заявку →",
+    "processor.unknown": "Не знаю",
+    "placeholder.comment": "Опишите задачу...",
+    "confirm.title": "Заявка создана",
+    "confirm.sub": "Следующий шаг — перейти в Telegram-бот для оплаты и продолжения.",
+    "confirm.statusLabel": "Статус",
+    "confirm.statusValue": "✓ Принято",
+    "confirm.telegram": "Перейти в Telegram-бот для оплаты",
+    "footer.privacy": "Политика конфиденциальности",
+    "privacy.title": "Конфиденциальность",
+    "privacy.updated": "Последнее обновление: 2025",
+    "privacy.collectTitle": "Что мы собираем",
+    "privacy.collectCopy": "Email, модель устройства и описание задачи — только добровольно.",
+    "privacy.whyTitle": "Зачем",
+    "privacy.whyCopy": "Email используется для аккаунта, заявки и восстановления доступа. Данные не продаются третьим лицам.",
+    "privacy.limitsTitle": "Ограничения",
+    "privacy.limitsCopy": "Сервис не обходит защитные ограничения производителей и операторов.",
+    "cabinet.title": "Ваш кабинет",
+    "cabinet.sub": "Данные аккаунта",
+    "cabinet.home": "Главная",
+    "cabinet.logout": "Выйти",
+    "forgot.title": "Восстановление доступа",
+    "forgot.sub": "Укажите email при регистрации",
+    "forgot.submit": "Отправить инструкцию",
+    "status.telegramSoon": "Telegram-бот скоро будет подключён",
+    "status.fillEmailPassword": "Заполните email и пароль",
+    "status.invalidEmail": "Введите корректный email",
+    "status.shortPassword": "Пароль минимум 8 символов",
+    "status.checking": "Проверяем...",
+    "status.sending": "Отправка...",
+    "status.deviceRequired": "⚠ Выбери устройство из списка",
+    "status.fillAll": "⚠ Заполни все поля",
+    "status.submitError": "⚠ Ошибка отправки — попробуй ещё раз",
+    "status.emailSent": "Письмо отправлено. Проверьте входящие и спам"
+    ,"status.verifyHintLogin": "Подтвердите email по ссылке из письма, затем нажмите «Я подтвердил»"
+    ,"status.verifyHintRegister": "Откройте письмо, нажмите ссылку, затем вернитесь и нажмите «Я подтвердил»"
+    ,"status.emailConfirmed": "Email подтверждён"
+    ,"status.emailNotConfirmed": "Email ещё не подтверждён. Откройте письмо"
+    ,"status.verifyError": "Ошибка проверки. Попробуйте позже"
+    ,"status.resendSending": "Отправляем..."
+    ,"status.tooMany": "Слишком много запросов. Подождите"
+    ,"status.resendError": "Ошибка отправки. Войдите заново"
+    ,"status.network": "Ошибка сети. Проверьте интернет"
+    ,"status.noAccount": "Аккаунт не найден. Создайте аккаунт"
+    ,"status.emailExists": "Этот email уже зарегистрирован. Войдите"
+    ,"status.badCredentials": "Неверный email или пароль"
+    ,"status.googlePopupClosed": "Окно закрыто. Попробуйте ещё раз"
+    ,"status.googlePopupBlocked": "Браузер заблокировал pop-up. Разрешите и повторите"
+    ,"status.cancelled": "Запрос отменён"
+    ,"status.unauthorizedDomain": "Домен не авторизован в Firebase Console"
+    ,"status.googleNotEnabled": "Google-вход не включён в Firebase Console"
+    ,"status.internal": "Внутренняя ошибка Firebase. Попробуйте позже"
+    ,"status.forgotNoAccount": "Аккаунт с этим email не найден"
+    ,"status.forgotError": "Не удалось отправить письмо. Попробуйте позже"
+    ,"status.firebaseConnect": "Не удалось подключиться к Firebase. Проверьте интернет"
+  },
+  en: {
+    "auth.subtitle": "Android device setup — submit a request in 30 seconds",
+    "auth.google": "Continue with Google",
+    "auth.or": "or",
+    "auth.forgot": "Forgot password?",
+    "auth.create": "Create account",
+    "auth.signIn": "Sign in",
+    "auth.toSignIn": "Already have an account? Sign in",
+    "auth.toCreate": "No account? Create one",
+    "form.password": "Password",
+    "placeholder.password": "At least 8 characters",
+    "verify.title": "Confirm your email",
+    "verify.sent": "A confirmation email has been sent",
+    "verify.check": "I confirmed →",
+    "verify.resend": "Send again",
+    "nav.cabinet": "Account",
+    "steps.request": "Request",
+    "steps.waiting": "Waiting",
+    "steps.done": "Done",
+    "hero.kicker": "Android setup service",
+    "hero.title": "Android setup for you.",
+    "hero.subtitle": "Submit a request for your Android device. Next, you will go to the Telegram bot for payment and a reset safety check.",
+    "hero.beta": "beta",
+    "hero.cta": "Submit request",
+    "hero.note": "All Android devices · payment via Telegram bot after request",
+    "trust.ready": "Readiness check",
+    "trust.data": "Protect your data",
+    "trust.payment": "Telegram payment",
+    "flow.title": "How it works",
+    "flow.requestTitle": "Request",
+    "flow.requestCopy": "Enter your device, processor, and task on the site.",
+    "flow.botTitle": "Telegram bot",
+    "flow.botCopy": "After the request, go to the bot, pay, and pass a short check.",
+    "flow.resetTitle": "Reset",
+    "flow.resetCopy": "If the check shows data-loss risk, save important data first.",
+    "formBox.title": "Setup request",
+    "formBox.sub": "Fill out the form — payment follows in Telegram",
+    "form.device": "Device",
+    "form.processor": "Processor",
+    "form.optional": "(optional)",
+    "form.comment": "Comment",
+    "form.submit": "Send request →",
+    "processor.unknown": "I don't know",
+    "placeholder.comment": "Describe the task...",
+    "confirm.title": "Request created",
+    "confirm.sub": "Next step: go to the Telegram bot for payment and continuation.",
+    "confirm.statusLabel": "Status",
+    "confirm.statusValue": "✓ Accepted",
+    "confirm.telegram": "Go to Telegram bot for payment",
+    "footer.privacy": "Privacy policy",
+    "privacy.title": "Privacy",
+    "privacy.updated": "Last updated: 2025",
+    "privacy.collectTitle": "What we collect",
+    "privacy.collectCopy": "Email, device model, and task description — only when provided voluntarily.",
+    "privacy.whyTitle": "Why",
+    "privacy.whyCopy": "Email is used for account access, requests, and recovery. Data is not sold to third parties.",
+    "privacy.limitsTitle": "Limits",
+    "privacy.limitsCopy": "The service does not bypass manufacturer or carrier security restrictions.",
+    "cabinet.title": "Your account",
+    "cabinet.sub": "Account details",
+    "cabinet.home": "Home",
+    "cabinet.logout": "Log out",
+    "forgot.title": "Account recovery",
+    "forgot.sub": "Enter the email used at registration",
+    "forgot.submit": "Send instructions",
+    "status.telegramSoon": "Telegram bot will be connected soon",
+    "status.fillEmailPassword": "Enter email and password",
+    "status.invalidEmail": "Enter a valid email",
+    "status.shortPassword": "Password must be at least 8 characters",
+    "status.checking": "Checking...",
+    "status.sending": "Sending...",
+    "status.deviceRequired": "⚠ Choose a device from the list",
+    "status.fillAll": "⚠ Fill in all required fields",
+    "status.submitError": "⚠ Sending failed — try again",
+    "status.emailSent": "Email sent. Check inbox and spam"
+    ,"status.verifyHintLogin": "Confirm your email using the link, then click “I confirmed”"
+    ,"status.verifyHintRegister": "Open the email, click the link, then return and click “I confirmed”"
+    ,"status.emailConfirmed": "Email confirmed"
+    ,"status.emailNotConfirmed": "Email is not confirmed yet. Open the email"
+    ,"status.verifyError": "Verification failed. Try again later"
+    ,"status.resendSending": "Sending..."
+    ,"status.tooMany": "Too many requests. Please wait"
+    ,"status.resendError": "Sending failed. Sign in again"
+    ,"status.network": "Network error. Check your connection"
+    ,"status.noAccount": "Account not found. Create an account"
+    ,"status.emailExists": "This email is already registered. Sign in"
+    ,"status.badCredentials": "Wrong email or password"
+    ,"status.googlePopupClosed": "Window closed. Try again"
+    ,"status.googlePopupBlocked": "Popup blocked. Allow it and try again"
+    ,"status.cancelled": "Request cancelled"
+    ,"status.unauthorizedDomain": "Domain is not authorized in Firebase Console"
+    ,"status.googleNotEnabled": "Google sign-in is not enabled in Firebase Console"
+    ,"status.internal": "Internal Firebase error. Try again later"
+    ,"status.forgotNoAccount": "No account found for this email"
+    ,"status.forgotError": "Could not send the email. Try again later"
+    ,"status.firebaseConnect": "Could not connect to Firebase. Check your connection"
+  },
+  zh: {
+    "auth.subtitle": "Android 设备设置 — 30 秒提交申请",
+    "auth.google": "使用 Google 登录",
+    "auth.or": "或",
+    "auth.forgot": "忘记密码？",
+    "auth.create": "创建账户",
+    "auth.signIn": "登录",
+    "auth.toSignIn": "已有账户？登录",
+    "auth.toCreate": "没有账户？创建",
+    "form.password": "密码",
+    "placeholder.password": "至少 8 个字符",
+    "verify.title": "确认邮箱",
+    "verify.sent": "确认邮件已发送到你的邮箱",
+    "verify.check": "我已确认 →",
+    "verify.resend": "重新发送",
+    "nav.cabinet": "账户",
+    "steps.request": "申请",
+    "steps.waiting": "等待",
+    "steps.done": "完成",
+    "hero.kicker": "Android setup service",
+    "hero.title": "为你设置 Android。",
+    "hero.subtitle": "提交 Android 设备设置申请。之后你将进入 Telegram 机器人完成付款和重置前检查。",
+    "hero.beta": "测试版",
+    "hero.cta": "提交申请",
+    "hero.note": "支持所有 Android 设备 · 申请后通过 Telegram 机器人付款",
+    "trust.ready": "检查准备状态",
+    "trust.data": "避免数据丢失",
+    "trust.payment": "Telegram 付款",
+    "flow.title": "流程",
+    "flow.requestTitle": "申请",
+    "flow.requestCopy": "在网站填写设备、处理器和任务。",
+    "flow.botTitle": "Telegram 机器人",
+    "flow.botCopy": "提交后进入机器人，付款并完成简短检查。",
+    "flow.resetTitle": "重置",
+    "flow.resetCopy": "如果检查发现数据丢失风险，先保存重要数据。",
+    "formBox.title": "设置申请",
+    "formBox.sub": "填写表单 — 之后在 Telegram 中付款",
+    "form.device": "设备",
+    "form.processor": "处理器",
+    "form.optional": "（可选）",
+    "form.comment": "备注",
+    "form.submit": "发送申请 →",
+    "processor.unknown": "不知道",
+    "placeholder.comment": "描述你的需求...",
+    "confirm.title": "申请已创建",
+    "confirm.sub": "下一步：进入 Telegram 机器人付款并继续。",
+    "confirm.statusLabel": "状态",
+    "confirm.statusValue": "✓ 已接受",
+    "confirm.telegram": "前往 Telegram 机器人付款",
+    "footer.privacy": "隐私政策",
+    "privacy.title": "隐私",
+    "privacy.updated": "最后更新：2025",
+    "privacy.collectTitle": "我们收集什么",
+    "privacy.collectCopy": "邮箱、设备型号和任务描述 — 仅在你主动提供时收集。",
+    "privacy.whyTitle": "用途",
+    "privacy.whyCopy": "邮箱用于账户、申请和恢复访问。数据不会出售给第三方。",
+    "privacy.limitsTitle": "限制",
+    "privacy.limitsCopy": "本服务不会绕过制造商或运营商的安全限制。",
+    "cabinet.title": "你的账户",
+    "cabinet.sub": "账户信息",
+    "cabinet.home": "主页",
+    "cabinet.logout": "退出",
+    "forgot.title": "恢复访问",
+    "forgot.sub": "输入注册时使用的邮箱",
+    "forgot.submit": "发送说明",
+    "status.telegramSoon": "Telegram 机器人即将接入",
+    "status.fillEmailPassword": "请输入邮箱和密码",
+    "status.invalidEmail": "请输入有效邮箱",
+    "status.shortPassword": "密码至少 8 个字符",
+    "status.checking": "正在检查...",
+    "status.sending": "正在发送...",
+    "status.deviceRequired": "⚠ 请从列表中选择设备",
+    "status.fillAll": "⚠ 请填写必填项",
+    "status.submitError": "⚠ 发送失败，请重试",
+    "status.emailSent": "邮件已发送，请检查收件箱和垃圾邮件"
+    ,"status.verifyHintLogin": "请通过邮件中的链接确认邮箱，然后点击“我已确认”"
+    ,"status.verifyHintRegister": "打开邮件，点击链接，然后返回并点击“我已确认”"
+    ,"status.emailConfirmed": "邮箱已确认"
+    ,"status.emailNotConfirmed": "邮箱尚未确认，请打开邮件"
+    ,"status.verifyError": "验证失败，请稍后再试"
+    ,"status.resendSending": "正在发送..."
+    ,"status.tooMany": "请求过多，请稍后再试"
+    ,"status.resendError": "发送失败，请重新登录"
+    ,"status.network": "网络错误，请检查连接"
+    ,"status.noAccount": "未找到账户，请创建账户"
+    ,"status.emailExists": "此邮箱已注册，请登录"
+    ,"status.badCredentials": "邮箱或密码错误"
+    ,"status.googlePopupClosed": "窗口已关闭，请重试"
+    ,"status.googlePopupBlocked": "弹窗被拦截，请允许后重试"
+    ,"status.cancelled": "请求已取消"
+    ,"status.unauthorizedDomain": "域名未在 Firebase Console 中授权"
+    ,"status.googleNotEnabled": "Firebase Console 中未启用 Google 登录"
+    ,"status.internal": "Firebase 内部错误，请稍后再试"
+    ,"status.forgotNoAccount": "未找到该邮箱对应的账户"
+    ,"status.forgotError": "无法发送邮件，请稍后再试"
+    ,"status.firebaseConnect": "无法连接 Firebase，请检查网络"
+  }
+};
+
+var currentLang = localStorage.getItem('iosxLang') || 'ru';
+
+function tr(key) {
+  return (translations[currentLang] && translations[currentLang][key]) || translations.ru[key] || key;
+}
+
+function setLanguage(lang) {
+  currentLang = translations[lang] ? lang : 'ru';
+  localStorage.setItem('iosxLang', currentLang);
+  document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : currentLang;
+  if (_fbAuth && _fbAuth.auth) _fbAuth.auth.languageCode = currentLang === 'zh' ? 'zh-CN' : currentLang;
+  applyTranslations();
+}
+
+function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    el.textContent = tr(el.getAttribute('data-i18n'));
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+    el.placeholder = tr(el.getAttribute('data-i18n-placeholder'));
+  });
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLang);
+  });
+  if (typeof setAuthMode === 'function') setAuthMode(isEmailSignInMode);
+}
+
 // ─── STEPS ────────────────────────────────────────────────
 function setStep(n) {
   [1,2,3].forEach(i => {
@@ -1178,7 +1559,7 @@ function setStep(n) {
 }
 
 function openTelegramBot() {
-  alert('Telegram-бот скоро будет подключён');
+  alert(tr('status.telegramSoon'));
 }
 
 // ─── SUBMIT REQUEST ───────────────────────────────────────
@@ -1195,9 +1576,9 @@ async function submitRequest() {
 
   if (!emailVal || !deviceVal) {
     if (!deviceVal) {
-      status.textContent = '⚠ Выбери устройство из списка';
+      status.textContent = tr('status.deviceRequired');
     } else {
-      status.textContent = '⚠ Заполни все поля';
+      status.textContent = tr('status.fillAll');
     }
     status.style.color = 'var(--red)';
     status.classList.add('visible');
@@ -1205,8 +1586,8 @@ async function submitRequest() {
   }
 
   submitBtn.disabled = true;
-  submitBtn.innerHTML = '<span>Отправка...</span>';
-  status.textContent = 'Отправка...';
+  submitBtn.innerHTML = '<span>' + tr('status.sending') + '</span>';
+  status.textContent = tr('status.sending');
   status.style.color = 'var(--muted)';
   status.classList.add('visible');
 
@@ -1227,23 +1608,23 @@ async function submitRequest() {
     const data = await res.json();
     if (!data || data.status !== 'success') throw new Error('Server error');
   } catch (e) {
-    status.textContent = '⚠ Ошибка отправки — попробуй ещё раз';
+    status.textContent = tr('status.submitError');
     status.style.color = 'var(--red)';
     submitBtn.disabled = false;
-    submitBtn.innerHTML = '<span>Отправить заявку →</span>';
+    submitBtn.innerHTML = '<span>' + tr('form.submit') + '</span>';
     return;
   }
 
   document.getElementById('confirmEmail').textContent     = emailVal;
   document.getElementById('confirmDevice').textContent    = deviceVal;
-  document.getElementById('confirmProcessor').textContent = processorVal;
+  document.getElementById('confirmProcessor').textContent = processorVal === 'Не знаю' ? tr('processor.unknown') : processorVal;
 
   document.getElementById('requestForm').reset();
   deviceHidden.value = '';
   deviceSearch.value = '';
   deviceSearch.placeholder = 'Samsung S21, Redmi Note 10...';
   submitBtn.disabled = false;
-  submitBtn.innerHTML = '<span>Отправить заявку →</span>';
+  submitBtn.innerHTML = '<span>' + tr('form.submit') + '</span>';
   status.classList.remove('visible');
 
   setStep(3);
@@ -1633,7 +2014,7 @@ async function getFirebaseAuth() {
 
     var app  = appModule.getApps().length ? appModule.getApps()[0] : appModule.initializeApp(firebaseConfig);
     var auth = authModule.getAuth(app);
-    auth.languageCode = 'ru';
+    auth.languageCode = currentLang === 'zh' ? 'zh-CN' : currentLang;
 
     _fbAuth = {
       auth,
@@ -1700,15 +2081,15 @@ function showVerifyPending(hintText) {
   if (divider) divider.style.display = 'none';
   document.getElementById('authSwitchBtn').style.display = 'none';
   document.getElementById('verifyPending').style.display = '';
-  document.getElementById('verifyEmailHint').textContent = hintText || 'Письмо подтверждения отправлено на вашу почту';
+  document.getElementById('verifyEmailHint').textContent = hintText || tr('verify.sent');
   setAuthStatus('');
   setVerifyStatus('');
 }
 
 function setAuthMode(signInMode) {
   isEmailSignInMode = !!signInMode;
-  document.getElementById('authActionBtn').innerHTML = isEmailSignInMode ? '<span>Войти</span>' : '<span>Создать аккаунт</span>';
-  document.getElementById('authSwitchBtn').textContent = isEmailSignInMode ? 'Нет аккаунта? Создать' : 'Уже есть аккаунт? Войти';
+  document.getElementById('authActionBtn').innerHTML = isEmailSignInMode ? '<span>' + tr('auth.signIn') + '</span>' : '<span>' + tr('auth.create') + '</span>';
+  document.getElementById('authSwitchBtn').textContent = isEmailSignInMode ? tr('auth.toCreate') : tr('auth.toSignIn');
   document.getElementById('authPassword').autocomplete = isEmailSignInMode ? 'current-password' : 'new-password';
   var forgotWrap = document.getElementById('forgotPasswordWrap');
   if (forgotWrap) forgotWrap.style.display = isEmailSignInMode ? 'block' : 'none';
@@ -1743,14 +2124,14 @@ window.signInWithGoogle = async function() {
   } catch (err) {
     console.error('Google sign-in error:', err);
     var knownErrors = {
-      'auth/popup-closed-by-user':                     'Окно закрыто. Попробуйте ещё раз',
-      'auth/popup-blocked':                            'Браузер заблокировал pop-up. Разрешите и повторите',
-      'auth/cancelled-popup-request':                  'Запрос отменён',
-      'auth/network-request-failed':                   'Ошибка сети. Проверьте интернет',
-      'auth/unauthorized-domain':                      'Домен не авторизован в Firebase Console',
+      'auth/popup-closed-by-user':                     tr('status.googlePopupClosed'),
+      'auth/popup-blocked':                            tr('status.googlePopupBlocked'),
+      'auth/cancelled-popup-request':                  tr('status.cancelled'),
+      'auth/network-request-failed':                   tr('status.network'),
+      'auth/unauthorized-domain':                      tr('status.unauthorizedDomain'),
       'auth/account-exists-with-different-credential': 'Email уже используется с другим способом входа',
-      'auth/operation-not-allowed':                    'Google-вход не включён в Firebase Console',
-      'auth/internal-error':                           'Внутренняя ошибка Firebase. Попробуйте позже'
+      'auth/operation-not-allowed':                    tr('status.googleNotEnabled'),
+      'auth/internal-error':                           tr('status.internal')
     };
     var msg = knownErrors[err.code]
       || ('Ошибка' + (err.code ? ' [' + err.code + ']' : '') + ': ' + (err.message || 'попробуйте ещё раз'));
@@ -1793,12 +2174,12 @@ window.handleEmailAuth = async function() {
   var email    = document.getElementById('authEmail').value.trim().toLowerCase();
   var password = document.getElementById('authPassword').value;
 
-  if (!email || !password) { setAuthStatus('Заполните email и пароль', 'var(--red)'); return; }
-  if (!isValidEmail(email)) { setAuthStatus('Введите корректный email', 'var(--red)'); return; }
-  if (password.length < 8)  { setAuthStatus('Пароль минимум 8 символов', 'var(--red)'); return; }
+  if (!email || !password) { setAuthStatus(tr('status.fillEmailPassword'), 'var(--red)'); return; }
+  if (!isValidEmail(email)) { setAuthStatus(tr('status.invalidEmail'), 'var(--red)'); return; }
+  if (password.length < 8)  { setAuthStatus(tr('status.shortPassword'), 'var(--red)'); return; }
 
   btn.disabled = true;
-  btn.innerHTML = '<span>Проверяем...</span>';
+  btn.innerHTML = '<span>' + tr('status.checking') + '</span>';
   setAuthStatus('');
 
   try {
@@ -1808,9 +2189,9 @@ window.handleEmailAuth = async function() {
       var loginResult = await fb.signInWithEmailAndPassword(fb.auth, email, password);
       localStorage.setItem('iosxEmail', email);
       if (!loginResult.user.emailVerified) {
-        showVerifyPending('Подтвердите email по ссылке из письма, затем нажмите «Я подтвердил»');
+        showVerifyPending(tr('status.verifyHintLogin'));
         btn.disabled = false;
-        btn.innerHTML = '<span>Войти</span>';
+        btn.innerHTML = '<span>' + tr('auth.signIn') + '</span>';
         return;
       }
       showApp();
@@ -1821,30 +2202,30 @@ window.handleEmailAuth = async function() {
     localStorage.setItem('iosxEmail', email);
     sessionStorage.setItem('iosxJustRegistered', '1');
     await fb.sendEmailVerification(registerResult.user, getEmailActionSettings());
-    showVerifyPending('Откройте письмо, нажмите ссылку, затем вернитесь и нажмите «Я подтвердил»');
+    showVerifyPending(tr('status.verifyHintRegister'));
 
   } catch (err) {
     var msg = {
-      'auth/email-already-in-use':   'Этот email уже зарегистрирован. Войдите',
-      'auth/user-not-found':         'Аккаунт не найден. Создайте аккаунт',
+      'auth/email-already-in-use':   tr('status.emailExists'),
+      'auth/user-not-found':         tr('status.noAccount'),
       'auth/wrong-password':         'Неверный пароль',
-      'auth/invalid-credential':     'Неверный email или пароль',
-      'auth/invalid-email':          'Введите корректный email',
-      'auth/weak-password':          'Пароль минимум 8 символов',
-      'auth/too-many-requests':      'Слишком много попыток. Подождите',
-      'auth/network-request-failed': 'Ошибка сети. Проверьте интернет'
+      'auth/invalid-credential':     tr('status.badCredentials'),
+      'auth/invalid-email':          tr('status.invalidEmail'),
+      'auth/weak-password':          tr('status.shortPassword'),
+      'auth/too-many-requests':      tr('status.tooMany'),
+      'auth/network-request-failed': tr('status.network')
     }[err.code] || 'Ошибка: ' + (err.message || 'попробуйте ещё раз');
     setAuthStatus(msg, 'var(--red)');
   }
 
   btn.disabled = false;
-  btn.innerHTML = isEmailSignInMode ? '<span>Войти</span>' : '<span>Создать аккаунт</span>';
+  btn.innerHTML = isEmailSignInMode ? '<span>' + tr('auth.signIn') + '</span>' : '<span>' + tr('auth.create') + '</span>';
 };
 
 window.checkEmailVerified = async function() {
   var btn = document.getElementById('verifyCheckBtn');
   btn.disabled = true;
-  btn.innerHTML = '<span>Проверяем...</span>';
+  btn.innerHTML = '<span>' + tr('status.checking') + '</span>';
   setVerifyStatus('');
 
   try {
@@ -1855,30 +2236,30 @@ window.checkEmailVerified = async function() {
     user = fb.auth.currentUser;
     if (user && user.emailVerified) {
       sessionStorage.removeItem('iosxJustRegistered');
-      setVerifyStatus('Email подтверждён', 'var(--green)');
+      setVerifyStatus(tr('status.emailConfirmed'), 'var(--green)');
       showApp();
       return;
     }
-    setVerifyStatus('Email ещё не подтверждён. Откройте письмо', 'var(--red)');
+    setVerifyStatus(tr('status.emailNotConfirmed'), 'var(--red)');
   } catch (e) {
-    setVerifyStatus('Ошибка проверки. Попробуйте позже', 'var(--red)');
+    setVerifyStatus(tr('status.verifyError'), 'var(--red)');
   }
 
   btn.disabled = false;
-  btn.innerHTML = '<span>Я подтвердил →</span>';
+  btn.innerHTML = '<span>' + tr('verify.check') + '</span>';
 };
 
 window.resendVerification = async function() {
   var btn = document.getElementById('verifyResendBtn');
   btn.disabled = true;
-  setVerifyStatus('Отправляем...', 'var(--muted)');
+  setVerifyStatus(tr('status.resendSending'), 'var(--muted)');
   try {
     await sendVerificationToCurrentUser();
-    setVerifyStatus('Письмо отправлено. Проверьте входящие и спам', 'var(--green)');
+    setVerifyStatus(tr('status.emailSent'), 'var(--green)');
   } catch (err) {
     var msg = err.code === 'auth/too-many-requests'
-      ? 'Слишком много запросов. Подождите'
-      : 'Ошибка отправки. Войдите заново';
+      ? tr('status.tooMany')
+      : tr('status.resendError');
     setVerifyStatus(msg, 'var(--red)');
   }
   btn.disabled = false;
@@ -1913,26 +2294,26 @@ window.closeForgotPassword = function() {
 window.handleForgotPassword = async function() {
   var email = document.getElementById('forgotEmail').value.trim().toLowerCase();
   var btn   = document.getElementById('forgotBtn');
-  if (!email)               { setTextStatus('forgotStatus', 'Введите email', 'var(--red)'); return; }
-  if (!isValidEmail(email)) { setTextStatus('forgotStatus', 'Введите корректный email', 'var(--red)'); return; }
+  if (!email)               { setTextStatus('forgotStatus', tr('status.invalidEmail'), 'var(--red)'); return; }
+  if (!isValidEmail(email)) { setTextStatus('forgotStatus', tr('status.invalidEmail'), 'var(--red)'); return; }
 
   btn.disabled = true;
-  btn.innerHTML = '<span>Отправляем...</span>';
+  btn.innerHTML = '<span>' + tr('status.resendSending') + '</span>';
   try {
     var fb = await getFirebaseAuth();
     await fb.sendPasswordResetEmail(fb.auth, email, getEmailActionSettings());
-    setTextStatus('forgotStatus', 'Письмо отправлено. Проверьте входящие и спам', 'var(--green)');
+    setTextStatus('forgotStatus', tr('status.emailSent'), 'var(--green)');
   } catch(err) {
     var msg = {
-      'auth/invalid-email':          'Введите корректный email',
-      'auth/user-not-found':         'Аккаунт с этим email не найден',
-      'auth/too-many-requests':      'Слишком много запросов. Подождите',
-      'auth/network-request-failed': 'Ошибка сети. Проверьте интернет'
-    }[err.code] || 'Не удалось отправить письмо. Попробуйте позже';
+      'auth/invalid-email':          tr('status.invalidEmail'),
+      'auth/user-not-found':         tr('status.forgotNoAccount'),
+      'auth/too-many-requests':      tr('status.tooMany'),
+      'auth/network-request-failed': tr('status.network')
+    }[err.code] || tr('status.forgotError');
     setTextStatus('forgotStatus', msg, 'var(--red)');
   }
   btn.disabled = false;
-  btn.innerHTML = '<span>Отправить инструкцию</span>';
+  btn.innerHTML = '<span>' + tr('forgot.submit') + '</span>';
 };
 
 // ─── CABINET ─────────────────────────────────────────────
@@ -1956,6 +2337,7 @@ function loadCabinet() {
 getFirebaseAuth().catch(function(){});
 
 document.addEventListener('DOMContentLoaded', async function() {
+  setLanguage(currentLang);
   showAuthForm();
   setAuthMode(false);
 
@@ -1970,14 +2352,14 @@ document.addEventListener('DOMContentLoaded', async function() {
       user = fb.auth.currentUser;
       if (user && user.emailVerified) { showApp(); return; }
       if (sessionStorage.getItem('iosxJustRegistered') === '1') {
-        showVerifyPending('Откройте письмо, нажмите ссылку, затем вернитесь и нажмите «Я подтвердил»');
+        showVerifyPending(tr('status.verifyHintRegister'));
       } else {
         showAuthForm();
         setAuthMode(true);
       }
     });
   } catch(e) {
-    setAuthStatus('Не удалось подключиться к Firebase. Проверьте интернет', 'var(--red)');
+    setAuthStatus(tr('status.firebaseConnect'), 'var(--red)');
   }
 });
 </script>
