@@ -5,6 +5,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>IOSx — Device Config Tool</title>
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://www.googleapis.com" crossorigin>
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -61,7 +65,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 9px;
     font-family: 'Manrope', sans-serif;
     font-size: 52px;
     font-weight: 800;
@@ -78,17 +82,19 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 5px 9px;
+    min-height: 18px;
+    padding: 4px 8px 3px;
     border-radius: 999px;
     background: #ffffff;
     color: #050505;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 500;
-    letter-spacing: 1px;
+    letter-spacing: 1.1px;
     line-height: 1;
     text-transform: uppercase;
-    transform: translateY(2px);
+    transform: translateY(-10px);
+    box-shadow: 0 6px 18px rgba(255,255,255,0.08);
   }
 
   .auth-subtitle {
@@ -296,7 +302,7 @@
   .app-logo {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     font-family: 'Manrope', sans-serif;
     font-size: 28px;
     font-weight: 800;
@@ -306,6 +312,13 @@
   }
 
   .app-logo .x { color: var(--muted); }
+
+  .app-logo .beta-badge {
+    min-height: 16px;
+    padding: 4px 7px 3px;
+    font-size: 8px;
+    transform: translateY(-7px);
+  }
 
   .cabinet-btn {
     display: inline-flex;
@@ -846,12 +859,14 @@
   .eye-btn:hover { color: var(--muted); }
 
   .cabinet-actions {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin-top: 20px;
   }
 
   .cabinet-actions .btn { margin-top: 0; }
+  .cabinet-actions .btn-danger { grid-column: 1 / -1; }
 
   /* ── FOOTER ────────────────────────────────────── */
   .footer {
@@ -1127,20 +1142,9 @@
       <input type="email" id="cabinetEmail" class="form-input" readonly style="background:transparent;border-color:var(--border);color:var(--muted);cursor:default;">
     </div>
 
-    <div class="form-group">
-      <label class="form-label">Пароль</label>
-      <div class="cabinet-field-wrap">
-        <input type="password" id="cabinetPassword" class="form-input" readonly value="********" style="background:transparent;border-color:var(--border);color:var(--muted);cursor:default;letter-spacing:3px;">
-        <button type="button" class="eye-btn" id="toggleCabinetPassword" onclick="toggleCabinetPassword()" title="Показать/скрыть">
-          <svg id="eyeIconShow" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          <svg id="eyeIconHide" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-        </button>
-      </div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);margin-top:5px;letter-spacing:0.3px;">Firebase не предоставляет доступ к реальному паролю</div>
-    </div>
-
     <div class="cabinet-actions">
       <button type="button" class="btn btn-outline" onclick="closeCabinet(); setStep(1);"><span>Главная</span></button>
+      <button type="button" class="btn btn-outline" onclick="openForgotFromCabinet()"><span>Сменить пароль</span></button>
       <button type="button" class="btn btn-danger" onclick="signOutGoogle()"><span>Выйти</span></button>
     </div>
   </div>
@@ -1605,39 +1609,54 @@ document.addEventListener('click', (e) => {
 <script>
 // ─── FIREBASE AUTH ────────────────────────────────────────
 var _fbAuth = null;
+var _fbAuthPromise = null;
+var FIREBASE_APP_URL = "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+var FIREBASE_AUTH_URL = "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 async function getFirebaseAuth() {
   if (_fbAuth) return _fbAuth;
+  if (_fbAuthPromise) return _fbAuthPromise;
 
-  var firebaseConfig = {
-    apiKey:            "AIzaSyDpjJemT5tAxPmuLEmqtib5yKuw8_shKok",
-    authDomain:        "iosx-71a9d.firebaseapp.com",
-    projectId:         "iosx-71a9d",
-    storageBucket:     "iosx-71a9d.firebasestorage.app",
-    messagingSenderId: "99982710026",
-    appId:             "1:99982710026:web:7957b7a3c051ad96ac16f3"
-  };
+  _fbAuthPromise = (async function() {
+    var firebaseConfig = {
+      apiKey:            "AIzaSyDpjJemT5tAxPmuLEmqtib5yKuw8_shKok",
+      authDomain:        "iosx-71a9d.firebaseapp.com",
+      projectId:         "iosx-71a9d",
+      storageBucket:     "iosx-71a9d.firebasestorage.app",
+      messagingSenderId: "99982710026",
+      appId:             "1:99982710026:web:7957b7a3c051ad96ac16f3"
+    };
 
-  var appModule  = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
-  var authModule = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+    var modules = await Promise.all([
+      import(FIREBASE_APP_URL),
+      import(FIREBASE_AUTH_URL)
+    ]);
+    var appModule = modules[0];
+    var authModule = modules[1];
 
-  var app  = appModule.getApps().length ? appModule.getApps()[0] : appModule.initializeApp(firebaseConfig);
-  var auth = authModule.getAuth(app);
-  auth.languageCode = 'ru';
+    var app  = appModule.getApps().length ? appModule.getApps()[0] : appModule.initializeApp(firebaseConfig);
+    var auth = authModule.getAuth(app);
+    auth.languageCode = 'ru';
 
-  _fbAuth = {
-    auth,
-    createUserWithEmailAndPassword: authModule.createUserWithEmailAndPassword,
-    signInWithEmailAndPassword:     authModule.signInWithEmailAndPassword,
-    sendEmailVerification:          authModule.sendEmailVerification,
-    sendPasswordResetEmail:         authModule.sendPasswordResetEmail,
-    onAuthStateChanged:             authModule.onAuthStateChanged,
-    signOut:                        authModule.signOut,
-    GoogleAuthProvider:             authModule.GoogleAuthProvider,
-    signInWithPopup:                authModule.signInWithPopup
-  };
+    _fbAuth = {
+      auth,
+      createUserWithEmailAndPassword: authModule.createUserWithEmailAndPassword,
+      signInWithEmailAndPassword:     authModule.signInWithEmailAndPassword,
+      sendEmailVerification:          authModule.sendEmailVerification,
+      sendPasswordResetEmail:         authModule.sendPasswordResetEmail,
+      onAuthStateChanged:             authModule.onAuthStateChanged,
+      signOut:                        authModule.signOut,
+      GoogleAuthProvider:             authModule.GoogleAuthProvider,
+      signInWithPopup:                authModule.signInWithPopup
+    };
 
-  return _fbAuth;
+    return _fbAuth;
+  })().catch(function(error) {
+    _fbAuthPromise = null;
+    throw error;
+  });
+
+  return _fbAuthPromise;
 }
 
 function isValidEmail(email) {
@@ -1904,10 +1923,16 @@ window.handleForgotPassword = async function() {
   btn.innerHTML = '<span>Отправляем...</span>';
   try {
     var fb = await getFirebaseAuth();
-    await fb.sendPasswordResetEmail(fb.auth, email);
-    setTextStatus('forgotStatus', 'Ссылка восстановления отправлена на почту', 'var(--green)');
-  } catch(e) {
-    setTextStatus('forgotStatus', 'Ошибка. Проверьте email и попробуйте снова', 'var(--red)');
+    await fb.sendPasswordResetEmail(fb.auth, email, getEmailActionSettings());
+    setTextStatus('forgotStatus', 'Письмо отправлено. Проверьте входящие и спам', 'var(--green)');
+  } catch(err) {
+    var msg = {
+      'auth/invalid-email':          'Введите корректный email',
+      'auth/user-not-found':         'Аккаунт с этим email не найден',
+      'auth/too-many-requests':      'Слишком много запросов. Подождите',
+      'auth/network-request-failed': 'Ошибка сети. Проверьте интернет'
+    }[err.code] || 'Не удалось отправить письмо. Попробуйте позже';
+    setTextStatus('forgotStatus', msg, 'var(--red)');
   }
   btn.disabled = false;
   btn.innerHTML = '<span>Отправить инструкцию</span>';
@@ -1923,38 +1948,23 @@ window.closeCabinet = function() {
   document.getElementById('cabinetOverlay').classList.remove('active');
 };
 
+window.openForgotFromCabinet = function() {
+  var cabinetEmail = document.getElementById('cabinetEmail');
+  var forgotEmail  = document.getElementById('forgotEmail');
+  if (cabinetEmail && forgotEmail) forgotEmail.value = cabinetEmail.value || '';
+  closeCabinet();
+  openForgotPassword();
+};
+
 function loadCabinet() {
   getFirebaseAuth().then(function(fb) {
     var user = fb.auth.currentUser;
     var emailEl = document.getElementById('cabinetEmail');
     if (emailEl && user) emailEl.value = user.email || '';
   }).catch(function(){});
-  var passEl = document.getElementById('cabinetPassword');
-  if (passEl) {
-    passEl.type = 'password';
-    passEl.value = '********';
-  }
-  var showIcon = document.getElementById('eyeIconShow');
-  var hideIcon = document.getElementById('eyeIconHide');
-  if (showIcon) showIcon.style.display = '';
-  if (hideIcon) hideIcon.style.display = 'none';
 }
 
-window.toggleCabinetPassword = function() {
-  var passEl   = document.getElementById('cabinetPassword');
-  var showIcon = document.getElementById('eyeIconShow');
-  var hideIcon = document.getElementById('eyeIconHide');
-  if (!passEl) return;
-  if (passEl.type === 'password') {
-    passEl.type = 'text';
-    if (showIcon) showIcon.style.display = 'none';
-    if (hideIcon) hideIcon.style.display = '';
-  } else {
-    passEl.type = 'password';
-    if (showIcon) showIcon.style.display = '';
-    if (hideIcon) hideIcon.style.display = 'none';
-  }
-};
+getFirebaseAuth().catch(function(){});
 
 document.addEventListener('DOMContentLoaded', async function() {
   showAuthForm();
