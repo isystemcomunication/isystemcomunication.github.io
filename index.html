@@ -1033,8 +1033,8 @@
       <h1 class="sales-title" data-i18n="hero.title">Настроим Android под вас.</h1>
       <p class="sales-subtitle" data-i18n="hero.subtitle">Оставьте заявку на настройку Android-устройства. Дальше вы перейдёте в Telegram-бота для оплаты и проверки перед сбросом.</p>
       <div class="sales-price" aria-label="Цена настройки Android">
-        <div class="sales-price-old">499 ₽</div>
-        <div class="sales-price-new">299 ₽</div>
+        <div class="sales-price-old" data-i18n="price.old">499 ₽</div>
+        <div class="sales-price-new" data-i18n="price.new">299 ₽</div>
         <div class="sales-price-tag" data-i18n="hero.beta">бета</div>
       </div>
       <div class="sales-actions">
@@ -1247,6 +1247,8 @@ const translations = {
     "hero.title": "Настроим Android под вас.",
     "hero.subtitle": "Оставьте заявку на настройку Android-устройства. Дальше вы перейдёте в Telegram-бота для оплаты и проверки перед сбросом.",
     "hero.beta": "бета",
+    "price.old": "499 ₽",
+    "price.new": "299 ₽",
     "hero.cta": "Оставить заявку",
     "hero.note": "Все Android-устройства · после заявки — Telegram-бот для оплаты",
     "trust.ready": "Проверим готовность",
@@ -1344,6 +1346,8 @@ const translations = {
     "hero.title": "Android setup for you.",
     "hero.subtitle": "Submit a request for your Android device. Next, you will go to the Telegram bot for payment and a reset safety check.",
     "hero.beta": "beta",
+    "price.old": "$5.99",
+    "price.new": "$3.49",
     "hero.cta": "Submit request",
     "hero.note": "All Android devices · payment via Telegram bot after request",
     "trust.ready": "Readiness check",
@@ -1441,6 +1445,8 @@ const translations = {
     "hero.title": "为你设置 Android。",
     "hero.subtitle": "提交 Android 设备设置申请。之后你将进入 Telegram 机器人完成付款和重置前检查。",
     "hero.beta": "测试版",
+    "price.old": "¥39",
+    "price.new": "¥24",
     "hero.cta": "提交申请",
     "hero.note": "支持所有 Android 设备 · 申请后通过 Telegram 机器人付款",
     "trust.ready": "检查准备状态",
@@ -1559,7 +1565,7 @@ function setStep(n) {
 }
 
 function openTelegramBot() {
-  alert(tr('status.telegramSoon'));
+  window.open('https://t.me/iosx_support_bot', '_blank', 'noopener');
 }
 
 // ─── SUBMIT REQUEST ───────────────────────────────────────
