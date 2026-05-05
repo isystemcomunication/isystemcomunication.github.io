@@ -58,6 +58,10 @@
   }
 
   .auth-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     font-family: 'Manrope', sans-serif;
     font-size: 52px;
     font-weight: 800;
@@ -69,6 +73,23 @@
   }
 
   .auth-logo .x { color: var(--muted); }
+
+  .beta-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #050505;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    line-height: 1;
+    text-transform: uppercase;
+    transform: translateY(2px);
+  }
 
   .auth-subtitle {
     text-align: center;
@@ -273,6 +294,9 @@
   }
 
   .app-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     font-family: 'Manrope', sans-serif;
     font-size: 28px;
     font-weight: 800;
@@ -865,7 +889,7 @@
 <!-- ── AUTH SCREEN ──────────────────────────────────────── -->
 <div id="authScreen">
   <div class="auth-card">
-    <div class="auth-logo">IOS<span class="x">x</span></div>
+    <div class="auth-logo">IOS<span class="x">x</span><span class="beta-badge">BETA</span></div>
     <div class="auth-subtitle">Настройка Android-устройств — подайте заявку за 30 секунд</div>
 
     <button type="button" class="auth-google-btn" id="authGoogleBtn">
@@ -908,7 +932,7 @@
 <div id="appContent">
 
   <div class="app-header">
-    <div class="app-logo">IOS<span class="x">x</span></div>
+    <div class="app-logo">IOS<span class="x">x</span><span class="beta-badge">BETA</span></div>
     <button type="button" class="cabinet-btn" onclick="openCabinet()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       Кабинет
