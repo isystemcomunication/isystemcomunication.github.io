@@ -859,14 +859,12 @@
   .eye-btn:hover { color: var(--muted); }
 
   .cabinet-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     gap: 10px;
     margin-top: 20px;
   }
 
   .cabinet-actions .btn { margin-top: 0; }
-  .cabinet-actions .btn-danger { grid-column: 1 / -1; }
 
   /* ── FOOTER ────────────────────────────────────── */
   .footer {
@@ -1144,7 +1142,6 @@
 
     <div class="cabinet-actions">
       <button type="button" class="btn btn-outline" onclick="closeCabinet(); setStep(1);"><span>Главная</span></button>
-      <button type="button" class="btn btn-outline" onclick="openForgotFromCabinet()"><span>Сменить пароль</span></button>
       <button type="button" class="btn btn-danger" onclick="signOutGoogle()"><span>Выйти</span></button>
     </div>
   </div>
@@ -1946,14 +1943,6 @@ window.openCabinet = function() {
 
 window.closeCabinet = function() {
   document.getElementById('cabinetOverlay').classList.remove('active');
-};
-
-window.openForgotFromCabinet = function() {
-  var cabinetEmail = document.getElementById('cabinetEmail');
-  var forgotEmail  = document.getElementById('forgotEmail');
-  if (cabinetEmail && forgotEmail) forgotEmail.value = cabinetEmail.value || '';
-  closeCabinet();
-  openForgotPassword();
 };
 
 function loadCabinet() {
