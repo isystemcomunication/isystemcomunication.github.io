@@ -801,6 +801,23 @@
     font-size: 13px;
   }
 
+  .confirm-expiry {
+    margin: -4px 0 18px;
+    padding: 13px 14px;
+    border: 1px solid rgba(248,113,113,0.28);
+    border-radius: 8px;
+    background: rgba(248,113,113,0.06);
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.55;
+    text-align: left;
+  }
+
+  .confirm-expiry strong {
+    color: var(--text);
+    font-weight: 800;
+  }
+
   /* ── MODAL / BOTTOM SHEET ──────────────────────── */
   .modal-overlay {
     display: none;
@@ -1150,6 +1167,9 @@
           <span class="confirm-row-value" data-i18n="confirm.statusValue" style="color:var(--green)">✓ Принято</span>
         </div>
       </div>
+      <div class="confirm-expiry" data-i18n="confirm.expiry">
+        Важно: заявка действует 2 часа. Если не оплатить в течение этого времени, она будет автоматически отменена.
+      </div>
       <button type="button" class="btn" onclick="openTelegramBot()"><span data-i18n="confirm.telegram">Перейти в Telegram-бот для оплаты</span></button>
     </div>
   </div>
@@ -1272,6 +1292,7 @@ const translations = {
     "placeholder.comment": "Опишите задачу...",
     "confirm.title": "Заявка создана",
     "confirm.sub": "Следующий шаг — перейти в Telegram-бот для оплаты и продолжения.",
+    "confirm.expiry": "Важно: заявка действует 2 часа. Если не оплатить в течение этого времени, она будет автоматически отменена.",
     "confirm.statusLabel": "Статус",
     "confirm.statusValue": "✓ Принято",
     "confirm.telegram": "Перейти в Telegram-бот для оплаты",
@@ -1371,6 +1392,7 @@ const translations = {
     "placeholder.comment": "Describe the task...",
     "confirm.title": "Request created",
     "confirm.sub": "Next step: go to the Telegram bot for payment and continuation.",
+    "confirm.expiry": "Important: the request is valid for 2 hours. If payment is not completed in time, it will be cancelled automatically.",
     "confirm.statusLabel": "Status",
     "confirm.statusValue": "✓ Accepted",
     "confirm.telegram": "Go to Telegram bot for payment",
@@ -1470,6 +1492,7 @@ const translations = {
     "placeholder.comment": "描述你的需求...",
     "confirm.title": "申请已创建",
     "confirm.sub": "下一步：进入 Telegram 机器人付款并继续。",
+    "confirm.expiry": "重要：申请有效期为 2 小时。如果未在此时间内付款，申请将自动取消。",
     "confirm.statusLabel": "状态",
     "confirm.statusValue": "✓ 已接受",
     "confirm.telegram": "前往 Telegram 机器人付款",
@@ -1564,8 +1587,10 @@ function setStep(n) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+let currentTelegramUrl = 'https://t.me/iosx_support_bot';
+
 function openTelegramBot() {
-  window.open('https://t.me/iosx_support_bot', '_blank', 'noopener');
+  window.open(currentTelegramUrl || 'https://t.me/iosx_support_bot', '_blank', 'noopener');
 }
 
 // ─── SUBMIT REQUEST ───────────────────────────────────────
@@ -1613,6 +1638,7 @@ async function submitRequest() {
     );
     const data = await res.json();
     if (!data || data.status !== 'success') throw new Error('Server error');
+    currentTelegramUrl = data.telegramUrl || 'https://t.me/iosx_support_bot';
   } catch (e) {
     status.textContent = tr('status.submitError');
     status.style.color = 'var(--red)';
