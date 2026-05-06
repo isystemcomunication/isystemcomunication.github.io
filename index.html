@@ -1587,10 +1587,13 @@ function setStep(n) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-let currentTelegramUrl = 'https://t.me/iosx_support_bot';
+const SITE_URL = 'https://isystemcomunication.github.io/IOSx.github.io/';
+const BOT_USERNAME = 'iosx_support_bot';
+const BOT_BASE_URL = `https://t.me/${BOT_USERNAME}`;
+let currentTelegramUrl = BOT_BASE_URL;
 
 function openTelegramBot() {
-  window.open(currentTelegramUrl || 'https://t.me/iosx_support_bot', '_blank', 'noopener');
+  window.open(currentTelegramUrl || BOT_BASE_URL, '_blank', 'noopener');
 }
 
 // ─── SUBMIT REQUEST ───────────────────────────────────────
@@ -1632,13 +1635,13 @@ async function submitRequest() {
           device: deviceVal,
           processor: processorVal,
           comment: commentVal,
-          pageUrl: window.location.href
+          pageUrl: SITE_URL
         })
       }
     );
     const data = await res.json();
     if (!data || data.status !== 'success') throw new Error('Server error');
-    currentTelegramUrl = data.telegramUrl || 'https://t.me/iosx_support_bot';
+    currentTelegramUrl = data.telegramUrl || BOT_BASE_URL;
   } catch (e) {
     status.textContent = tr('status.submitError');
     status.style.color = 'var(--red)';
@@ -2190,7 +2193,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function getEmailActionSettings() {
   var cleanUrl = window.location.origin && window.location.origin !== 'null'
     ? window.location.origin + window.location.pathname
-    : 'https://isystemcomunication.github.io/IOSx.github.io/';
+    : SITE_URL;
   return { url: cleanUrl, handleCodeInApp: false };
 }
 
