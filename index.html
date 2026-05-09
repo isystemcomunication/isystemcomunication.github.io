@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -7,8 +6,6 @@
 <title>IOSx — Device Config Tool</title>
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://www.googleapis.com" crossorigin>
-<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js">
-<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -42,7 +39,6 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* ── AUTH SCREEN ───────────────────────────────── */
   #authScreen {
     min-height: 100dvh;
     display: flex;
@@ -187,7 +183,6 @@
     text-transform: uppercase;
   }
 
-  /* ── FORM ELEMENTS ─────────────────────────────── */
   .form-group { margin-bottom: 14px; }
 
   .form-label {
@@ -233,7 +228,6 @@
 
   .form-select option, .form-select optgroup { background: #1a1a1a; color: var(--text); }
 
-  /* ── BUTTONS ───────────────────────────────────── */
   .btn {
     width: 100%;
     padding: 14px;
@@ -303,7 +297,6 @@
 
   .status-msg.visible { opacity: 1; }
 
-  /* ── VERIFY PENDING ────────────────────────────── */
   #verifyPending {
     display: none;
     margin-top: 16px;
@@ -314,7 +307,6 @@
     text-align: center;
   }
 
-  /* ── APP HEADER ────────────────────────────────── */
   #appContent {
     display: none;
     min-height: 100dvh;
@@ -382,7 +374,6 @@
 
   .cabinet-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
 
-  /* ── STEPS ─────────────────────────────────────── */
   .steps {
     display: flex;
     align-items: center;
@@ -451,7 +442,6 @@
   .step.active .step-label { color: var(--text); }
   .step.done .step-label   { color: var(--green); }
 
-  /* ── PAGE / CARD ───────────────────────────────── */
   .page {
     display: none;
     width: 100%;
@@ -485,7 +475,6 @@
 
   .card-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  /* ── SALES HERO ───────────────────────────────── */
   .sales-hero {
     padding: 34px 0 20px;
   }
@@ -623,7 +612,6 @@
     text-align: right;
   }
 
-  /* ── HERO ROW ──────────────────────────────────── */
   .hero-row {
     display: flex;
     align-items: center;
@@ -662,7 +650,6 @@
     font-weight: 400;
   }
 
-  /* ── DEVICE PICKER ─────────────────────────────── */
   .device-wrapper { position: relative; }
 
   .device-list {
@@ -727,7 +714,6 @@
     padding: 10px 14px;
   }
 
-  /* ── CONFIRM PAGE ──────────────────────────────── */
   .confirm-icon {
     width: 56px; height: 56px;
     border-radius: 50%;
@@ -818,7 +804,6 @@
     font-weight: 800;
   }
 
-  /* ── MODAL / BOTTOM SHEET ──────────────────────── */
   .modal-overlay {
     display: none;
     position: fixed; inset: 0;
@@ -895,7 +880,6 @@
     letter-spacing: 1px;
   }
 
-  /* ── CABINET ───────────────────────────────────── */
   .cabinet-field-wrap { position: relative; }
   .cabinet-field-wrap .form-input { padding-right: 44px; }
 
@@ -925,7 +909,6 @@
 
   .cabinet-actions .btn { margin-top: 0; }
 
-  /* ── FOOTER ────────────────────────────────────── */
   .footer {
     position: fixed;
     bottom: 0; left: 0; right: 0;
@@ -953,7 +936,6 @@
     .sales-title { font-size: 42px; }
   }
 
-  /* ── SCROLLBAR ─────────────────────────────────── */
   ::-webkit-scrollbar { width: 3px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
@@ -961,14 +943,13 @@
 </head>
 <body>
 
-<!-- ── AUTH SCREEN ──────────────────────────────────────── -->
 <div id="authScreen">
   <div class="auth-card">
     <div class="auth-lang">
       <div class="lang-switch" role="group" aria-label="Language">
-        <button type="button" class="lang-btn" data-lang="ru" onclick="setLanguage('ru')">RU</button>
-        <button type="button" class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
-        <button type="button" class="lang-btn" data-lang="zh" onclick="setLanguage('zh')">中文</button>
+        <button type="button" class="lang-btn" data-lang="ru">RU</button>
+        <button type="button" class="lang-btn" data-lang="en">EN</button>
+        <button type="button" class="lang-btn" data-lang="zh">中文</button>
       </div>
     </div>
     <div class="auth-logo">IOS<span class="x">x</span><span class="beta-badge">BETA</span></div>
@@ -981,7 +962,7 @@
 
     <div class="auth-divider"><span data-i18n="auth.or">или</span></div>
 
-    <form id="authForm" autocomplete="on" onsubmit="handleEmailAuth(); return false;">
+    <form id="authForm" autocomplete="on">
       <div class="form-group">
         <label class="form-label">Email</label>
         <input type="email" id="authEmail" name="email" class="form-input" placeholder="user@gmail.com" autocomplete="email" inputmode="email">
@@ -991,37 +972,36 @@
         <input type="password" id="authPassword" name="password" class="form-input" data-i18n-placeholder="placeholder.password" placeholder="Минимум 8 символов" minlength="8" autocomplete="current-password">
       </div>
       <div id="forgotPasswordWrap" style="display:none;text-align:right;margin-top:-6px;margin-bottom:12px;">
-        <button type="button" onclick="openForgotPassword()" data-i18n="auth.forgot" style="background:none;border:none;color:var(--muted);font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer;padding:4px 0;transition:color 0.15s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">Забыли пароль?</button>
+        <button type="button" id="forgotPasswordBtn" data-i18n="auth.forgot" style="background:none;border:none;color:var(--muted);font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer;padding:4px 0;transition:color 0.15s;">Забыли пароль?</button>
       </div>
       <button type="submit" class="btn" id="authActionBtn"><span>Создать аккаунт</span></button>
     </form>
 
-    <button type="button" class="auth-switch-btn" id="authSwitchBtn" onclick="toggleAuthMode()">Уже есть аккаунт? Войти</button>
+    <button type="button" class="auth-switch-btn" id="authSwitchBtn">Уже есть аккаунт? Войти</button>
     <div class="status-msg" id="authStatus"></div>
 
     <div id="verifyPending">
       <div style="font-size:26px;margin-bottom:10px;">✉️</div>
       <div data-i18n="verify.title" style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;letter-spacing:-0.2px;">Подтвердите email</div>
       <div data-i18n="verify.sent" style="font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:18px;" id="verifyEmailHint">Письмо отправлено на вашу почту</div>
-      <button type="button" class="btn" onclick="checkEmailVerified()" id="verifyCheckBtn" style="margin-bottom:10px;"><span data-i18n="verify.check">Я подтвердил →</span></button>
-      <button type="button" onclick="resendVerification()" id="verifyResendBtn" data-i18n="verify.resend" style="width:100%;padding:11px;border-radius:12px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer;min-height:42px;transition:color 0.15s,border-color 0.15s;" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,0.25)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border2)'">Отправить снова</button>
+      <button type="button" class="btn" id="verifyCheckBtn" style="margin-bottom:10px;"><span data-i18n="verify.check">Я подтвердил →</span></button>
+      <button type="button" id="verifyResendBtn" data-i18n="verify.resend" style="width:100%;padding:11px;border-radius:12px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer;min-height:42px;transition:color 0.15s,border-color 0.15s;">Отправить снова</button>
       <div class="status-msg" id="verifyStatus" style="margin-top:8px;"></div>
     </div>
   </div>
 </div>
 
-<!-- ── APP CONTENT ──────────────────────────────────────── -->
 <div id="appContent">
 
   <div class="app-header">
     <div class="app-logo">IOS<span class="x">x</span><span class="beta-badge">BETA</span></div>
     <div class="header-actions">
       <div class="lang-switch" role="group" aria-label="Language">
-        <button type="button" class="lang-btn" data-lang="ru" onclick="setLanguage('ru')">RU</button>
-        <button type="button" class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
-        <button type="button" class="lang-btn" data-lang="zh" onclick="setLanguage('zh')">中文</button>
+        <button type="button" class="lang-btn" data-lang="ru">RU</button>
+        <button type="button" class="lang-btn" data-lang="en">EN</button>
+        <button type="button" class="lang-btn" data-lang="zh">中文</button>
       </div>
-      <button type="button" class="cabinet-btn" onclick="openCabinet()">
+      <button type="button" class="cabinet-btn" id="cabinetBtn">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
         <span data-i18n="nav.cabinet">Кабинет</span>
       </button>
@@ -1043,7 +1023,6 @@
     </div>
   </div>
 
-  <!-- PAGE 1 -->
   <div id="page1" class="page active">
     <section class="sales-hero">
       <div class="sales-kicker" data-i18n="hero.kicker">Android setup service</div>
@@ -1055,7 +1034,7 @@
         <div class="sales-price-tag" data-i18n="hero.beta">бета</div>
       </div>
       <div class="sales-actions">
-        <button type="button" class="btn" onclick="document.getElementById('requestForm').scrollIntoView({behavior:'smooth',block:'start'});"><span data-i18n="hero.cta">Оставить заявку</span></button>
+        <button type="button" class="btn" id="heroCtaBtn"><span data-i18n="hero.cta">Оставить заявку</span></button>
         <div class="sales-note" data-i18n="hero.note">Все Android-устройства · после заявки — Telegram-бот для оплаты</div>
       </div>
     </section>
@@ -1134,16 +1113,14 @@
           <input type="text" name="comment" class="form-input" data-i18n-placeholder="placeholder.comment" placeholder="Опишите задачу...">
         </div>
 
-        <button type="button" class="btn" onclick="submitRequest()"><span data-i18n="form.submit">Отправить заявку →</span></button>
+        <button type="button" class="btn" id="submitFormBtn"><span data-i18n="form.submit">Отправить заявку →</span></button>
         <div class="status-msg" id="formStatus"></div>
       </form>
     </div>
   </div>
 
-  <!-- PAGE 2 (hidden) -->
   <div id="page2" class="page"></div>
 
-  <!-- PAGE 3 -->
   <div id="page3" class="page">
     <div class="card" style="text-align:center;">
       <div class="confirm-icon">✓</div>
@@ -1170,22 +1147,20 @@
       <div class="confirm-expiry" data-i18n="confirm.expiry">
         Важно: заявка действует 2 часа. Если не оплатить в течение этого времени, она будет автоматически отменена.
       </div>
-      <button type="button" class="btn" onclick="openTelegramBot()"><span data-i18n="confirm.telegram">Перейти в Telegram-бот для оплаты</span></button>
+      <button type="button" class="btn" id="telegramBtn"><span data-i18n="confirm.telegram">Перейти в Telegram-бот для оплаты</span></button>
     </div>
   </div>
 
-</div><!-- end appContent -->
+</div>
 
-<!-- Footer -->
 <div class="footer">
-  <a href="#" onclick="openPrivacy();return false;" data-i18n="footer.privacy">Политика конфиденциальности</a>
+  <a href="#" id="privacyLink" data-i18n="footer.privacy">Политика конфиденциальности</a>
   &nbsp;·&nbsp; IOSx
 </div>
 
-<!-- ── MODAL: ПОЛИТИКА ──────────────────────────────────── -->
-<div class="modal-overlay" id="privacyOverlay" onclick="if(event.target===this)closePrivacy()" style="z-index:1100;">
+<div class="modal-overlay" id="privacyOverlay">
   <div class="modal" style="max-width:480px;">
-    <button class="modal-close" onclick="closePrivacy()">✕</button>
+    <button class="modal-close" id="closePrivacy">✕</button>
     <div class="modal-title" data-i18n="privacy.title">Конфиденциальность</div>
     <div class="modal-sub" data-i18n="privacy.updated">Последнее обновление: 2025</div>
     <div style="display:flex;flex-direction:column;gap:20px;">
@@ -1207,10 +1182,9 @@
   </div>
 </div>
 
-<!-- ── MODAL: КАБИНЕТ ───────────────────────────────────── -->
-<div class="modal-overlay" id="cabinetOverlay" onclick="if(event.target===this)closeCabinet()">
+<div class="modal-overlay" id="cabinetOverlay">
   <div class="modal" style="max-width:440px;">
-    <button class="modal-close" onclick="closeCabinet()">✕</button>
+    <button class="modal-close" id="closeCabinet">✕</button>
     <div class="modal-title" data-i18n="cabinet.title">Ваш кабинет</div>
     <div class="modal-sub" data-i18n="cabinet.sub">Данные аккаунта</div>
 
@@ -1220,1183 +1194,1120 @@
     </div>
 
     <div class="cabinet-actions">
-      <button type="button" class="btn btn-outline" onclick="closeCabinet(); setStep(1);"><span data-i18n="cabinet.home">Главная</span></button>
-      <button type="button" class="btn btn-danger" onclick="signOutGoogle()"><span data-i18n="cabinet.logout">Выйти</span></button>
+      <button type="button" class="btn btn-outline" id="cabinetHomeBtn"><span data-i18n="cabinet.home">Главная</span></button>
+      <button type="button" class="btn btn-danger" id="logoutBtn"><span data-i18n="cabinet.logout">Выйти</span></button>
     </div>
   </div>
 </div>
 
-<!-- ── MODAL: ВОССТАНОВЛЕНИЕ ────────────────────────────── -->
-<div class="modal-overlay" id="forgotOverlay" onclick="if(event.target===this)closeForgotPassword()">
+<div class="modal-overlay" id="forgotOverlay">
   <div class="modal" style="max-width:440px;">
-    <button class="modal-close" onclick="closeForgotPassword()">✕</button>
+    <button class="modal-close" id="closeForgot">✕</button>
     <div class="modal-title" data-i18n="forgot.title">Восстановление доступа</div>
     <div class="modal-sub" data-i18n="forgot.sub">Укажите email при регистрации</div>
     <div class="form-group">
       <label class="form-label">Email</label>
       <input type="email" id="forgotEmail" class="form-input" placeholder="user@gmail.com" autocomplete="email" inputmode="email">
     </div>
-    <button type="button" class="btn" onclick="handleForgotPassword()" id="forgotBtn"><span data-i18n="forgot.submit">Отправить инструкцию</span></button>
+    <button type="button" class="btn" id="forgotBtn"><span data-i18n="forgot.submit">Отправить инструкцию</span></button>
     <div class="status-msg" id="forgotStatus" style="margin-top:12px;"></div>
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script>
-// ─── LANGUAGE ─────────────────────────────────────────────
-const translations = {
-  ru: {
-    "auth.subtitle": "Настройка Android-устройств — подайте заявку за 30 секунд",
-    "auth.google": "Войти через Google",
-    "auth.or": "или",
-    "auth.forgot": "Забыли пароль?",
-    "auth.create": "Создать аккаунт",
-    "auth.signIn": "Войти",
-    "auth.toSignIn": "Уже есть аккаунт? Войти",
-    "auth.toCreate": "Нет аккаунта? Создать",
-    "form.password": "Пароль",
-    "placeholder.password": "Минимум 8 символов",
-    "verify.title": "Подтвердите email",
-    "verify.sent": "Письмо отправлено на вашу почту",
-    "verify.check": "Я подтвердил →",
-    "verify.resend": "Отправить снова",
-    "nav.cabinet": "Кабинет",
-    "steps.request": "Заявка",
-    "steps.waiting": "Ожидание",
-    "steps.done": "Готово",
-    "hero.kicker": "Android setup service",
-    "hero.title": "Настроим Android под вас.",
-    "hero.subtitle": "Оставьте заявку на настройку Android-устройства. Дальше вы перейдёте в Telegram-бота для оплаты и проверки перед сбросом.",
-    "hero.beta": "бета",
-    "price.old": "499 ₽",
-    "price.new": "299 ₽",
-    "hero.cta": "Оставить заявку",
-    "hero.note": "Все Android-устройства · после заявки — Telegram-бот для оплаты",
-    "trust.ready": "Проверим готовность",
-    "trust.data": "Не дадим потерять данные",
-    "trust.payment": "Оплата в Telegram",
-    "flow.title": "Как проходит",
-    "flow.requestTitle": "Заявка",
-    "flow.requestCopy": "Вы указываете устройство, процессор и задачу на сайте.",
-    "flow.botTitle": "Telegram-бот",
-    "flow.botCopy": "После заявки переходите в бота, оплачиваете и проходите короткую проверку.",
-    "flow.resetTitle": "Сброс",
-    "flow.resetCopy": "Если проверка показывает риск потери данных, сначала сохраняем важное.",
-    "formBox.title": "Заявка на настройку",
-    "formBox.sub": "Заполните форму — дальше оплата в Telegram-боте",
-    "form.device": "Устройство",
-    "form.processor": "Процессор",
-    "form.optional": "(необязательно)",
-    "form.comment": "Комментарий",
-    "form.submit": "Отправить заявку →",
-    "processor.unknown": "Не знаю",
-    "placeholder.comment": "Опишите задачу...",
-    "confirm.title": "Заявка создана",
-    "confirm.sub": "Следующий шаг — перейти в Telegram-бот для оплаты и продолжения.",
-    "confirm.expiry": "Важно: заявка действует 2 часа. Если не оплатить в течение этого времени, она будет автоматически отменена.",
-    "confirm.statusLabel": "Статус",
-    "confirm.statusValue": "✓ Принято",
-    "confirm.telegram": "Перейти в Telegram-бот для оплаты",
-    "footer.privacy": "Политика конфиденциальности",
-    "privacy.title": "Конфиденциальность",
-    "privacy.updated": "Последнее обновление: 2025",
-    "privacy.collectTitle": "Что мы собираем",
-    "privacy.collectCopy": "Email, модель устройства и описание задачи — только добровольно.",
-    "privacy.whyTitle": "Зачем",
-    "privacy.whyCopy": "Email используется для аккаунта, заявки и восстановления доступа. Данные не продаются третьим лицам.",
-    "privacy.limitsTitle": "Ограничения",
-    "privacy.limitsCopy": "Сервис не обходит защитные ограничения производителей и операторов.",
-    "cabinet.title": "Ваш кабинет",
-    "cabinet.sub": "Данные аккаунта",
-    "cabinet.home": "Главная",
-    "cabinet.logout": "Выйти",
-    "forgot.title": "Восстановление доступа",
-    "forgot.sub": "Укажите email при регистрации",
-    "forgot.submit": "Отправить инструкцию",
-    "status.telegramSoon": "Telegram-бот скоро будет подключён",
-    "status.fillEmailPassword": "Заполните email и пароль",
-    "status.invalidEmail": "Введите корректный email",
-    "status.shortPassword": "Пароль минимум 8 символов",
-    "status.checking": "Проверяем...",
-    "status.sending": "Отправка...",
-    "status.deviceRequired": "⚠ Выбери устройство из списка",
-    "status.fillAll": "⚠ Заполни все поля",
-    "status.submitError": "⚠ Ошибка отправки — попробуй ещё раз",
-    "status.emailSent": "Письмо отправлено. Проверьте входящие и спам"
-    ,"status.verifyHintLogin": "Подтвердите email по ссылке из письма, затем нажмите «Я подтвердил»"
-    ,"status.verifyHintRegister": "Откройте письмо, нажмите ссылку, затем вернитесь и нажмите «Я подтвердил»"
-    ,"status.emailConfirmed": "Email подтверждён"
-    ,"status.emailNotConfirmed": "Email ещё не подтверждён. Откройте письмо"
-    ,"status.verifyError": "Ошибка проверки. Попробуйте позже"
-    ,"status.resendSending": "Отправляем..."
-    ,"status.tooMany": "Слишком много запросов. Подождите"
-    ,"status.resendError": "Ошибка отправки. Войдите заново"
-    ,"status.network": "Ошибка сети. Проверьте интернет"
-    ,"status.noAccount": "Аккаунт не найден. Создайте аккаунт"
-    ,"status.emailExists": "Этот email уже зарегистрирован. Войдите"
-    ,"status.badCredentials": "Неверный email или пароль"
-    ,"status.googlePopupClosed": "Окно закрыто. Попробуйте ещё раз"
-    ,"status.googlePopupBlocked": "Браузер заблокировал pop-up. Разрешите и повторите"
-    ,"status.cancelled": "Запрос отменён"
-    ,"status.unauthorizedDomain": "Домен не авторизован в Firebase Console"
-    ,"status.googleNotEnabled": "Google-вход не включён в Firebase Console"
-    ,"status.internal": "Внутренняя ошибка Firebase. Попробуйте позже"
-    ,"status.forgotNoAccount": "Аккаунт с этим email не найден"
-    ,"status.forgotError": "Не удалось отправить письмо. Попробуйте позже"
-    ,"status.firebaseConnect": "Не удалось подключиться к Firebase. Проверьте интернет"
-  },
-  en: {
-    "auth.subtitle": "Android device setup — submit a request in 30 seconds",
-    "auth.google": "Continue with Google",
-    "auth.or": "or",
-    "auth.forgot": "Forgot password?",
-    "auth.create": "Create account",
-    "auth.signIn": "Sign in",
-    "auth.toSignIn": "Already have an account? Sign in",
-    "auth.toCreate": "No account? Create one",
-    "form.password": "Password",
-    "placeholder.password": "At least 8 characters",
-    "verify.title": "Confirm your email",
-    "verify.sent": "A confirmation email has been sent",
-    "verify.check": "I confirmed →",
-    "verify.resend": "Send again",
-    "nav.cabinet": "Account",
-    "steps.request": "Request",
-    "steps.waiting": "Waiting",
-    "steps.done": "Done",
-    "hero.kicker": "Android setup service",
-    "hero.title": "Android setup for you.",
-    "hero.subtitle": "Submit a request for your Android device. Next, you will go to the Telegram bot for payment and a reset safety check.",
-    "hero.beta": "beta",
-    "price.old": "$5.99",
-    "price.new": "$3.49",
-    "hero.cta": "Submit request",
-    "hero.note": "All Android devices · payment via Telegram bot after request",
-    "trust.ready": "Readiness check",
-    "trust.data": "Protect your data",
-    "trust.payment": "Telegram payment",
-    "flow.title": "How it works",
-    "flow.requestTitle": "Request",
-    "flow.requestCopy": "Enter your device, processor, and task on the site.",
-    "flow.botTitle": "Telegram bot",
-    "flow.botCopy": "After the request, go to the bot, pay, and pass a short check.",
-    "flow.resetTitle": "Reset",
-    "flow.resetCopy": "If the check shows data-loss risk, save important data first.",
-    "formBox.title": "Setup request",
-    "formBox.sub": "Fill out the form — payment follows in Telegram",
-    "form.device": "Device",
-    "form.processor": "Processor",
-    "form.optional": "(optional)",
-    "form.comment": "Comment",
-    "form.submit": "Send request →",
-    "processor.unknown": "I don't know",
-    "placeholder.comment": "Describe the task...",
-    "confirm.title": "Request created",
-    "confirm.sub": "Next step: go to the Telegram bot for payment and continuation.",
-    "confirm.expiry": "Important: the request is valid for 2 hours. If payment is not completed in time, it will be cancelled automatically.",
-    "confirm.statusLabel": "Status",
-    "confirm.statusValue": "✓ Accepted",
-    "confirm.telegram": "Go to Telegram bot for payment",
-    "footer.privacy": "Privacy policy",
-    "privacy.title": "Privacy",
-    "privacy.updated": "Last updated: 2025",
-    "privacy.collectTitle": "What we collect",
-    "privacy.collectCopy": "Email, device model, and task description — only when provided voluntarily.",
-    "privacy.whyTitle": "Why",
-    "privacy.whyCopy": "Email is used for account access, requests, and recovery. Data is not sold to third parties.",
-    "privacy.limitsTitle": "Limits",
-    "privacy.limitsCopy": "The service does not bypass manufacturer or carrier security restrictions.",
-    "cabinet.title": "Your account",
-    "cabinet.sub": "Account details",
-    "cabinet.home": "Home",
-    "cabinet.logout": "Log out",
-    "forgot.title": "Account recovery",
-    "forgot.sub": "Enter the email used at registration",
-    "forgot.submit": "Send instructions",
-    "status.telegramSoon": "Telegram bot will be connected soon",
-    "status.fillEmailPassword": "Enter email and password",
-    "status.invalidEmail": "Enter a valid email",
-    "status.shortPassword": "Password must be at least 8 characters",
-    "status.checking": "Checking...",
-    "status.sending": "Sending...",
-    "status.deviceRequired": "⚠ Choose a device from the list",
-    "status.fillAll": "⚠ Fill in all required fields",
-    "status.submitError": "⚠ Sending failed — try again",
-    "status.emailSent": "Email sent. Check inbox and spam"
-    ,"status.verifyHintLogin": "Confirm your email using the link, then click “I confirmed”"
-    ,"status.verifyHintRegister": "Open the email, click the link, then return and click “I confirmed”"
-    ,"status.emailConfirmed": "Email confirmed"
-    ,"status.emailNotConfirmed": "Email is not confirmed yet. Open the email"
-    ,"status.verifyError": "Verification failed. Try again later"
-    ,"status.resendSending": "Sending..."
-    ,"status.tooMany": "Too many requests. Please wait"
-    ,"status.resendError": "Sending failed. Sign in again"
-    ,"status.network": "Network error. Check your connection"
-    ,"status.noAccount": "Account not found. Create an account"
-    ,"status.emailExists": "This email is already registered. Sign in"
-    ,"status.badCredentials": "Wrong email or password"
-    ,"status.googlePopupClosed": "Window closed. Try again"
-    ,"status.googlePopupBlocked": "Popup blocked. Allow it and try again"
-    ,"status.cancelled": "Request cancelled"
-    ,"status.unauthorizedDomain": "Domain is not authorized in Firebase Console"
-    ,"status.googleNotEnabled": "Google sign-in is not enabled in Firebase Console"
-    ,"status.internal": "Internal Firebase error. Try again later"
-    ,"status.forgotNoAccount": "No account found for this email"
-    ,"status.forgotError": "Could not send the email. Try again later"
-    ,"status.firebaseConnect": "Could not connect to Firebase. Check your connection"
-  },
-  zh: {
-    "auth.subtitle": "Android 设备设置 — 30 秒提交申请",
-    "auth.google": "使用 Google 登录",
-    "auth.or": "或",
-    "auth.forgot": "忘记密码？",
-    "auth.create": "创建账户",
-    "auth.signIn": "登录",
-    "auth.toSignIn": "已有账户？登录",
-    "auth.toCreate": "没有账户？创建",
-    "form.password": "密码",
-    "placeholder.password": "至少 8 个字符",
-    "verify.title": "确认邮箱",
-    "verify.sent": "确认邮件已发送到你的邮箱",
-    "verify.check": "我已确认 →",
-    "verify.resend": "重新发送",
-    "nav.cabinet": "账户",
-    "steps.request": "申请",
-    "steps.waiting": "等待",
-    "steps.done": "完成",
-    "hero.kicker": "Android setup service",
-    "hero.title": "为你设置 Android。",
-    "hero.subtitle": "提交 Android 设备设置申请。之后你将进入 Telegram 机器人完成付款和重置前检查。",
-    "hero.beta": "测试版",
-    "price.old": "¥39",
-    "price.new": "¥24",
-    "hero.cta": "提交申请",
-    "hero.note": "支持所有 Android 设备 · 申请后通过 Telegram 机器人付款",
-    "trust.ready": "检查准备状态",
-    "trust.data": "避免数据丢失",
-    "trust.payment": "Telegram 付款",
-    "flow.title": "流程",
-    "flow.requestTitle": "申请",
-    "flow.requestCopy": "在网站填写设备、处理器和任务。",
-    "flow.botTitle": "Telegram 机器人",
-    "flow.botCopy": "提交后进入机器人，付款并完成简短检查。",
-    "flow.resetTitle": "重置",
-    "flow.resetCopy": "如果检查发现数据丢失风险，先保存重要数据。",
-    "formBox.title": "设置申请",
-    "formBox.sub": "填写表单 — 之后在 Telegram 中付款",
-    "form.device": "设备",
-    "form.processor": "处理器",
-    "form.optional": "（可选）",
-    "form.comment": "备注",
-    "form.submit": "发送申请 →",
-    "processor.unknown": "不知道",
-    "placeholder.comment": "描述你的需求...",
-    "confirm.title": "申请已创建",
-    "confirm.sub": "下一步：进入 Telegram 机器人付款并继续。",
-    "confirm.expiry": "重要：申请有效期为 2 小时。如果未在此时间内付款，申请将自动取消。",
-    "confirm.statusLabel": "状态",
-    "confirm.statusValue": "✓ 已接受",
-    "confirm.telegram": "前往 Telegram 机器人付款",
-    "footer.privacy": "隐私政策",
-    "privacy.title": "隐私",
-    "privacy.updated": "最后更新：2025",
-    "privacy.collectTitle": "我们收集什么",
-    "privacy.collectCopy": "邮箱、设备型号和任务描述 — 仅在你主动提供时收集。",
-    "privacy.whyTitle": "用途",
-    "privacy.whyCopy": "邮箱用于账户、申请和恢复访问。数据不会出售给第三方。",
-    "privacy.limitsTitle": "限制",
-    "privacy.limitsCopy": "本服务不会绕过制造商或运营商的安全限制。",
-    "cabinet.title": "你的账户",
-    "cabinet.sub": "账户信息",
-    "cabinet.home": "主页",
-    "cabinet.logout": "退出",
-    "forgot.title": "恢复访问",
-    "forgot.sub": "输入注册时使用的邮箱",
-    "forgot.submit": "发送说明",
-    "status.telegramSoon": "Telegram 机器人即将接入",
-    "status.fillEmailPassword": "请输入邮箱和密码",
-    "status.invalidEmail": "请输入有效邮箱",
-    "status.shortPassword": "密码至少 8 个字符",
-    "status.checking": "正在检查...",
-    "status.sending": "正在发送...",
-    "status.deviceRequired": "⚠ 请从列表中选择设备",
-    "status.fillAll": "⚠ 请填写必填项",
-    "status.submitError": "⚠ 发送失败，请重试",
-    "status.emailSent": "邮件已发送，请检查收件箱和垃圾邮件"
-    ,"status.verifyHintLogin": "请通过邮件中的链接确认邮箱，然后点击“我已确认”"
-    ,"status.verifyHintRegister": "打开邮件，点击链接，然后返回并点击“我已确认”"
-    ,"status.emailConfirmed": "邮箱已确认"
-    ,"status.emailNotConfirmed": "邮箱尚未确认，请打开邮件"
-    ,"status.verifyError": "验证失败，请稍后再试"
-    ,"status.resendSending": "正在发送..."
-    ,"status.tooMany": "请求过多，请稍后再试"
-    ,"status.resendError": "发送失败，请重新登录"
-    ,"status.network": "网络错误，请检查连接"
-    ,"status.noAccount": "未找到账户，请创建账户"
-    ,"status.emailExists": "此邮箱已注册，请登录"
-    ,"status.badCredentials": "邮箱或密码错误"
-    ,"status.googlePopupClosed": "窗口已关闭，请重试"
-    ,"status.googlePopupBlocked": "弹窗被拦截，请允许后重试"
-    ,"status.cancelled": "请求已取消"
-    ,"status.unauthorizedDomain": "域名未在 Firebase Console 中授权"
-    ,"status.googleNotEnabled": "Firebase Console 中未启用 Google 登录"
-    ,"status.internal": "Firebase 内部错误，请稍后再试"
-    ,"status.forgotNoAccount": "未找到该邮箱对应的账户"
-    ,"status.forgotError": "无法发送邮件，请稍后再试"
-    ,"status.firebaseConnect": "无法连接 Firebase，请检查网络"
-  }
-};
-
-var currentLang = localStorage.getItem('iosxLang') || 'ru';
-
-function tr(key) {
-  return (translations[currentLang] && translations[currentLang][key]) || translations.ru[key] || key;
-}
-
-function setLanguage(lang) {
-  currentLang = translations[lang] ? lang : 'ru';
-  localStorage.setItem('iosxLang', currentLang);
-  document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : currentLang;
-  if (_fbAuth && _fbAuth.auth) _fbAuth.auth.languageCode = currentLang === 'zh' ? 'zh-CN' : currentLang;
-  applyTranslations();
-}
-
-function applyTranslations() {
-  document.querySelectorAll('[data-i18n]').forEach(function(el) {
-    el.textContent = tr(el.getAttribute('data-i18n'));
-  });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
-    el.placeholder = tr(el.getAttribute('data-i18n-placeholder'));
-  });
-  document.querySelectorAll('.lang-btn').forEach(function(btn) {
-    btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLang);
-  });
-  if (typeof setAuthMode === 'function') setAuthMode(isEmailSignInMode);
-}
-
-// ─── STEPS ────────────────────────────────────────────────
-function setStep(n) {
-  [1,2,3].forEach(i => {
-    const el = document.getElementById('step' + i);
-    el.classList.remove('active','done');
-    if (i < n) el.classList.add('done');
-    if (i === n) el.classList.add('active');
-  });
-  ['page1','page2','page3'].forEach((id,i) => {
-    document.getElementById(id).classList.toggle('active', i+1 === n);
-  });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-const SITE_URL = 'https://isystemcomunication.github.io/IOSx.github.io/';
-const BOT_USERNAME = 'iosx_support_bot';
-const BOT_BASE_URL = `https://t.me/${BOT_USERNAME}`;
-let currentTelegramUrl = BOT_BASE_URL;
-
-function openTelegramBot() {
-  window.open(currentTelegramUrl || BOT_BASE_URL, '_blank', 'noopener');
-}
-
-// ─── SUBMIT REQUEST ───────────────────────────────────────
-async function submitRequest() {
-  const emailVal     = document.getElementById('email').value.trim();
-  const deviceVal    = document.getElementById('deviceHidden').value.trim()
-                    || document.getElementById('deviceSearch').value.trim();
-  const processorVal = document.getElementById('processor').value || 'Не знаю';
-  const commentVal   = document.querySelector('[name="comment"]').value.trim();
-  const status       = document.getElementById('formStatus');
-  const submitBtn    = document.querySelector('#requestForm .btn');
-
-  status.classList.remove('visible');
-
-  if (!emailVal || !deviceVal) {
-    if (!deviceVal) {
-      status.textContent = tr('status.deviceRequired');
-    } else {
-      status.textContent = tr('status.fillAll');
+(function() {
+  // ─── TRANSLATIONS ─────────────────────────────────────
+  const translations = {
+    ru: {
+      "auth.subtitle": "Настройка Android-устройств — подайте заявку за 30 секунд",
+      "auth.google": "Войти через Google",
+      "auth.or": "или",
+      "auth.forgot": "Забыли пароль?",
+      "auth.create": "Создать аккаунт",
+      "auth.signIn": "Войти",
+      "auth.toSignIn": "Уже есть аккаунт? Войти",
+      "auth.toCreate": "Нет аккаунта? Создать",
+      "form.password": "Пароль",
+      "placeholder.password": "Минимум 8 символов",
+      "verify.title": "Подтвердите email",
+      "verify.sent": "Письмо отправлено на вашу почту",
+      "verify.check": "Я подтвердил →",
+      "verify.resend": "Отправить снова",
+      "nav.cabinet": "Кабинет",
+      "steps.request": "Заявка",
+      "steps.waiting": "Ожидание",
+      "steps.done": "Готово",
+      "hero.kicker": "Android setup service",
+      "hero.title": "Настроим Android под вас.",
+      "hero.subtitle": "Оставьте заявку на настройку Android-устройства. Дальше вы перейдёте в Telegram-бота для оплаты и проверки перед сбросом.",
+      "hero.beta": "бета",
+      "price.old": "499 ₽",
+      "price.new": "299 ₽",
+      "hero.cta": "Оставить заявку",
+      "hero.note": "Все Android-устройства · после заявки — Telegram-бот для оплаты",
+      "trust.ready": "Проверим готовность",
+      "trust.data": "Не дадим потерять данные",
+      "trust.payment": "Оплата в Telegram",
+      "flow.title": "Как проходит",
+      "flow.requestTitle": "Заявка",
+      "flow.requestCopy": "Вы указываете устройство, процессор и задачу на сайте.",
+      "flow.botTitle": "Telegram-бот",
+      "flow.botCopy": "После заявки переходите в бота, оплачиваете и проходите короткую проверку.",
+      "flow.resetTitle": "Сброс",
+      "flow.resetCopy": "Если проверка показывает риск потери данных, сначала сохраняем важное.",
+      "formBox.title": "Заявка на настройку",
+      "formBox.sub": "Заполните форму — дальше оплата в Telegram-боте",
+      "form.device": "Устройство",
+      "form.processor": "Процессор",
+      "form.optional": "(необязательно)",
+      "form.comment": "Комментарий",
+      "form.submit": "Отправить заявку →",
+      "processor.unknown": "Не знаю",
+      "placeholder.comment": "Опишите задачу...",
+      "confirm.title": "Заявка создана",
+      "confirm.sub": "Следующий шаг — перейти в Telegram-бот для оплаты и продолжения.",
+      "confirm.expiry": "Важно: заявка действует 2 часа. Если не оплатить в течение этого времени, она будет автоматически отменена.",
+      "confirm.statusLabel": "Статус",
+      "confirm.statusValue": "✓ Принято",
+      "confirm.telegram": "Перейти в Telegram-бот для оплаты",
+      "footer.privacy": "Политика конфиденциальности",
+      "privacy.title": "Конфиденциальность",
+      "privacy.updated": "Последнее обновление: 2025",
+      "privacy.collectTitle": "Что мы собираем",
+      "privacy.collectCopy": "Email, модель устройства и описание задачи — только добровольно.",
+      "privacy.whyTitle": "Зачем",
+      "privacy.whyCopy": "Email используется для аккаунта, заявки и восстановления доступа. Данные не продаются третьим лицам.",
+      "privacy.limitsTitle": "Ограничения",
+      "privacy.limitsCopy": "Сервис не обходит защитные ограничения производителей и операторов.",
+      "cabinet.title": "Ваш кабинет",
+      "cabinet.sub": "Данные аккаунта",
+      "cabinet.home": "Главная",
+      "cabinet.logout": "Выйти",
+      "forgot.title": "Восстановление доступа",
+      "forgot.sub": "Укажите email при регистрации",
+      "forgot.submit": "Отправить инструкцию",
+      "status.telegramSoon": "Telegram-бот скоро будет подключён",
+      "status.fillEmailPassword": "Заполните email и пароль",
+      "status.invalidEmail": "Введите корректный email",
+      "status.shortPassword": "Пароль минимум 8 символов",
+      "status.checking": "Проверяем...",
+      "status.sending": "Отправка...",
+      "status.deviceRequired": "⚠ Выбери устройство из списка",
+      "status.fillAll": "⚠ Заполни все поля",
+      "status.submitError": "⚠ Ошибка отправки — попробуй ещё раз",
+      "status.emailSent": "Письмо отправлено. Проверьте входящие и спам",
+      "status.verifyHintLogin": "Подтвердите email по ссылке из письма, затем нажмите «Я подтвердил»",
+      "status.verifyHintRegister": "Откройте письмо, нажмите ссылку, затем вернитесь и нажмите «Я подтвердил»",
+      "status.emailConfirmed": "Email подтверждён",
+      "status.emailNotConfirmed": "Email ещё не подтверждён. Откройте письмо",
+      "status.verifyError": "Ошибка проверки. Попробуйте позже",
+      "status.resendSending": "Отправляем...",
+      "status.tooMany": "Слишком много запросов. Подождите",
+      "status.resendError": "Ошибка отправки. Войдите заново",
+      "status.network": "Ошибка сети. Проверьте интернет",
+      "status.noAccount": "Аккаунт не найден. Создайте аккаунт",
+      "status.emailExists": "Этот email уже зарегистрирован. Войдите",
+      "status.badCredentials": "Неверный email или пароль",
+      "status.googlePopupClosed": "Окно закрыто. Попробуйте ещё раз",
+      "status.googlePopupBlocked": "Браузер заблокировал pop-up. Разрешите и повторите",
+      "status.cancelled": "Запрос отменён",
+      "status.unauthorizedDomain": "Домен не авторизован в Firebase Console",
+      "status.googleNotEnabled": "Google-вход не включён в Firebase Console",
+      "status.internal": "Внутренняя ошибка Firebase. Попробуйте позже",
+      "status.forgotNoAccount": "Аккаунт с этим email не найден",
+      "status.forgotError": "Не удалось отправить письмо. Попробуйте позже",
+      "status.firebaseConnect": "Не удалось подключиться к Firebase. Проверьте интернет"
+    },
+    en: {
+      "auth.subtitle": "Android device setup — submit a request in 30 seconds",
+      "auth.google": "Continue with Google",
+      "auth.or": "or",
+      "auth.forgot": "Forgot password?",
+      "auth.create": "Create account",
+      "auth.signIn": "Sign in",
+      "auth.toSignIn": "Already have an account? Sign in",
+      "auth.toCreate": "No account? Create one",
+      "form.password": "Password",
+      "placeholder.password": "At least 8 characters",
+      "verify.title": "Confirm your email",
+      "verify.sent": "A confirmation email has been sent",
+      "verify.check": "I confirmed →",
+      "verify.resend": "Send again",
+      "nav.cabinet": "Account",
+      "steps.request": "Request",
+      "steps.waiting": "Waiting",
+      "steps.done": "Done",
+      "hero.kicker": "Android setup service",
+      "hero.title": "Android setup for you.",
+      "hero.subtitle": "Submit a request for your Android device. Next, you will go to the Telegram bot for payment and a reset safety check.",
+      "hero.beta": "beta",
+      "price.old": "$5.99",
+      "price.new": "$3.49",
+      "hero.cta": "Submit request",
+      "hero.note": "All Android devices · payment via Telegram bot after request",
+      "trust.ready": "Readiness check",
+      "trust.data": "Protect your data",
+      "trust.payment": "Telegram payment",
+      "flow.title": "How it works",
+      "flow.requestTitle": "Request",
+      "flow.requestCopy": "Enter your device, processor, and task on the site.",
+      "flow.botTitle": "Telegram bot",
+      "flow.botCopy": "After the request, go to the bot, pay, and pass a short check.",
+      "flow.resetTitle": "Reset",
+      "flow.resetCopy": "If the check shows data-loss risk, save important data first.",
+      "formBox.title": "Setup request",
+      "formBox.sub": "Fill out the form — payment follows in Telegram",
+      "form.device": "Device",
+      "form.processor": "Processor",
+      "form.optional": "(optional)",
+      "form.comment": "Comment",
+      "form.submit": "Send request →",
+      "processor.unknown": "I don't know",
+      "placeholder.comment": "Describe the task...",
+      "confirm.title": "Request created",
+      "confirm.sub": "Next step: go to the Telegram bot for payment and continuation.",
+      "confirm.expiry": "Important: the request is valid for 2 hours. If payment is not completed in time, it will be cancelled automatically.",
+      "confirm.statusLabel": "Status",
+      "confirm.statusValue": "✓ Accepted",
+      "confirm.telegram": "Go to Telegram bot for payment",
+      "footer.privacy": "Privacy policy",
+      "privacy.title": "Privacy",
+      "privacy.updated": "Last updated: 2025",
+      "privacy.collectTitle": "What we collect",
+      "privacy.collectCopy": "Email, device model, and task description — only when provided voluntarily.",
+      "privacy.whyTitle": "Why",
+      "privacy.whyCopy": "Email is used for account access, requests, and recovery. Data is not sold to third parties.",
+      "privacy.limitsTitle": "Limits",
+      "privacy.limitsCopy": "The service does not bypass manufacturer or carrier security restrictions.",
+      "cabinet.title": "Your account",
+      "cabinet.sub": "Account details",
+      "cabinet.home": "Home",
+      "cabinet.logout": "Log out",
+      "forgot.title": "Account recovery",
+      "forgot.sub": "Enter the email used at registration",
+      "forgot.submit": "Send instructions",
+      "status.telegramSoon": "Telegram bot will be connected soon",
+      "status.fillEmailPassword": "Enter email and password",
+      "status.invalidEmail": "Enter a valid email",
+      "status.shortPassword": "Password must be at least 8 characters",
+      "status.checking": "Checking...",
+      "status.sending": "Sending...",
+      "status.deviceRequired": "⚠ Choose a device from the list",
+      "status.fillAll": "⚠ Fill in all required fields",
+      "status.submitError": "⚠ Sending failed — try again",
+      "status.emailSent": "Email sent. Check inbox and spam",
+      "status.verifyHintLogin": "Confirm your email using the link, then click \"I confirmed\"",
+      "status.verifyHintRegister": "Open the email, click the link, then return and click \"I confirmed\"",
+      "status.emailConfirmed": "Email confirmed",
+      "status.emailNotConfirmed": "Email is not confirmed yet. Open the email",
+      "status.verifyError": "Verification failed. Try again later",
+      "status.resendSending": "Sending...",
+      "status.tooMany": "Too many requests. Please wait",
+      "status.resendError": "Sending failed. Sign in again",
+      "status.network": "Network error. Check your connection",
+      "status.noAccount": "Account not found. Create an account",
+      "status.emailExists": "This email is already registered. Sign in",
+      "status.badCredentials": "Wrong email or password",
+      "status.googlePopupClosed": "Window closed. Try again",
+      "status.googlePopupBlocked": "Popup blocked. Allow it and try again",
+      "status.cancelled": "Request cancelled",
+      "status.unauthorizedDomain": "Domain is not authorized in Firebase Console",
+      "status.googleNotEnabled": "Google sign-in is not enabled in Firebase Console",
+      "status.internal": "Internal Firebase error. Try again later",
+      "status.forgotNoAccount": "No account found for this email",
+      "status.forgotError": "Could not send the email. Try again later",
+      "status.firebaseConnect": "Could not connect to Firebase. Check your connection"
+    },
+    zh: {
+      "auth.subtitle": "Android 设备设置 — 30 秒提交申请",
+      "auth.google": "使用 Google 登录",
+      "auth.or": "或",
+      "auth.forgot": "忘记密码？",
+      "auth.create": "创建账户",
+      "auth.signIn": "登录",
+      "auth.toSignIn": "已有账户？登录",
+      "auth.toCreate": "没有账户？创建",
+      "form.password": "密码",
+      "placeholder.password": "至少 8 个字符",
+      "verify.title": "确认邮箱",
+      "verify.sent": "确认邮件已发送到你的邮箱",
+      "verify.check": "我已确认 →",
+      "verify.resend": "重新发送",
+      "nav.cabinet": "账户",
+      "steps.request": "申请",
+      "steps.waiting": "等待",
+      "steps.done": "完成",
+      "hero.kicker": "Android setup service",
+      "hero.title": "为你设置 Android。",
+      "hero.subtitle": "提交 Android 设备设置申请。之后你将进入 Telegram 机器人完成付款和重置前检查。",
+      "hero.beta": "测试版",
+      "price.old": "¥39",
+      "price.new": "¥24",
+      "hero.cta": "提交申请",
+      "hero.note": "支持所有 Android 设备 · 申请后通过 Telegram 机器人付款",
+      "trust.ready": "检查准备状态",
+      "trust.data": "避免数据丢失",
+      "trust.payment": "Telegram 付款",
+      "flow.title": "流程",
+      "flow.requestTitle": "申请",
+      "flow.requestCopy": "在网站填写设备、处理器和任务。",
+      "flow.botTitle": "Telegram 机器人",
+      "flow.botCopy": "提交后进入机器人，付款并完成简短检查。",
+      "flow.resetTitle": "重置",
+      "flow.resetCopy": "如果检查发现数据丢失风险，先保存重要数据。",
+      "formBox.title": "设置申请",
+      "formBox.sub": "填写表单 — 之后在 Telegram 中付款",
+      "form.device": "设备",
+      "form.processor": "处理器",
+      "form.optional": "（可选）",
+      "form.comment": "备注",
+      "form.submit": "发送申请 →",
+      "processor.unknown": "不知道",
+      "placeholder.comment": "描述你的需求...",
+      "confirm.title": "申请已创建",
+      "confirm.sub": "下一步：进入 Telegram 机器人付款并继续。",
+      "confirm.expiry": "重要：申请有效期为 2 小时。如果未在此时间内付款，申请将自动取消。",
+      "confirm.statusLabel": "状态",
+      "confirm.statusValue": "✓ 已接受",
+      "confirm.telegram": "前往 Telegram 机器人付款",
+      "footer.privacy": "隐私政策",
+      "privacy.title": "隐私",
+      "privacy.updated": "最后更新：2025",
+      "privacy.collectTitle": "我们收集什么",
+      "privacy.collectCopy": "邮箱、设备型号和任务描述 — 仅在你主动提供时收集。",
+      "privacy.whyTitle": "用途",
+      "privacy.whyCopy": "邮箱用于账户、申请和恢复访问。数据不会出售给第三方。",
+      "privacy.limitsTitle": "限制",
+      "privacy.limitsCopy": "本服务不会绕过制造商或运营商的安全限制。",
+      "cabinet.title": "你的账户",
+      "cabinet.sub": "账户信息",
+      "cabinet.home": "主页",
+      "cabinet.logout": "退出",
+      "forgot.title": "恢复访问",
+      "forgot.sub": "输入注册时使用的邮箱",
+      "forgot.submit": "发送说明",
+      "status.telegramSoon": "Telegram 机器人即将接入",
+      "status.fillEmailPassword": "请输入邮箱和密码",
+      "status.invalidEmail": "请输入有效邮箱",
+      "status.shortPassword": "密码至少 8 个字符",
+      "status.checking": "正在检查...",
+      "status.sending": "正在发送...",
+      "status.deviceRequired": "⚠ 请从列表中选择设备",
+      "status.fillAll": "⚠ 请填写必填项",
+      "status.submitError": "⚠ 发送失败，请重试",
+      "status.emailSent": "邮件已发送，请检查收件箱和垃圾邮件",
+      "status.verifyHintLogin": "请通过邮件中的链接确认邮箱，然后点击\"我已确认\"",
+      "status.verifyHintRegister": "打开邮件，点击链接，然后返回并点击\"我已确认\"",
+      "status.emailConfirmed": "邮箱已确认",
+      "status.emailNotConfirmed": "邮箱尚未确认，请打开邮件",
+      "status.verifyError": "验证失败，请稍后再试",
+      "status.resendSending": "正在发送...",
+      "status.tooMany": "请求过多，请稍后再试",
+      "status.resendError": "发送失败，请重新登录",
+      "status.network": "网络错误，请检查连接",
+      "status.noAccount": "未找到账户，请创建账户",
+      "status.emailExists": "此邮箱已注册，请登录",
+      "status.badCredentials": "邮箱或密码错误",
+      "status.googlePopupClosed": "窗口已关闭，请重试",
+      "status.googlePopupBlocked": "弹窗被拦截，请允许后重试",
+      "status.cancelled": "请求已取消",
+      "status.unauthorizedDomain": "域名未在 Firebase Console 中授权",
+      "status.googleNotEnabled": "Firebase Console 中未启用 Google 登录",
+      "status.internal": "Firebase 内部错误，请稍后再试",
+      "status.forgotNoAccount": "未找到该邮箱对应的账户",
+      "status.forgotError": "无法发送邮件，请稍后再试",
+      "status.firebaseConnect": "无法连接 Firebase，请检查网络"
     }
-    status.style.color = 'var(--red)';
-    status.classList.add('visible');
-    return;
+  };
+
+  let currentLang = localStorage.getItem('iosxLang') || 'ru';
+
+  function tr(key) {
+    return (translations[currentLang] && translations[currentLang][key]) || translations.ru[key] || key;
   }
 
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = '<span>' + tr('status.sending') + '</span>';
-  status.textContent = tr('status.sending');
-  status.style.color = 'var(--muted)';
-  status.classList.add('visible');
-
-  try {
-    const res = await fetch(
-      'https://script.google.com/macros/s/AKfycbyZ448ik1x2EOyry7YsLIp079xTImZoGxx_iAIFvNlsBoWd5s59T8U3Mltj-70JjRw8/exec',
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          email: emailVal,
-          device: deviceVal,
-          processor: processorVal,
-          comment: commentVal,
-          pageUrl: SITE_URL
-        })
-      }
-    );
-    const data = await res.json();
-    if (!data || data.status !== 'success') throw new Error('Server error');
-    currentTelegramUrl = data.telegramUrl || BOT_BASE_URL;
-  } catch (e) {
-    status.textContent = tr('status.submitError');
-    status.style.color = 'var(--red)';
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = '<span>' + tr('form.submit') + '</span>';
-    return;
-  }
-
-  document.getElementById('confirmEmail').textContent     = emailVal;
-  document.getElementById('confirmDevice').textContent    = deviceVal;
-  document.getElementById('confirmProcessor').textContent = processorVal === 'Не знаю' ? tr('processor.unknown') : processorVal;
-
-  document.getElementById('requestForm').reset();
-  deviceHidden.value = '';
-  deviceSearch.value = '';
-  deviceSearch.placeholder = 'Samsung S21, Redmi Note 10...';
-  submitBtn.disabled = false;
-  submitBtn.innerHTML = '<span>' + tr('form.submit') + '</span>';
-  status.classList.remove('visible');
-
-  setStep(3);
-}
-
-// ─── MODALS ───────────────────────────────────────────────
-function openPrivacy()  { document.getElementById('privacyOverlay').classList.add('active'); }
-function closePrivacy() { document.getElementById('privacyOverlay').classList.remove('active'); }
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    ['privacyOverlay','forgotOverlay','cabinetOverlay'].forEach(id => {
-      document.getElementById(id)?.classList.remove('active');
+  function applyTranslations() {
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+      el.textContent = tr(el.getAttribute('data-i18n'));
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+      el.placeholder = tr(el.getAttribute('data-i18n-placeholder'));
+    });
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLang);
     });
   }
-});
 
-// ─── DEVICE PICKER ────────────────────────────────────────
-const devicesByBrand = {
-  "Xiaomi": [
-    "Xiaomi Mi 9","Xiaomi Mi 9T","Xiaomi Mi 9T Pro","Xiaomi Mi 10","Xiaomi Mi 10 Pro","Xiaomi Mi 10T","Xiaomi Mi 10T Pro","Xiaomi Mi 10 Lite",
-    "Xiaomi Mi 11","Xiaomi Mi 11 Lite","Xiaomi Mi 11 Lite 5G","Xiaomi Mi 11i","Xiaomi Mi 11 Ultra",
-    "Xiaomi 11T","Xiaomi 11T Pro","Xiaomi 11 Lite 5G NE",
-    "Xiaomi 12","Xiaomi 12 Lite","Xiaomi 12 Pro","Xiaomi 12X","Xiaomi 12T","Xiaomi 12T Pro",
-    "Xiaomi 13","Xiaomi 13 Lite","Xiaomi 13 Pro","Xiaomi 13 Ultra","Xiaomi 13T","Xiaomi 13T Pro",
-    "Xiaomi 14","Xiaomi 14 Pro","Xiaomi 14 Ultra","Xiaomi 14T","Xiaomi 14T Pro",
-    "Xiaomi 15","Xiaomi 15 Pro","Xiaomi 15 Ultra",
-    "Xiaomi Civi 1S","Xiaomi Civi 2","Xiaomi Civi 3","Xiaomi Civi 4 Pro",
-    "Xiaomi MIX 4","Xiaomi MIX Flip","Xiaomi MIX Fold","Xiaomi MIX Fold 2","Xiaomi MIX Fold 3","Xiaomi MIX Fold 4",
-    "Xiaomi Pad 5","Xiaomi Pad 5 Pro","Xiaomi Pad 6","Xiaomi Pad 6 Pro","Xiaomi Pad 6 Max","Xiaomi Pad 6S Pro","Xiaomi Pad 7","Xiaomi Pad 7 Pro"
-  ],
-  "Redmi": [
-    "Redmi 9","Redmi 9A","Redmi 9C","Redmi 9T",
-    "Redmi 10","Redmi 10A","Redmi 10C","Redmi 10 2022","Redmi 10 5G","Redmi 10 Prime","Redmi 10 Prime 2022",
-    "Redmi 11 Prime","Redmi 11 Prime 5G",
-    "Redmi 12","Redmi 12C","Redmi 12 5G",
-    "Redmi 13","Redmi 13C","Redmi 13C 5G","Redmi 13 5G",
-    "Redmi 14C","Redmi 14C 5G",
-    "Redmi Note 8","Redmi Note 8 Pro","Redmi Note 8T",
-    "Redmi Note 9","Redmi Note 9 Pro","Redmi Note 9S","Redmi Note 9T",
-    "Redmi Note 10","Redmi Note 10 Pro","Redmi Note 10 Pro Max","Redmi Note 10S","Redmi Note 10 5G","Redmi Note 10T 5G",
-    "Redmi Note 11","Redmi Note 11 Pro","Redmi Note 11 Pro+","Redmi Note 11S","Redmi Note 11 5G","Redmi Note 11T 5G",
-    "Redmi Note 12","Redmi Note 12 Pro","Redmi Note 12 Pro+","Redmi Note 12S","Redmi Note 12 4G","Redmi Note 12 5G","Redmi Note 12 Turbo",
-    "Redmi Note 13","Redmi Note 13 Pro","Redmi Note 13 Pro+","Redmi Note 13 4G","Redmi Note 13 5G",
-    "Redmi Note 14","Redmi Note 14 Pro","Redmi Note 14 Pro+","Redmi Note 14 5G","Redmi Note 14 Pro 5G","Redmi Note 14 Pro+ 5G",
-    "Redmi K40","Redmi K40 Pro","Redmi K40 Gaming",
-    "Redmi K50","Redmi K50 Pro","Redmi K50 Gaming","Redmi K50 Ultra",
-    "Redmi K60","Redmi K60 Pro","Redmi K60 Ultra",
-    "Redmi K70","Redmi K70 Pro","Redmi K70 Ultra",
-    "Redmi K80","Redmi K80 Pro"
-  ],
-  "POCO": [
-    "POCO F2 Pro","POCO F3","POCO F4","POCO F4 GT","POCO F5","POCO F5 Pro","POCO F6","POCO F6 Pro","POCO F7","POCO F7 Pro","POCO F7 Ultra",
-    "POCO X3","POCO X3 NFC","POCO X3 Pro","POCO X4 GT","POCO X4 Pro 5G",
-    "POCO X5","POCO X5 Pro","POCO X6","POCO X6 Pro","POCO X6 Neo","POCO X7","POCO X7 Pro",
-    "POCO M3","POCO M3 Pro","POCO M4","POCO M4 Pro","POCO M4 5G","POCO M5","POCO M5s","POCO M6","POCO M6 Pro","POCO M6 Plus","POCO M7 Pro",
-    "POCO C40","POCO C50","POCO C51","POCO C55","POCO C61","POCO C65","POCO C75"
-  ],
-  "Samsung Galaxy S": [
-    "Samsung Galaxy S10","Samsung Galaxy S10+","Samsung Galaxy S10e","Samsung Galaxy S10 Lite",
-    "Samsung Galaxy S20","Samsung Galaxy S20+","Samsung Galaxy S20 Ultra",
-    "Samsung Galaxy S20 FE","Samsung Galaxy S20 FE 5G",
-    "Samsung Galaxy S21","Samsung Galaxy S21+","Samsung Galaxy S21 Ultra","Samsung Galaxy S21 FE",
-    "Samsung Galaxy S22","Samsung Galaxy S22+","Samsung Galaxy S22 Ultra",
-    "Samsung Galaxy S23","Samsung Galaxy S23+","Samsung Galaxy S23 Ultra","Samsung Galaxy S23 FE",
-    "Samsung Galaxy S24","Samsung Galaxy S24+","Samsung Galaxy S24 Ultra","Samsung Galaxy S24 FE",
-    "Samsung Galaxy S25","Samsung Galaxy S25+","Samsung Galaxy S25 Ultra","Samsung Galaxy S25 Edge"
-  ],
-  "Samsung Galaxy A": [
-    "Samsung Galaxy A01","Samsung Galaxy A02","Samsung Galaxy A02s","Samsung Galaxy A03","Samsung Galaxy A03s","Samsung Galaxy A04","Samsung Galaxy A04s","Samsung Galaxy A04e",
-    "Samsung Galaxy A05","Samsung Galaxy A05s","Samsung Galaxy A06",
-    "Samsung Galaxy A10","Samsung Galaxy A10s","Samsung Galaxy A11","Samsung Galaxy A12","Samsung Galaxy A13","Samsung Galaxy A13 5G","Samsung Galaxy A14","Samsung Galaxy A14 5G",
-    "Samsung Galaxy A15","Samsung Galaxy A15 5G","Samsung Galaxy A16","Samsung Galaxy A16 5G",
-    "Samsung Galaxy A20","Samsung Galaxy A20s","Samsung Galaxy A21s","Samsung Galaxy A22","Samsung Galaxy A22 5G","Samsung Galaxy A23","Samsung Galaxy A23 5G","Samsung Galaxy A24",
-    "Samsung Galaxy A25","Samsung Galaxy A25 5G","Samsung Galaxy A26 5G",
-    "Samsung Galaxy A30","Samsung Galaxy A30s","Samsung Galaxy A31","Samsung Galaxy A32","Samsung Galaxy A32 5G","Samsung Galaxy A33 5G","Samsung Galaxy A34","Samsung Galaxy A34 5G",
-    "Samsung Galaxy A35","Samsung Galaxy A35 5G","Samsung Galaxy A36 5G",
-    "Samsung Galaxy A40","Samsung Galaxy A41","Samsung Galaxy A42 5G",
-    "Samsung Galaxy A50","Samsung Galaxy A50s","Samsung Galaxy A51","Samsung Galaxy A51 5G","Samsung Galaxy A52","Samsung Galaxy A52 5G","Samsung Galaxy A52s","Samsung Galaxy A53 5G","Samsung Galaxy A54",
-    "Samsung Galaxy A55","Samsung Galaxy A55 5G","Samsung Galaxy A56 5G",
-    "Samsung Galaxy A70","Samsung Galaxy A70s","Samsung Galaxy A71","Samsung Galaxy A71 5G","Samsung Galaxy A72","Samsung Galaxy A73 5G"
-  ],
-  "Samsung Galaxy M/F": [
-    "Samsung Galaxy M01","Samsung Galaxy M02","Samsung Galaxy M02s","Samsung Galaxy M04","Samsung Galaxy M05",
-    "Samsung Galaxy M10","Samsung Galaxy M11","Samsung Galaxy M12","Samsung Galaxy M13","Samsung Galaxy M14","Samsung Galaxy M15","Samsung Galaxy M15 5G","Samsung Galaxy M16 5G",
-    "Samsung Galaxy M20","Samsung Galaxy M21","Samsung Galaxy M21s","Samsung Galaxy M22","Samsung Galaxy M23","Samsung Galaxy M30","Samsung Galaxy M30s","Samsung Galaxy M31","Samsung Galaxy M31s","Samsung Galaxy M32","Samsung Galaxy M32 5G","Samsung Galaxy M33","Samsung Galaxy M34","Samsung Galaxy M35 5G",
-    "Samsung Galaxy M40","Samsung Galaxy M42 5G","Samsung Galaxy M51","Samsung Galaxy M52 5G","Samsung Galaxy M53","Samsung Galaxy M54","Samsung Galaxy M55","Samsung Galaxy M55s","Samsung Galaxy M56 5G",
-    "Samsung Galaxy F02s","Samsung Galaxy F04","Samsung Galaxy F05","Samsung Galaxy F12","Samsung Galaxy F13","Samsung Galaxy F14","Samsung Galaxy F15","Samsung Galaxy F15 5G","Samsung Galaxy F16 5G",
-    "Samsung Galaxy F22","Samsung Galaxy F23","Samsung Galaxy F34","Samsung Galaxy F41","Samsung Galaxy F42 5G","Samsung Galaxy F52 5G","Samsung Galaxy F54","Samsung Galaxy F55","Samsung Galaxy F56 5G"
-  ],
-  "Samsung Galaxy Z": [
-    "Samsung Galaxy Z Fold 2","Samsung Galaxy Z Fold 3","Samsung Galaxy Z Fold 4","Samsung Galaxy Z Fold 5","Samsung Galaxy Z Fold 6",
-    "Samsung Galaxy Z Flip","Samsung Galaxy Z Flip 3","Samsung Galaxy Z Flip 4","Samsung Galaxy Z Flip 5","Samsung Galaxy Z Flip 6"
-  ],
-  "Samsung Galaxy Note": [
-    "Samsung Galaxy Note 9","Samsung Galaxy Note 10","Samsung Galaxy Note 10+","Samsung Galaxy Note 10 Lite",
-    "Samsung Galaxy Note 20","Samsung Galaxy Note 20 Ultra"
-  ],
-  "Google Pixel": [
-    "Google Pixel 4","Google Pixel 4 XL","Google Pixel 4a","Google Pixel 4a 5G",
-    "Google Pixel 5","Google Pixel 5a",
-    "Google Pixel 6","Google Pixel 6 Pro","Google Pixel 6a",
-    "Google Pixel 7","Google Pixel 7 Pro","Google Pixel 7a",
-    "Google Pixel 8","Google Pixel 8 Pro","Google Pixel 8a",
-    "Google Pixel 9","Google Pixel 9 Pro","Google Pixel 9 Pro XL","Google Pixel 9 Pro Fold","Google Pixel 9a",
-    "Google Pixel Fold"
-  ],
-  "OnePlus": [
-    "OnePlus 7","OnePlus 7 Pro","OnePlus 7T","OnePlus 7T Pro",
-    "OnePlus 8","OnePlus 8 Pro","OnePlus 8T",
-    "OnePlus 9","OnePlus 9 Pro","OnePlus 9R","OnePlus 9RT",
-    "OnePlus 10 Pro","OnePlus 10R","OnePlus 10T",
-    "OnePlus 11","OnePlus 11R","OnePlus 12","OnePlus 12R","OnePlus 13","OnePlus 13R",
-    "OnePlus Nord","OnePlus Nord 2","OnePlus Nord 2T","OnePlus Nord 3","OnePlus Nord 4",
-    "OnePlus Nord CE","OnePlus Nord CE 2","OnePlus Nord CE 2 Lite","OnePlus Nord CE 3","OnePlus Nord CE 3 Lite","OnePlus Nord CE 4","OnePlus Nord CE 4 Lite",
-    "OnePlus Nord N10","OnePlus Nord N20","OnePlus Nord N30","OnePlus Nord N100","OnePlus Nord N200","OnePlus Nord N300",
-    "OnePlus Open"
-  ],
-  "Motorola": [
-    "Motorola Moto G Power","Motorola Moto G Power 2022","Motorola Moto G Power 2023","Motorola Moto G Power 2024",
-    "Motorola Moto G Stylus","Motorola Moto G Stylus 2022","Motorola Moto G Stylus 2023","Motorola Moto G Stylus 2024",
-    "Motorola Moto G Play","Motorola Moto G Play 2023","Motorola Moto G Play 2024",
-    "Motorola Moto G 5G","Motorola Moto G 5G 2023","Motorola Moto G 5G 2024",
-    "Motorola Moto G13","Motorola Moto G14","Motorola Moto G23","Motorola Moto G24","Motorola Moto G30","Motorola Moto G31","Motorola Moto G32","Motorola Moto G34","Motorola Moto G35","Motorola Moto G42","Motorola Moto G52","Motorola Moto G53","Motorola Moto G54","Motorola Moto G55","Motorola Moto G62","Motorola Moto G72","Motorola Moto G73","Motorola Moto G84","Motorola Moto G85",
-    "Motorola Edge 20","Motorola Edge 20 Lite","Motorola Edge 20 Pro","Motorola Edge 30","Motorola Edge 30 Fusion","Motorola Edge 30 Neo","Motorola Edge 30 Pro","Motorola Edge 30 Ultra",
-    "Motorola Edge 40","Motorola Edge 40 Neo","Motorola Edge 40 Pro","Motorola Edge 50","Motorola Edge 50 Fusion","Motorola Edge 50 Neo","Motorola Edge 50 Pro","Motorola Edge 50 Ultra",
-    "Motorola Razr 2022","Motorola Razr 40","Motorola Razr 40 Ultra","Motorola Razr 50","Motorola Razr 50 Ultra"
-  ],
-  "realme": [
-    "realme 6","realme 6 Pro","realme 7","realme 7 Pro","realme 8","realme 8 Pro","realme 8 5G","realme 9","realme 9 Pro","realme 9 Pro+","realme 9i",
-    "realme 10","realme 10 Pro","realme 10 Pro+","realme 10T","realme 10 5G",
-    "realme 11","realme 11 Pro","realme 11 Pro+","realme 11x","realme 11 5G",
-    "realme 12","realme 12 Pro","realme 12 Pro+","realme 12x","realme 12 5G",
-    "realme 13","realme 13 Pro","realme 13 Pro+","realme 13 5G",
-    "realme 14 Pro","realme 14 Pro+",
-    "realme C21","realme C25","realme C30","realme C31","realme C33","realme C35","realme C51","realme C53","realme C55","realme C61","realme C63","realme C65","realme C67","realme C75",
-    "realme GT","realme GT Neo","realme GT Neo 2","realme GT Neo 3","realme GT Neo 5","realme GT Neo 6","realme GT 2","realme GT 2 Pro","realme GT 3","realme GT 5","realme GT 6","realme GT 6T","realme GT 7 Pro",
-    "realme Narzo 50","realme Narzo 50A","realme Narzo 50i","realme Narzo 60","realme Narzo 60 Pro","realme Narzo 70","realme Narzo 70 Pro"
-  ],
-  "OPPO": [
-    "OPPO A15","OPPO A16","OPPO A17","OPPO A18","OPPO A31","OPPO A38","OPPO A40","OPPO A52","OPPO A53","OPPO A54","OPPO A55","OPPO A57","OPPO A58","OPPO A59","OPPO A60","OPPO A72","OPPO A73","OPPO A74","OPPO A76","OPPO A77","OPPO A78","OPPO A79","OPPO A94","OPPO A95","OPPO A96","OPPO A98",
-    "OPPO Reno 4","OPPO Reno 4 Pro","OPPO Reno 5","OPPO Reno 5 Pro","OPPO Reno 6","OPPO Reno 6 Pro","OPPO Reno 7","OPPO Reno 7 Pro","OPPO Reno 8","OPPO Reno 8 Pro","OPPO Reno 8T","OPPO Reno 9","OPPO Reno 9 Pro","OPPO Reno 10","OPPO Reno 10 Pro","OPPO Reno 10 Pro+","OPPO Reno 11","OPPO Reno 11 Pro","OPPO Reno 12","OPPO Reno 12 Pro","OPPO Reno 13","OPPO Reno 13 Pro",
-    "OPPO Find X3","OPPO Find X3 Pro","OPPO Find X5","OPPO Find X5 Pro","OPPO Find X6","OPPO Find X6 Pro","OPPO Find X7","OPPO Find X7 Ultra","OPPO Find X8","OPPO Find X8 Pro",
-    "OPPO Find N","OPPO Find N2","OPPO Find N2 Flip","OPPO Find N3","OPPO Find N3 Flip"
-  ],
-  "vivo": [
-    "vivo Y15","vivo Y16","vivo Y17s","vivo Y20","vivo Y21","vivo Y22","vivo Y27","vivo Y28","vivo Y31","vivo Y33s","vivo Y35","vivo Y36","vivo Y53s","vivo Y55","vivo Y56","vivo Y75","vivo Y76","vivo Y78","vivo Y100","vivo Y200",
-    "vivo V20","vivo V20 Pro","vivo V21","vivo V21e","vivo V23","vivo V23 Pro","vivo V25","vivo V25 Pro","vivo V27","vivo V27 Pro","vivo V29","vivo V29 Pro","vivo V30","vivo V30 Pro","vivo V40","vivo V40 Pro","vivo V50",
-    "vivo X60","vivo X60 Pro","vivo X70","vivo X70 Pro","vivo X80","vivo X80 Pro","vivo X90","vivo X90 Pro","vivo X90 Pro+","vivo X100","vivo X100 Pro","vivo X100 Ultra","vivo X200","vivo X200 Pro","vivo X Fold","vivo X Fold 2","vivo X Fold 3","vivo X Fold 3 Pro"
-  ],
-  "Honor": [
-    "Honor 50","Honor 50 Lite","Honor 60","Honor 60 Pro","Honor 70","Honor 70 Pro","Honor 80","Honor 80 Pro","Honor 90","Honor 90 Lite","Honor 90 Pro","Honor 100","Honor 100 Pro","Honor 200","Honor 200 Lite","Honor 200 Pro","Honor 300","Honor 300 Pro",
-    "Honor X6","Honor X6a","Honor X7","Honor X7a","Honor X7b","Honor X8","Honor X8a","Honor X8b","Honor X9","Honor X9a","Honor X9b","Honor X9c",
-    "Honor Magic 4","Honor Magic 4 Pro","Honor Magic 5","Honor Magic 5 Pro","Honor Magic 6","Honor Magic 6 Pro","Honor Magic 6 Lite","Honor Magic 7","Honor Magic 7 Pro",
-    "Honor Magic V","Honor Magic Vs","Honor Magic V2","Honor Magic V3"
-  ],
-  "Huawei": [
-    "Huawei P30","Huawei P30 Pro","Huawei P30 Lite","Huawei P40","Huawei P40 Pro","Huawei P40 Lite","Huawei P50","Huawei P50 Pro","Huawei P50 Pocket","Huawei P60","Huawei P60 Pro","Huawei Pura 70","Huawei Pura 70 Pro","Huawei Pura 70 Ultra",
-    "Huawei Mate 20","Huawei Mate 20 Pro","Huawei Mate 30","Huawei Mate 30 Pro","Huawei Mate 40","Huawei Mate 40 Pro","Huawei Mate 50","Huawei Mate 50 Pro","Huawei Mate 60","Huawei Mate 60 Pro","Huawei Mate X3","Huawei Mate X5",
-    "Huawei Nova 5T","Huawei Nova 7","Huawei Nova 7i","Huawei Nova 8","Huawei Nova 8i","Huawei Nova 9","Huawei Nova 9 SE","Huawei Nova 10","Huawei Nova 10 SE","Huawei Nova 11","Huawei Nova 11i","Huawei Nova 12","Huawei Nova 12 SE","Huawei Nova 13"
-  ],
-  "Nothing": [
-    "Nothing Phone 1","Nothing Phone 2","Nothing Phone 2a","Nothing Phone 2a Plus","Nothing Phone 3a","Nothing Phone 3a Pro",
-    "CMF Phone 1"
-  ],
-  "Sony Xperia": [
-    "Sony Xperia 1","Sony Xperia 1 II","Sony Xperia 1 III","Sony Xperia 1 IV","Sony Xperia 1 V","Sony Xperia 1 VI",
-    "Sony Xperia 5","Sony Xperia 5 II","Sony Xperia 5 III","Sony Xperia 5 IV","Sony Xperia 5 V",
-    "Sony Xperia 10","Sony Xperia 10 II","Sony Xperia 10 III","Sony Xperia 10 IV","Sony Xperia 10 V","Sony Xperia 10 VI"
-  ],
-  "ASUS": [
-    "ASUS Zenfone 7","ASUS Zenfone 7 Pro","ASUS Zenfone 8","ASUS Zenfone 8 Flip","ASUS Zenfone 9","ASUS Zenfone 10","ASUS Zenfone 11 Ultra",
-    "ASUS ROG Phone 3","ASUS ROG Phone 5","ASUS ROG Phone 5s","ASUS ROG Phone 6","ASUS ROG Phone 6D","ASUS ROG Phone 7","ASUS ROG Phone 8","ASUS ROG Phone 8 Pro","ASUS ROG Phone 9","ASUS ROG Phone 9 Pro"
-  ],
-  "TECNO": [
-    "TECNO Spark 8","TECNO Spark 8C","TECNO Spark 9","TECNO Spark 10","TECNO Spark 10 Pro","TECNO Spark 20","TECNO Spark 20 Pro","TECNO Spark 20 Pro+","TECNO Spark 30","TECNO Spark 30 Pro",
-    "TECNO Camon 18","TECNO Camon 19","TECNO Camon 20","TECNO Camon 20 Pro","TECNO Camon 20 Premier","TECNO Camon 30","TECNO Camon 30 Pro","TECNO Camon 30 Premier",
-    "TECNO Pova 4","TECNO Pova 5","TECNO Pova 5 Pro","TECNO Pova 6","TECNO Pova 6 Pro",
-    "TECNO Phantom X","TECNO Phantom X2","TECNO Phantom X2 Pro","TECNO Phantom V Fold","TECNO Phantom V Flip","TECNO Phantom V Fold 2","TECNO Phantom V Flip 2"
-  ],
-  "Infinix": [
-    "Infinix Hot 10","Infinix Hot 11","Infinix Hot 12","Infinix Hot 20","Infinix Hot 30","Infinix Hot 30i","Infinix Hot 40","Infinix Hot 40 Pro","Infinix Hot 50",
-    "Infinix Note 10","Infinix Note 11","Infinix Note 12","Infinix Note 12 Pro","Infinix Note 30","Infinix Note 30 Pro","Infinix Note 40","Infinix Note 40 Pro","Infinix Note 40 Pro+",
-    "Infinix Zero 8","Infinix Zero X","Infinix Zero X Pro","Infinix Zero 20","Infinix Zero 30","Infinix Zero 30 5G","Infinix Zero 40","Infinix Zero 40 5G",
-    "Infinix GT 10 Pro","Infinix GT 20 Pro"
-  ],
-  "Nokia / HMD": [
-    "Nokia 2.4","Nokia 3.4","Nokia 5.4","Nokia 8.3 5G",
-    "Nokia C20","Nokia C21","Nokia C21 Plus","Nokia C30","Nokia C31","Nokia C32",
-    "Nokia G10","Nokia G11","Nokia G11 Plus","Nokia G20","Nokia G21","Nokia G22","Nokia G42 5G","Nokia G50","Nokia G60 5G",
-    "Nokia X10","Nokia X20","Nokia X30 5G","Nokia XR20","Nokia XR21",
-    "HMD Pulse","HMD Pulse+","HMD Pulse Pro","HMD Skyline"
-  ]
-};
-
-const allDevices = Object.values(devicesByBrand).flat();
-
-const deviceSearch = document.getElementById('deviceSearch');
-const deviceList   = document.getElementById('deviceList');
-const deviceHidden = document.getElementById('deviceHidden');
-
-let _dropdownOpen = false;
-
-function openDropdown()  { _dropdownOpen = true;  deviceList.classList.add('open'); }
-function closeDropdown() { _dropdownOpen = false; deviceList.classList.remove('open'); }
-
-function finalizeDevice() {
-  const typed = deviceSearch.value.trim();
-  if (typed && !deviceHidden.value) {
-    deviceHidden.value = typed;
+  function setLanguage(lang) {
+    if (!translations[lang]) lang = 'ru';
+    currentLang = lang;
+    localStorage.setItem('iosxLang', currentLang);
+    document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : currentLang;
+    if (window.firebaseAuth && window.firebaseAuth.languageCode) {
+      window.firebaseAuth.languageCode = currentLang === 'zh' ? 'zh-CN' : currentLang;
+    }
+    applyTranslations();
+    if (typeof setAuthMode === 'function') setAuthMode(isEmailSignInMode);
   }
-}
 
-function scoreDevice(name, query) {
-  const n = name.toLowerCase();
-  const q = query.toLowerCase().trim();
-  if (n === q) return 100;
-  if (n.startsWith(q)) return 80;
-  const words = q.split(/\s+/);
-  if (words.every(w => n.includes(w))) return 60;
-  if (n.includes(q)) return 50;
-  if (words.some(w => n.includes(w))) return 20;
-  return 0;
-}
+  // ─── FIREBASE INIT ─────────────────────────────────────
+  const firebaseConfig = {
+    apiKey: "AIzaSyDpjJemT5tAxPmuLEmqtib5yKuw8_shKok",
+    authDomain: "iosx-71a9d.firebaseapp.com",
+    projectId: "iosx-71a9d",
+    storageBucket: "iosx-71a9d.firebasestorage.app",
+    messagingSenderId: "99982710026",
+    appId: "1:99982710026:web:7957b7a3c051ad96ac16f3"
+  };
 
-function selectDevice(name) {
-  deviceSearch.value = name;
-  deviceHidden.value = name;
-  closeDropdown();
-  deviceSearch.style.borderColor = 'rgba(74,222,128,0.5)';
-  setTimeout(() => { deviceSearch.style.borderColor = ''; }, 1200);
-}
+  let firebaseApp = null;
+  let firebaseAuth = null;
 
-function makeItem(cls, html, onSelect) {
-  const div = document.createElement('div');
-  div.className = 'device-item' + (cls ? ' ' + cls : '');
-  div.innerHTML = html;
-  div.addEventListener('mousedown', (e) => { e.preventDefault(); onSelect(); });
-  div.addEventListener('touchend',  (e) => { e.preventDefault(); onSelect(); });
-  return div;
-}
+  function initFirebase() {
+    if (!firebaseApp) {
+      firebaseApp = firebase.initializeApp(firebaseConfig);
+    }
+    if (!firebaseAuth) {
+      firebaseAuth = firebase.auth();
+      firebaseAuth.languageCode = currentLang === 'zh' ? 'zh-CN' : currentLang;
+      window.firebaseAuth = firebaseAuth;
+    }
+    return firebaseAuth;
+  }
 
-function renderBrandList() {
-  deviceList.innerHTML = '';
-  Object.keys(devicesByBrand).forEach(brand => {
-    const count = devicesByBrand[brand].length;
-    const div = makeItem('', `<div class="device-brand-row"><span>${brand}</span><span style="color:var(--dim);font-size:11px;font-family:'IBM Plex Mono',monospace">${count} ›</span></div>`, () => {
-      renderBrandDevices(brand);
+  // ─── STEPS ─────────────────────────────────────────────
+  function setStep(n) {
+    [1,2,3].forEach(function(i) {
+      var el = document.getElementById('step' + i);
+      if (!el) return;
+      el.classList.remove('active','done');
+      if (i < n) el.classList.add('done');
+      if (i === n) el.classList.add('active');
     });
-    deviceList.appendChild(div);
-  });
-  const other = makeItem('device-custom', '✏ Ввести вручную', () => {
-    deviceSearch.value = '';
-    deviceHidden.value = '';
-    closeDropdown();
-    deviceSearch.placeholder = 'Введите название устройства...';
-    deviceSearch.focus();
-  });
-  deviceList.appendChild(other);
-  openDropdown();
-}
-
-function renderBrandDevices(brand) {
-  deviceList.innerHTML = '';
-  const back = makeItem('device-back', '‹ Назад', () => {
-    renderBrandList();
-  });
-  deviceList.appendChild(back);
-
-  devicesByBrand[brand].forEach(device => {
-    const div = makeItem('', device, () => {
-      selectDevice(device);
+    ['page1','page2','page3'].forEach(function(id, i) {
+      var page = document.getElementById(id);
+      if (page) page.classList.toggle('active', i+1 === n);
     });
-    deviceList.appendChild(div);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ─── HELPERS ───────────────────────────────────────────
+  const SITE_URL = 'https://isystemcomunication.github.io/IOSx.github.io/';
+  const BOT_USERNAME = 'iosx_support_bot';
+  const BOT_BASE_URL = 'https://t.me/' + BOT_USERNAME;
+  let currentTelegramUrl = BOT_BASE_URL;
+
+  function openTelegramBot() {
+    window.open(currentTelegramUrl || BOT_BASE_URL, '_blank', 'noopener');
+  }
+
+  function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email || '');
+  }
+
+  function setTextStatus(id, message, color) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = message || '';
+    el.style.color = color || 'var(--muted)';
+    el.classList.toggle('visible', !!message);
+  }
+
+  function setAuthStatus(message, color) { setTextStatus('authStatus', message, color); }
+  function setVerifyStatus(message, color) { setTextStatus('verifyStatus', message, color); }
+
+  function showAuthForm() {
+    document.getElementById('authScreen').style.display = '';
+    document.getElementById('appContent').style.display = 'none';
+    document.getElementById('authForm').style.display = '';
+    document.getElementById('authGoogleBtn').style.display = '';
+    var divider = document.querySelector('.auth-divider');
+    if (divider) divider.style.display = '';
+    document.getElementById('authSwitchBtn').style.display = '';
+    document.getElementById('verifyPending').style.display = 'none';
+  }
+
+  function showApp() {
+    document.getElementById('authScreen').style.display = 'none';
+    document.getElementById('appContent').style.display = 'block';
+    var cab = document.getElementById('cabinetOverlay');
+    if (cab) cab.classList.remove('active');
+  }
+
+  function showVerifyPending(hintText) {
+    document.getElementById('authScreen').style.display = '';
+    document.getElementById('appContent').style.display = 'none';
+    document.getElementById('authForm').style.display = 'none';
+    document.getElementById('authGoogleBtn').style.display = 'none';
+    var divider = document.querySelector('.auth-divider');
+    if (divider) divider.style.display = 'none';
+    document.getElementById('authSwitchBtn').style.display = 'none';
+    document.getElementById('verifyPending').style.display = '';
+    document.getElementById('verifyEmailHint').textContent = hintText || tr('verify.sent');
+    setAuthStatus('');
+    setVerifyStatus('');
+  }
+
+  var isEmailSignInMode = false;
+
+  function setAuthMode(signInMode) {
+    isEmailSignInMode = !!signInMode;
+    var actionBtn = document.getElementById('authActionBtn');
+    if (actionBtn) {
+      actionBtn.innerHTML = isEmailSignInMode ? '<span>' + tr('auth.signIn') + '</span>' : '<span>' + tr('auth.create') + '</span>';
+    }
+    var switchBtn = document.getElementById('authSwitchBtn');
+    if (switchBtn) {
+      switchBtn.textContent = isEmailSignInMode ? tr('auth.toCreate') : tr('auth.toSignIn');
+    }
+    var passwordInput = document.getElementById('authPassword');
+    if (passwordInput) {
+      passwordInput.autocomplete = isEmailSignInMode ? 'current-password' : 'new-password';
+    }
+    var forgotWrap = document.getElementById('forgotPasswordWrap');
+    if (forgotWrap) forgotWrap.style.display = isEmailSignInMode ? 'block' : 'none';
+    setAuthStatus('');
+  }
+
+  // ─── DEVICE PICKER DATA ────────────────────────────────
+  var devicesByBrand = {
+    "Xiaomi": ["Xiaomi Mi 9","Xiaomi Mi 9T","Xiaomi Mi 9T Pro","Xiaomi Mi 10","Xiaomi Mi 10 Pro","Xiaomi Mi 10T","Xiaomi Mi 10T Pro","Xiaomi Mi 10 Lite","Xiaomi Mi 11","Xiaomi Mi 11 Lite","Xiaomi Mi 11 Lite 5G","Xiaomi Mi 11i","Xiaomi Mi 11 Ultra","Xiaomi 11T","Xiaomi 11T Pro","Xiaomi 11 Lite 5G NE","Xiaomi 12","Xiaomi 12 Lite","Xiaomi 12 Pro","Xiaomi 12X","Xiaomi 12T","Xiaomi 12T Pro","Xiaomi 13","Xiaomi 13 Lite","Xiaomi 13 Pro","Xiaomi 13 Ultra","Xiaomi 13T","Xiaomi 13T Pro","Xiaomi 14","Xiaomi 14 Pro","Xiaomi 14 Ultra","Xiaomi 14T","Xiaomi 14T Pro","Xiaomi 15","Xiaomi 15 Pro","Xiaomi 15 Ultra","Xiaomi Civi 1S","Xiaomi Civi 2","Xiaomi Civi 3","Xiaomi Civi 4 Pro","Xiaomi MIX 4","Xiaomi MIX Flip","Xiaomi MIX Fold","Xiaomi MIX Fold 2","Xiaomi MIX Fold 3","Xiaomi MIX Fold 4","Xiaomi Pad 5","Xiaomi Pad 5 Pro","Xiaomi Pad 6","Xiaomi Pad 6 Pro","Xiaomi Pad 6 Max","Xiaomi Pad 6S Pro","Xiaomi Pad 7","Xiaomi Pad 7 Pro"],
+    "Redmi": ["Redmi 9","Redmi 9A","Redmi 9C","Redmi 9T","Redmi 10","Redmi 10A","Redmi 10C","Redmi 10 2022","Redmi 10 5G","Redmi 10 Prime","Redmi 10 Prime 2022","Redmi 11 Prime","Redmi 11 Prime 5G","Redmi 12","Redmi 12C","Redmi 12 5G","Redmi 13","Redmi 13C","Redmi 13C 5G","Redmi 13 5G","Redmi 14C","Redmi 14C 5G","Redmi Note 8","Redmi Note 8 Pro","Redmi Note 8T","Redmi Note 9","Redmi Note 9 Pro","Redmi Note 9S","Redmi Note 9T","Redmi Note 10","Redmi Note 10 Pro","Redmi Note 10 Pro Max","Redmi Note 10S","Redmi Note 10 5G","Redmi Note 10T 5G","Redmi Note 11","Redmi Note 11 Pro","Redmi Note 11 Pro+","Redmi Note 11S","Redmi Note 11 5G","Redmi Note 11T 5G","Redmi Note 12","Redmi Note 12 Pro","Redmi Note 12 Pro+","Redmi Note 12S","Redmi Note 12 4G","Redmi Note 12 5G","Redmi Note 12 Turbo","Redmi Note 13","Redmi Note 13 Pro","Redmi Note 13 Pro+","Redmi Note 13 4G","Redmi Note 13 5G","Redmi Note 14","Redmi Note 14 Pro","Redmi Note 14 Pro+","Redmi Note 14 5G","Redmi Note 14 Pro 5G","Redmi Note 14 Pro+ 5G","Redmi K40","Redmi K40 Pro","Redmi K40 Gaming","Redmi K50","Redmi K50 Pro","Redmi K50 Gaming","Redmi K50 Ultra","Redmi K60","Redmi K60 Pro","Redmi K60 Ultra","Redmi K70","Redmi K70 Pro","Redmi K70 Ultra","Redmi K80","Redmi K80 Pro"],
+    "POCO": ["POCO F2 Pro","POCO F3","POCO F4","POCO F4 GT","POCO F5","POCO F5 Pro","POCO F6","POCO F6 Pro","POCO F7","POCO F7 Pro","POCO F7 Ultra","POCO X3","POCO X3 NFC","POCO X3 Pro","POCO X4 GT","POCO X4 Pro 5G","POCO X5","POCO X5 Pro","POCO X6","POCO X6 Pro","POCO X6 Neo","POCO X7","POCO X7 Pro","POCO M3","POCO M3 Pro","POCO M4","POCO M4 Pro","POCO M4 5G","POCO M5","POCO M5s","POCO M6","POCO M6 Pro","POCO M6 Plus","POCO M7 Pro","POCO C40","POCO C50","POCO C51","POCO C55","POCO C61","POCO C65","POCO C75"],
+    "Samsung Galaxy S": ["Samsung Galaxy S10","Samsung Galaxy S10+","Samsung Galaxy S10e","Samsung Galaxy S10 Lite","Samsung Galaxy S20","Samsung Galaxy S20+","Samsung Galaxy S20 Ultra","Samsung Galaxy S20 FE","Samsung Galaxy S20 FE 5G","Samsung Galaxy S21","Samsung Galaxy S21+","Samsung Galaxy S21 Ultra","Samsung Galaxy S21 FE","Samsung Galaxy S22","Samsung Galaxy S22+","Samsung Galaxy S22 Ultra","Samsung Galaxy S23","Samsung Galaxy S23+","Samsung Galaxy S23 Ultra","Samsung Galaxy S23 FE","Samsung Galaxy S24","Samsung Galaxy S24+","Samsung Galaxy S24 Ultra","Samsung Galaxy S24 FE","Samsung Galaxy S25","Samsung Galaxy S25+","Samsung Galaxy S25 Ultra","Samsung Galaxy S25 Edge"],
+    "Samsung Galaxy A": ["Samsung Galaxy A01","Samsung Galaxy A02","Samsung Galaxy A02s","Samsung Galaxy A03","Samsung Galaxy A03s","Samsung Galaxy A04","Samsung Galaxy A04s","Samsung Galaxy A04e","Samsung Galaxy A05","Samsung Galaxy A05s","Samsung Galaxy A06","Samsung Galaxy A10","Samsung Galaxy A10s","Samsung Galaxy A11","Samsung Galaxy A12","Samsung Galaxy A13","Samsung Galaxy A13 5G","Samsung Galaxy A14","Samsung Galaxy A14 5G","Samsung Galaxy A15","Samsung Galaxy A15 5G","Samsung Galaxy A16","Samsung Galaxy A16 5G","Samsung Galaxy A20","Samsung Galaxy A20s","Samsung Galaxy A21s","Samsung Galaxy A22","Samsung Galaxy A22 5G","Samsung Galaxy A23","Samsung Galaxy A23 5G","Samsung Galaxy A24","Samsung Galaxy A25","Samsung Galaxy A25 5G","Samsung Galaxy A26 5G","Samsung Galaxy A30","Samsung Galaxy A30s","Samsung Galaxy A31","Samsung Galaxy A32","Samsung Galaxy A32 5G","Samsung Galaxy A33 5G","Samsung Galaxy A34","Samsung Galaxy A34 5G","Samsung Galaxy A35","Samsung Galaxy A35 5G","Samsung Galaxy A36 5G","Samsung Galaxy A40","Samsung Galaxy A41","Samsung Galaxy A42 5G","Samsung Galaxy A50","Samsung Galaxy A50s","Samsung Galaxy A51","Samsung Galaxy A51 5G","Samsung Galaxy A52","Samsung Galaxy A52 5G","Samsung Galaxy A52s","Samsung Galaxy A53 5G","Samsung Galaxy A54","Samsung Galaxy A55","Samsung Galaxy A55 5G","Samsung Galaxy A56 5G","Samsung Galaxy A70","Samsung Galaxy A70s","Samsung Galaxy A71","Samsung Galaxy A71 5G","Samsung Galaxy A72","Samsung Galaxy A73 5G"],
+    "Samsung Galaxy M/F": ["Samsung Galaxy M01","Samsung Galaxy M02","Samsung Galaxy M02s","Samsung Galaxy M04","Samsung Galaxy M05","Samsung Galaxy M10","Samsung Galaxy M11","Samsung Galaxy M12","Samsung Galaxy M13","Samsung Galaxy M14","Samsung Galaxy M15","Samsung Galaxy M15 5G","Samsung Galaxy M16 5G","Samsung Galaxy M20","Samsung Galaxy M21","Samsung Galaxy M21s","Samsung Galaxy M22","Samsung Galaxy M23","Samsung Galaxy M30","Samsung Galaxy M30s","Samsung Galaxy M31","Samsung Galaxy M31s","Samsung Galaxy M32","Samsung Galaxy M32 5G","Samsung Galaxy M33","Samsung Galaxy M34","Samsung Galaxy M35 5G","Samsung Galaxy M40","Samsung Galaxy M42 5G","Samsung Galaxy M51","Samsung Galaxy M52 5G","Samsung Galaxy M53","Samsung Galaxy M54","Samsung Galaxy M55","Samsung Galaxy M55s","Samsung Galaxy M56 5G","Samsung Galaxy F02s","Samsung Galaxy F04","Samsung Galaxy F05","Samsung Galaxy F12","Samsung Galaxy F13","Samsung Galaxy F14","Samsung Galaxy F15","Samsung Galaxy F15 5G","Samsung Galaxy F16 5G","Samsung Galaxy F22","Samsung Galaxy F23","Samsung Galaxy F34","Samsung Galaxy F41","Samsung Galaxy F42 5G","Samsung Galaxy F52 5G","Samsung Galaxy F54","Samsung Galaxy F55","Samsung Galaxy F56 5G"],
+    "Samsung Galaxy Z": ["Samsung Galaxy Z Fold 2","Samsung Galaxy Z Fold 3","Samsung Galaxy Z Fold 4","Samsung Galaxy Z Fold 5","Samsung Galaxy Z Fold 6","Samsung Galaxy Z Flip","Samsung Galaxy Z Flip 3","Samsung Galaxy Z Flip 4","Samsung Galaxy Z Flip 5","Samsung Galaxy Z Flip 6"],
+    "Samsung Galaxy Note": ["Samsung Galaxy Note 9","Samsung Galaxy Note 10","Samsung Galaxy Note 10+","Samsung Galaxy Note 10 Lite","Samsung Galaxy Note 20","Samsung Galaxy Note 20 Ultra"],
+    "Google Pixel": ["Google Pixel 4","Google Pixel 4 XL","Google Pixel 4a","Google Pixel 4a 5G","Google Pixel 5","Google Pixel 5a","Google Pixel 6","Google Pixel 6 Pro","Google Pixel 6a","Google Pixel 7","Google Pixel 7 Pro","Google Pixel 7a","Google Pixel 8","Google Pixel 8 Pro","Google Pixel 8a","Google Pixel 9","Google Pixel 9 Pro","Google Pixel 9 Pro XL","Google Pixel 9 Pro Fold","Google Pixel 9a","Google Pixel Fold"],
+    "OnePlus": ["OnePlus 7","OnePlus 7 Pro","OnePlus 7T","OnePlus 7T Pro","OnePlus 8","OnePlus 8 Pro","OnePlus 8T","OnePlus 9","OnePlus 9 Pro","OnePlus 9R","OnePlus 9RT","OnePlus 10 Pro","OnePlus 10R","OnePlus 10T","OnePlus 11","OnePlus 11R","OnePlus 12","OnePlus 12R","OnePlus 13","OnePlus 13R","OnePlus Nord","OnePlus Nord 2","OnePlus Nord 2T","OnePlus Nord 3","OnePlus Nord 4","OnePlus Nord CE","OnePlus Nord CE 2","OnePlus Nord CE 2 Lite","OnePlus Nord CE 3","OnePlus Nord CE 3 Lite","OnePlus Nord CE 4","OnePlus Nord CE 4 Lite","OnePlus Nord N10","OnePlus Nord N20","OnePlus Nord N30","OnePlus Nord N100","OnePlus Nord N200","OnePlus Nord N300","OnePlus Open"],
+    "Motorola": ["Motorola Moto G Power","Motorola Moto G Power 2022","Motorola Moto G Power 2023","Motorola Moto G Power 2024","Motorola Moto G Stylus","Motorola Moto G Stylus 2022","Motorola Moto G Stylus 2023","Motorola Moto G Stylus 2024","Motorola Moto G Play","Motorola Moto G Play 2023","Motorola Moto G Play 2024","Motorola Moto G 5G","Motorola Moto G 5G 2023","Motorola Moto G 5G 2024","Motorola Moto G13","Motorola Moto G14","Motorola Moto G23","Motorola Moto G24","Motorola Moto G30","Motorola Moto G31","Motorola Moto G32","Motorola Moto G34","Motorola Moto G35","Motorola Moto G42","Motorola Moto G52","Motorola Moto G53","Motorola Moto G54","Motorola Moto G55","Motorola Moto G62","Motorola Moto G72","Motorola Moto G73","Motorola Moto G84","Motorola Moto G85","Motorola Edge 20","Motorola Edge 20 Lite","Motorola Edge 20 Pro","Motorola Edge 30","Motorola Edge 30 Fusion","Motorola Edge 30 Neo","Motorola Edge 30 Pro","Motorola Edge 30 Ultra","Motorola Edge 40","Motorola Edge 40 Neo","Motorola Edge 40 Pro","Motorola Edge 50","Motorola Edge 50 Fusion","Motorola Edge 50 Neo","Motorola Edge 50 Pro","Motorola Edge 50 Ultra","Motorola Razr 2022","Motorola Razr 40","Motorola Razr 40 Ultra","Motorola Razr 50","Motorola Razr 50 Ultra"],
+    "realme": ["realme 6","realme 6 Pro","realme 7","realme 7 Pro","realme 8","realme 8 Pro","realme 8 5G","realme 9","realme 9 Pro","realme 9 Pro+","realme 9i","realme 10","realme 10 Pro","realme 10 Pro+","realme 10T","realme 10 5G","realme 11","realme 11 Pro","realme 11 Pro+","realme 11x","realme 11 5G","realme 12","realme 12 Pro","realme 12 Pro+","realme 12x","realme 12 5G","realme 13","realme 13 Pro","realme 13 Pro+","realme 13 5G","realme 14 Pro","realme 14 Pro+","realme C21","realme C25","realme C30","realme C31","realme C33","realme C35","realme C51","realme C53","realme C55","realme C61","realme C63","realme C65","realme C67","realme C75","realme GT","realme GT Neo","realme GT Neo 2","realme GT Neo 3","realme GT Neo 5","realme GT Neo 6","realme GT 2","realme GT 2 Pro","realme GT 3","realme GT 5","realme GT 6","realme GT 6T","realme GT 7 Pro","realme Narzo 50","realme Narzo 50A","realme Narzo 50i","realme Narzo 60","realme Narzo 60 Pro","realme Narzo 70","realme Narzo 70 Pro"],
+    "OPPO": ["OPPO A15","OPPO A16","OPPO A17","OPPO A18","OPPO A31","OPPO A38","OPPO A40","OPPO A52","OPPO A53","OPPO A54","OPPO A55","OPPO A57","OPPO A58","OPPO A59","OPPO A60","OPPO A72","OPPO A73","OPPO A74","OPPO A76","OPPO A77","OPPO A78","OPPO A79","OPPO A94","OPPO A95","OPPO A96","OPPO A98","OPPO Reno 4","OPPO Reno 4 Pro","OPPO Reno 5","OPPO Reno 5 Pro","OPPO Reno 6","OPPO Reno 6 Pro","OPPO Reno 7","OPPO Reno 7 Pro","OPPO Reno 8","OPPO Reno 8 Pro","OPPO Reno 8T","OPPO Reno 9","OPPO Reno 9 Pro","OPPO Reno 10","OPPO Reno 10 Pro","OPPO Reno 10 Pro+","OPPO Reno 11","OPPO Reno 11 Pro","OPPO Reno 12","OPPO Reno 12 Pro","OPPO Reno 13","OPPO Reno 13 Pro","OPPO Find X3","OPPO Find X3 Pro","OPPO Find X5","OPPO Find X5 Pro","OPPO Find X6","OPPO Find X6 Pro","OPPO Find X7","OPPO Find X7 Ultra","OPPO Find X8","OPPO Find X8 Pro","OPPO Find N","OPPO Find N2","OPPO Find N2 Flip","OPPO Find N3","OPPO Find N3 Flip"],
+    "vivo": ["vivo Y15","vivo Y16","vivo Y17s","vivo Y20","vivo Y21","vivo Y22","vivo Y27","vivo Y28","vivo Y31","vivo Y33s","vivo Y35","vivo Y36","vivo Y53s","vivo Y55","vivo Y56","vivo Y75","vivo Y76","vivo Y78","vivo Y100","vivo Y200","vivo V20","vivo V20 Pro","vivo V21","vivo V21e","vivo V23","vivo V23 Pro","vivo V25","vivo V25 Pro","vivo V27","vivo V27 Pro","vivo V29","vivo V29 Pro","vivo V30","vivo V30 Pro","vivo V40","vivo V40 Pro","vivo V50","vivo X60","vivo X60 Pro","vivo X70","vivo X70 Pro","vivo X80","vivo X80 Pro","vivo X90","vivo X90 Pro","vivo X90 Pro+","vivo X100","vivo X100 Pro","vivo X100 Ultra","vivo X200","vivo X200 Pro","vivo X Fold","vivo X Fold 2","vivo X Fold 3","vivo X Fold 3 Pro"],
+    "Honor": ["Honor 50","Honor 50 Lite","Honor 60","Honor 60 Pro","Honor 70","Honor 70 Pro","Honor 80","Honor 80 Pro","Honor 90","Honor 90 Lite","Honor 90 Pro","Honor 100","Honor 100 Pro","Honor 200","Honor 200 Lite","Honor 200 Pro","Honor 300","Honor 300 Pro","Honor X6","Honor X6a","Honor X7","Honor X7a","Honor X7b","Honor X8","Honor X8a","Honor X8b","Honor X9","Honor X9a","Honor X9b","Honor X9c","Honor Magic 4","Honor Magic 4 Pro","Honor Magic 5","Honor Magic 5 Pro","Honor Magic 6","Honor Magic 6 Pro","Honor Magic 6 Lite","Honor Magic 7","Honor Magic 7 Pro","Honor Magic V","Honor Magic Vs","Honor Magic V2","Honor Magic V3"],
+    "Huawei": ["Huawei P30","Huawei P30 Pro","Huawei P30 Lite","Huawei P40","Huawei P40 Pro","Huawei P40 Lite","Huawei P50","Huawei P50 Pro","Huawei P50 Pocket","Huawei P60","Huawei P60 Pro","Huawei Pura 70","Huawei Pura 70 Pro","Huawei Pura 70 Ultra","Huawei Mate 20","Huawei Mate 20 Pro","Huawei Mate 30","Huawei Mate 30 Pro","Huawei Mate 40","Huawei Mate 40 Pro","Huawei Mate 50","Huawei Mate 50 Pro","Huawei Mate 60","Huawei Mate 60 Pro","Huawei Mate X3","Huawei Mate X5","Huawei Nova 5T","Huawei Nova 7","Huawei Nova 7i","Huawei Nova 8","Huawei Nova 8i","Huawei Nova 9","Huawei Nova 9 SE","Huawei Nova 10","Huawei Nova 10 SE","Huawei Nova 11","Huawei Nova 11i","Huawei Nova 12","Huawei Nova 12 SE","Huawei Nova 13"],
+    "Nothing": ["Nothing Phone 1","Nothing Phone 2","Nothing Phone 2a","Nothing Phone 2a Plus","Nothing Phone 3a","Nothing Phone 3a Pro","CMF Phone 1"],
+    "Sony Xperia": ["Sony Xperia 1","Sony Xperia 1 II","Sony Xperia 1 III","Sony Xperia 1 IV","Sony Xperia 1 V","Sony Xperia 1 VI","Sony Xperia 5","Sony Xperia 5 II","Sony Xperia 5 III","Sony Xperia 5 IV","Sony Xperia 5 V","Sony Xperia 10","Sony Xperia 10 II","Sony Xperia 10 III","Sony Xperia 10 IV","Sony Xperia 10 V","Sony Xperia 10 VI"],
+    "ASUS": ["ASUS Zenfone 7","ASUS Zenfone 7 Pro","ASUS Zenfone 8","ASUS Zenfone 8 Flip","ASUS Zenfone 9","ASUS Zenfone 10","ASUS Zenfone 11 Ultra","ASUS ROG Phone 3","ASUS ROG Phone 5","ASUS ROG Phone 5s","ASUS ROG Phone 6","ASUS ROG Phone 6D","ASUS ROG Phone 7","ASUS ROG Phone 8","ASUS ROG Phone 8 Pro","ASUS ROG Phone 9","ASUS ROG Phone 9 Pro"],
+    "TECNO": ["TECNO Spark 8","TECNO Spark 8C","TECNO Spark 9","TECNO Spark 10","TECNO Spark 10 Pro","TECNO Spark 20","TECNO Spark 20 Pro","TECNO Spark 20 Pro+","TECNO Spark 30","TECNO Spark 30 Pro","TECNO Camon 18","TECNO Camon 19","TECNO Camon 20","TECNO Camon 20 Pro","TECNO Camon 20 Premier","TECNO Camon 30","TECNO Camon 30 Pro","TECNO Camon 30 Premier","TECNO Pova 4","TECNO Pova 5","TECNO Pova 5 Pro","TECNO Pova 6","TECNO Pova 6 Pro","TECNO Phantom X","TECNO Phantom X2","TECNO Phantom X2 Pro","TECNO Phantom V Fold","TECNO Phantom V Flip","TECNO Phantom V Fold 2","TECNO Phantom V Flip 2"],
+    "Infinix": ["Infinix Hot 10","Infinix Hot 11","Infinix Hot 12","Infinix Hot 20","Infinix Hot 30","Infinix Hot 30i","Infinix Hot 40","Infinix Hot 40 Pro","Infinix Hot 50","Infinix Note 10","Infinix Note 11","Infinix Note 12","Infinix Note 12 Pro","Infinix Note 30","Infinix Note 30 Pro","Infinix Note 40","Infinix Note 40 Pro","Infinix Note 40 Pro+","Infinix Zero 8","Infinix Zero X","Infinix Zero X Pro","Infinix Zero 20","Infinix Zero 30","Infinix Zero 30 5G","Infinix Zero 40","Infinix Zero 40 5G","Infinix GT 10 Pro","Infinix GT 20 Pro"],
+    "Nokia / HMD": ["Nokia 2.4","Nokia 3.4","Nokia 5.4","Nokia 8.3 5G","Nokia C20","Nokia C21","Nokia C21 Plus","Nokia C30","Nokia C31","Nokia C32","Nokia G10","Nokia G11","Nokia G11 Plus","Nokia G20","Nokia G21","Nokia G22","Nokia G42 5G","Nokia G50","Nokia G60 5G","Nokia X10","Nokia X20","Nokia X30 5G","Nokia XR20","Nokia XR21","HMD Pulse","HMD Pulse+","HMD Pulse Pro","HMD Skyline"]
+  };
+
+  var allDevices = [];
+  Object.keys(devicesByBrand).forEach(function(brand) {
+    allDevices = allDevices.concat(devicesByBrand[brand]);
   });
-  openDropdown();
-}
 
-function renderSearchResults(query) {
-  deviceList.innerHTML = '';
-  const q = query.toLowerCase().trim();
+  // ─── DEVICE PICKER ─────────────────────────────────────
+  var deviceSearch, deviceList, deviceHidden;
+  var dropdownOpen = false;
 
-  const results = allDevices
-    .map(d => ({ name: d, score: scoreDevice(d, q) }))
-    .filter(r => r.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 25);
+  function openDropdown() {
+    dropdownOpen = true;
+    if (deviceList) deviceList.classList.add('open');
+  }
 
-  if (results.length === 0) {
-    const info = document.createElement('div');
-    info.className = 'device-item';
-    info.style.color = 'var(--muted)';
-    info.style.pointerEvents = 'none';
-    info.textContent = '🔍 Совпадений нет';
-    deviceList.appendChild(info);
+  function closeDropdown() {
+    dropdownOpen = false;
+    if (deviceList) deviceList.classList.remove('open');
+  }
 
-    const typed = deviceSearch.value.trim();
-    if (typed) {
+  function finalizeDevice() {
+    if (!deviceSearch || !deviceHidden) return;
+    var typed = deviceSearch.value.trim();
+    if (typed && !deviceHidden.value) {
       deviceHidden.value = typed;
-      const custom = makeItem('device-custom', `✏ Использовать «${typed}»`, () => {
-        selectDevice(typed);
-      });
-      deviceList.appendChild(custom);
     }
-  } else {
-    const typed = deviceSearch.value.trim();
-    deviceHidden.value = typed;
+  }
 
-    results.forEach(r => {
-      const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const highlighted = r.name.replace(
-        new RegExp('(' + escaped + ')', 'gi'),
-        '<span style="color:var(--text);font-weight:600">$1</span>'
-      );
-      const div = makeItem('', highlighted, () => {
-        selectDevice(r.name);
-      });
+  function scoreDevice(name, query) {
+    var n = name.toLowerCase();
+    var q = query.toLowerCase().trim();
+    if (n === q) return 100;
+    if (n.startsWith(q)) return 80;
+    var words = q.split(/\s+/);
+    var allMatch = true;
+    for (var i = 0; i < words.length; i++) {
+      if (!n.includes(words[i])) {
+        allMatch = false;
+        break;
+      }
+    }
+    if (allMatch) return 60;
+    if (n.includes(q)) return 50;
+    var someMatch = false;
+    for (var j = 0; j < words.length; j++) {
+      if (n.includes(words[j])) {
+        someMatch = true;
+        break;
+      }
+    }
+    if (someMatch) return 20;
+    return 0;
+  }
+
+  function selectDevice(name) {
+    if (!deviceSearch || !deviceHidden) return;
+    deviceSearch.value = name;
+    deviceHidden.value = name;
+    closeDropdown();
+    deviceSearch.style.borderColor = 'rgba(74,222,128,0.5)';
+    setTimeout(function() {
+      if (deviceSearch) deviceSearch.style.borderColor = '';
+    }, 1200);
+  }
+
+  function makeItem(cls, html, onSelect) {
+    var div = document.createElement('div');
+    div.className = 'device-item' + (cls ? ' ' + cls : '');
+    div.innerHTML = html;
+    div.addEventListener('mousedown', function(e) { e.preventDefault(); onSelect(); });
+    div.addEventListener('touchend', function(e) { e.preventDefault(); onSelect(); });
+    return div;
+  }
+
+  function renderBrandList() {
+    if (!deviceList) return;
+    deviceList.innerHTML = '';
+    var brands = Object.keys(devicesByBrand);
+    brands.forEach(function(brand) {
+      var count = devicesByBrand[brand].length;
+      var div = makeItem('', '<div class="device-brand-row"><span>' + brand + '</span><span style="color:var(--dim);font-size:11px;font-family:\'IBM Plex Mono\',monospace">' + count + ' ›</span></div>', (function(b) {
+        return function() { renderBrandDevices(b); };
+      })(brand));
       deviceList.appendChild(div);
     });
-
-    if (typed && !allDevices.some(d => d.toLowerCase() === typed.toLowerCase())) {
-      const custom = makeItem('device-custom', `✏ Использовать «${typed}» (ввод вручную)`, () => {
-        selectDevice(typed);
-      });
-      deviceList.appendChild(custom);
-    }
-  }
-
-  openDropdown();
-}
-
-deviceSearch.addEventListener('focus', () => {
-  const val = deviceSearch.value.trim();
-  if (val) renderSearchResults(val);
-  else renderBrandList();
-});
-
-deviceSearch.addEventListener('blur', () => {
-  setTimeout(() => {
-    finalizeDevice();
-    closeDropdown();
-  }, 150);
-});
-
-deviceSearch.addEventListener('input', () => {
-  const val = deviceSearch.value.trim();
-  deviceHidden.value = val;
-  if (!val) renderBrandList();
-  else renderSearchResults(val);
-});
-
-document.addEventListener('click', (e) => {
-  if (!deviceSearch.contains(e.target) && !deviceList.contains(e.target)) {
-    finalizeDevice();
-    closeDropdown();
-  }
-});
-</script>
-
-<script>
-// ─── FIREBASE AUTH ────────────────────────────────────────
-var _fbAuth = null;
-var _fbAuthPromise = null;
-var FIREBASE_APP_URL = "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-var FIREBASE_AUTH_URL = "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-async function getFirebaseAuth() {
-  if (_fbAuth) return _fbAuth;
-  if (_fbAuthPromise) return _fbAuthPromise;
-
-  _fbAuthPromise = (async function() {
-    var firebaseConfig = {
-      apiKey:            "AIzaSyDpjJemT5tAxPmuLEmqtib5yKuw8_shKok",
-      authDomain:        "iosx-71a9d.firebaseapp.com",
-      projectId:         "iosx-71a9d",
-      storageBucket:     "iosx-71a9d.firebasestorage.app",
-      messagingSenderId: "99982710026",
-      appId:             "1:99982710026:web:7957b7a3c051ad96ac16f3"
-    };
-
-    var modules = await Promise.all([
-      import(FIREBASE_APP_URL),
-      import(FIREBASE_AUTH_URL)
-    ]);
-    var appModule = modules[0];
-    var authModule = modules[1];
-
-    var app  = appModule.getApps().length ? appModule.getApps()[0] : appModule.initializeApp(firebaseConfig);
-    var auth = authModule.getAuth(app);
-    auth.languageCode = currentLang === 'zh' ? 'zh-CN' : currentLang;
-
-    _fbAuth = {
-      auth,
-      createUserWithEmailAndPassword: authModule.createUserWithEmailAndPassword,
-      signInWithEmailAndPassword:     authModule.signInWithEmailAndPassword,
-      sendEmailVerification:          authModule.sendEmailVerification,
-      sendPasswordResetEmail:         authModule.sendPasswordResetEmail,
-      onAuthStateChanged:             authModule.onAuthStateChanged,
-      signOut:                        authModule.signOut,
-      GoogleAuthProvider:             authModule.GoogleAuthProvider,
-      signInWithPopup:                authModule.signInWithPopup
-    };
-
-    return _fbAuth;
-  })().catch(function(error) {
-    _fbAuthPromise = null;
-    throw error;
-  });
-
-  return _fbAuthPromise;
-}
-
-function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email || '');
-}
-
-var isEmailSignInMode = false;
-
-function setTextStatus(id, message, color) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = message || '';
-  el.style.color = color || 'var(--muted)';
-  el.classList.toggle('visible', !!message);
-}
-
-function setAuthStatus(message, color)   { setTextStatus('authStatus', message, color); }
-function setVerifyStatus(message, color) { setTextStatus('verifyStatus', message, color); }
-
-function showAuthForm() {
-  document.getElementById('authScreen').style.display  = '';
-  document.getElementById('appContent').style.display  = 'none';
-  document.getElementById('authForm').style.display    = '';
-  document.getElementById('authGoogleBtn').style.display = '';
-  var divider = document.querySelector('.auth-divider');
-  if (divider) divider.style.display = '';
-  document.getElementById('authSwitchBtn').style.display = '';
-  document.getElementById('verifyPending').style.display = 'none';
-}
-
-function showApp() {
-  document.getElementById('authScreen').style.display = 'none';
-  document.getElementById('appContent').style.display = 'block';
-  var cab = document.getElementById('cabinetOverlay');
-  if (cab) cab.classList.remove('active');
-}
-
-function showVerifyPending(hintText) {
-  document.getElementById('authScreen').style.display  = '';
-  document.getElementById('appContent').style.display  = 'none';
-  document.getElementById('authForm').style.display    = 'none';
-  document.getElementById('authGoogleBtn').style.display = 'none';
-  var divider = document.querySelector('.auth-divider');
-  if (divider) divider.style.display = 'none';
-  document.getElementById('authSwitchBtn').style.display = 'none';
-  document.getElementById('verifyPending').style.display = '';
-  document.getElementById('verifyEmailHint').textContent = hintText || tr('verify.sent');
-  setAuthStatus('');
-  setVerifyStatus('');
-}
-
-function setAuthMode(signInMode) {
-  isEmailSignInMode = !!signInMode;
-  document.getElementById('authActionBtn').innerHTML = isEmailSignInMode ? '<span>' + tr('auth.signIn') + '</span>' : '<span>' + tr('auth.create') + '</span>';
-  document.getElementById('authSwitchBtn').textContent = isEmailSignInMode ? tr('auth.toCreate') : tr('auth.toSignIn');
-  document.getElementById('authPassword').autocomplete = isEmailSignInMode ? 'current-password' : 'new-password';
-  var forgotWrap = document.getElementById('forgotPasswordWrap');
-  if (forgotWrap) forgotWrap.style.display = isEmailSignInMode ? 'block' : 'none';
-  setAuthStatus('');
-}
-
-window.toggleAuthMode = function() { setAuthMode(!isEmailSignInMode); };
-
-window.signInWithGoogle = async function() {
-  console.log('Google sign-in clicked');
-  var btn = document.getElementById('authGoogleBtn');
-  if (btn) {
-    btn.disabled = true;
-    btn.style.opacity = '0.6';
-  }
-  setAuthStatus('');
-
-  try {
-    console.log('Loading Firebase...');
-    var fb = await getFirebaseAuth();
-    console.log('Firebase loaded, opening popup...');
-
-    var provider = new fb.GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
-
-    var result = await fb.signInWithPopup(fb.auth, provider);
-    console.log('Google sign-in success:', result.user && result.user.email);
-
-    if (result.user) {
-      showApp();
-    }
-  } catch (err) {
-    console.error('Google sign-in error:', err);
-    var knownErrors = {
-      'auth/popup-closed-by-user':                     tr('status.googlePopupClosed'),
-      'auth/popup-blocked':                            tr('status.googlePopupBlocked'),
-      'auth/cancelled-popup-request':                  tr('status.cancelled'),
-      'auth/network-request-failed':                   tr('status.network'),
-      'auth/unauthorized-domain':                      tr('status.unauthorizedDomain'),
-      'auth/account-exists-with-different-credential': 'Email уже используется с другим способом входа',
-      'auth/operation-not-allowed':                    tr('status.googleNotEnabled'),
-      'auth/internal-error':                           tr('status.internal')
-    };
-    var msg = knownErrors[err.code]
-      || ('Ошибка' + (err.code ? ' [' + err.code + ']' : '') + ': ' + (err.message || 'попробуйте ещё раз'));
-    setAuthStatus(msg, 'var(--red)');
-  }
-
-  if (btn) {
-    btn.disabled = false;
-    btn.style.opacity = '';
-  }
-};
-
-document.addEventListener('DOMContentLoaded', function() {
-  var googleBtn = document.getElementById('authGoogleBtn');
-  if (googleBtn) {
-    googleBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      window.signInWithGoogle();
+    var other = makeItem('device-custom', '✏ Ввести вручную', function() {
+      if (deviceSearch) {
+        deviceSearch.value = '';
+        deviceHidden.value = '';
+        deviceSearch.placeholder = 'Введите название устройства...';
+        deviceSearch.focus();
+      }
+      closeDropdown();
     });
+    deviceList.appendChild(other);
+    openDropdown();
   }
-});
 
-function getEmailActionSettings() {
-  var cleanUrl = window.location.origin && window.location.origin !== 'null'
-    ? window.location.origin + window.location.pathname
-    : SITE_URL;
-  return { url: cleanUrl, handleCodeInApp: false };
-}
+  function renderBrandDevices(brand) {
+    if (!deviceList) return;
+    deviceList.innerHTML = '';
+    var back = makeItem('device-back', '‹ Назад', function() { renderBrandList(); });
+    deviceList.appendChild(back);
 
-async function sendVerificationToCurrentUser() {
-  var fb   = await getFirebaseAuth();
-  var user = fb.auth.currentUser;
-  if (!user) throw new Error('no_user');
-  await fb.sendEmailVerification(user, getEmailActionSettings());
-}
+    devicesByBrand[brand].forEach(function(device) {
+      var div = makeItem('', device, (function(d) {
+        return function() { selectDevice(d); };
+      })(device));
+      deviceList.appendChild(div);
+    });
+    openDropdown();
+  }
 
-window.handleEmailAuth = async function() {
-  var btn      = document.getElementById('authActionBtn');
-  var email    = document.getElementById('authEmail').value.trim().toLowerCase();
-  var password = document.getElementById('authPassword').value;
+  function renderSearchResults(query) {
+    if (!deviceList || !deviceSearch || !deviceHidden) return;
+    deviceList.innerHTML = '';
+    var q = query.toLowerCase().trim();
 
-  if (!email || !password) { setAuthStatus(tr('status.fillEmailPassword'), 'var(--red)'); return; }
-  if (!isValidEmail(email)) { setAuthStatus(tr('status.invalidEmail'), 'var(--red)'); return; }
-  if (password.length < 8)  { setAuthStatus(tr('status.shortPassword'), 'var(--red)'); return; }
+    var results = allDevices
+      .map(function(d) { return { name: d, score: scoreDevice(d, q) }; })
+      .filter(function(r) { return r.score > 0; })
+      .sort(function(a, b) { return b.score - a.score; })
+      .slice(0, 25);
 
-  btn.disabled = true;
-  btn.innerHTML = '<span>' + tr('status.checking') + '</span>';
-  setAuthStatus('');
+    if (results.length === 0) {
+      var info = document.createElement('div');
+      info.className = 'device-item';
+      info.style.color = 'var(--muted)';
+      info.style.pointerEvents = 'none';
+      info.textContent = '🔍 Совпадений нет';
+      deviceList.appendChild(info);
 
-  try {
-    var fb = await getFirebaseAuth();
+      var typed = deviceSearch.value.trim();
+      if (typed) {
+        deviceHidden.value = typed;
+        var custom = makeItem('device-custom', '✏ Использовать «' + typed + '»', function() { selectDevice(typed); });
+        deviceList.appendChild(custom);
+      }
+    } else {
+      var typed2 = deviceSearch.value.trim();
+      deviceHidden.value = typed2;
 
-    if (isEmailSignInMode) {
-      var loginResult = await fb.signInWithEmailAndPassword(fb.auth, email, password);
-      localStorage.setItem('iosxEmail', email);
-      if (!loginResult.user.emailVerified) {
-        showVerifyPending(tr('status.verifyHintLogin'));
-        btn.disabled = false;
-        btn.innerHTML = '<span>' + tr('auth.signIn') + '</span>';
+      results.forEach(function(r) {
+        var escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var highlighted = r.name.replace(
+          new RegExp('(' + escaped + ')', 'gi'),
+          '<span style="color:var(--text);font-weight:600">$1</span>'
+        );
+        var div = makeItem('', highlighted, (function(d) {
+          return function() { selectDevice(d); };
+        })(r.name));
+        deviceList.appendChild(div);
+      });
+
+      if (typed2 && !allDevices.some(function(d) { return d.toLowerCase() === typed2.toLowerCase(); })) {
+        var custom2 = makeItem('device-custom', '✏ Использовать «' + typed2 + '» (ввод вручную)', function() { selectDevice(typed2); });
+        deviceList.appendChild(custom2);
+      }
+    }
+    openDropdown();
+  }
+
+  // ─── SUBMIT REQUEST ────────────────────────────────────
+  async function submitRequest() {
+    var emailVal = document.getElementById('email').value.trim();
+    var deviceVal = (document.getElementById('deviceHidden') && document.getElementById('deviceHidden').value.trim()) || (document.getElementById('deviceSearch') && document.getElementById('deviceSearch').value.trim());
+    var processorVal = (document.getElementById('processor') && document.getElementById('processor').value) || 'Не знаю';
+    var commentVal = document.querySelector('[name="comment"]') && document.querySelector('[name="comment"]').value.trim();
+    var statusEl = document.getElementById('formStatus');
+    var submitBtn = document.getElementById('submitFormBtn');
+
+    if (statusEl) {
+      statusEl.classList.remove('visible');
+      statusEl.textContent = '';
+    }
+
+    if (!emailVal || !deviceVal) {
+      if (statusEl) {
+        statusEl.textContent = !deviceVal ? tr('status.deviceRequired') : tr('status.fillAll');
+        statusEl.style.color = 'var(--red)';
+        statusEl.classList.add('visible');
+      }
+      return;
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>' + tr('status.sending') + '</span>';
+    }
+    if (statusEl) {
+      statusEl.textContent = tr('status.sending');
+      statusEl.style.color = 'var(--muted)';
+      statusEl.classList.add('visible');
+    }
+
+    try {
+      var res = await fetch(
+        'https://script.google.com/macros/s/AKfycbyZ448ik1x2EOyry7YsLIp079xTImZoGxx_iAIFvNlsBoWd5s59T8U3Mltj-70JjRw8/exec',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            email: emailVal,
+            device: deviceVal,
+            processor: processorVal,
+            comment: commentVal || '',
+            pageUrl: SITE_URL
+          })
+        }
+      );
+      var data = await res.json();
+      if (!data || data.status !== 'success') throw new Error('Server error');
+      currentTelegramUrl = data.telegramUrl || BOT_BASE_URL;
+    } catch (e) {
+      if (statusEl) {
+        statusEl.textContent = tr('status.submitError');
+        statusEl.style.color = 'var(--red)';
+      }
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>' + tr('form.submit') + '</span>';
+      }
+      return;
+    }
+
+    var confirmEmail = document.getElementById('confirmEmail');
+    var confirmDevice = document.getElementById('confirmDevice');
+    var confirmProcessor = document.getElementById('confirmProcessor');
+
+    if (confirmEmail) confirmEmail.textContent = emailVal;
+    if (confirmDevice) confirmDevice.textContent = deviceVal;
+    if (confirmProcessor) confirmProcessor.textContent = processorVal === 'Не знаю' ? tr('processor.unknown') : processorVal;
+
+    document.getElementById('requestForm').reset();
+    if (deviceHidden) deviceHidden.value = '';
+    if (deviceSearch) {
+      deviceSearch.value = '';
+      deviceSearch.placeholder = 'Samsung S21, Redmi Note 10...';
+    }
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span>' + tr('form.submit') + '</span>';
+    }
+    if (statusEl) statusEl.classList.remove('visible');
+
+    setStep(3);
+  }
+
+  // ─── AUTH ─────────────────────────────────────────────
+  async function signInWithGoogle() {
+    var btn = document.getElementById('authGoogleBtn');
+    if (btn) {
+      btn.disabled = true;
+      btn.style.opacity = '0.6';
+    }
+    setAuthStatus('');
+
+    try {
+      var auth = initFirebase();
+      var provider = new firebase.auth.GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+      var result = await auth.signInWithPopup(provider);
+      if (result.user) {
+        showApp();
+      }
+    } catch (err) {
+      var knownErrors = {
+        'auth/popup-closed-by-user': tr('status.googlePopupClosed'),
+        'auth/popup-blocked': tr('status.googlePopupBlocked'),
+        'auth/cancelled-popup-request': tr('status.cancelled'),
+        'auth/network-request-failed': tr('status.network'),
+        'auth/unauthorized-domain': tr('status.unauthorizedDomain'),
+        'auth/account-exists-with-different-credential': 'Email уже используется с другим способом входа',
+        'auth/operation-not-allowed': tr('status.googleNotEnabled'),
+        'auth/internal-error': tr('status.internal')
+      };
+      var msg = knownErrors[err.code] || ('Ошибка' + (err.code ? ' [' + err.code + ']' : '') + ': ' + (err.message || 'попробуйте ещё раз'));
+      setAuthStatus(msg, 'var(--red)');
+    }
+
+    if (btn) {
+      btn.disabled = false;
+      btn.style.opacity = '';
+    }
+  }
+
+  function getEmailActionSettings() {
+    var cleanUrl = window.location.origin && window.location.origin !== 'null'
+      ? window.location.origin + window.location.pathname
+      : SITE_URL;
+    return { url: cleanUrl, handleCodeInApp: false };
+  }
+
+  async function sendVerificationToCurrentUser() {
+    var auth = initFirebase();
+    var user = auth.currentUser;
+    if (!user) throw new Error('no_user');
+    await user.sendEmailVerification(getEmailActionSettings());
+  }
+
+  async function handleEmailAuth() {
+    var btn = document.getElementById('authActionBtn');
+    var email = (document.getElementById('authEmail') && document.getElementById('authEmail').value.trim().toLowerCase()) || '';
+    var password = (document.getElementById('authPassword') && document.getElementById('authPassword').value) || '';
+
+    if (!email || !password) { setAuthStatus(tr('status.fillEmailPassword'), 'var(--red)'); return; }
+    if (!isValidEmail(email)) { setAuthStatus(tr('status.invalidEmail'), 'var(--red)'); return; }
+    if (password.length < 8) { setAuthStatus(tr('status.shortPassword'), 'var(--red)'); return; }
+
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span>' + tr('status.checking') + '</span>';
+    }
+    setAuthStatus('');
+
+    try {
+      var auth = initFirebase();
+
+      if (isEmailSignInMode) {
+        var loginResult = await auth.signInWithEmailAndPassword(email, password);
+        localStorage.setItem('iosxEmail', email);
+        if (!loginResult.user.emailVerified) {
+          showVerifyPending(tr('status.verifyHintLogin'));
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<span>' + tr('auth.signIn') + '</span>';
+          }
+          return;
+        }
+        showApp();
         return;
       }
-      showApp();
-      return;
+
+      var registerResult = await auth.createUserWithEmailAndPassword(email, password);
+      localStorage.setItem('iosxEmail', email);
+      sessionStorage.setItem('iosxJustRegistered', '1');
+      await registerResult.user.sendEmailVerification(getEmailActionSettings());
+      showVerifyPending(tr('status.verifyHintRegister'));
+
+    } catch (err) {
+      var msg = {
+        'auth/email-already-in-use': tr('status.emailExists'),
+        'auth/user-not-found': tr('status.noAccount'),
+        'auth/wrong-password': 'Неверный пароль',
+        'auth/invalid-credential': tr('status.badCredentials'),
+        'auth/invalid-email': tr('status.invalidEmail'),
+        'auth/weak-password': tr('status.shortPassword'),
+        'auth/too-many-requests': tr('status.tooMany'),
+        'auth/network-request-failed': tr('status.network')
+      }[err.code] || 'Ошибка: ' + (err.message || 'попробуйте ещё раз');
+      setAuthStatus(msg, 'var(--red)');
     }
 
-    var registerResult = await fb.createUserWithEmailAndPassword(fb.auth, email, password);
-    localStorage.setItem('iosxEmail', email);
-    sessionStorage.setItem('iosxJustRegistered', '1');
-    await fb.sendEmailVerification(registerResult.user, getEmailActionSettings());
-    showVerifyPending(tr('status.verifyHintRegister'));
-
-  } catch (err) {
-    var msg = {
-      'auth/email-already-in-use':   tr('status.emailExists'),
-      'auth/user-not-found':         tr('status.noAccount'),
-      'auth/wrong-password':         'Неверный пароль',
-      'auth/invalid-credential':     tr('status.badCredentials'),
-      'auth/invalid-email':          tr('status.invalidEmail'),
-      'auth/weak-password':          tr('status.shortPassword'),
-      'auth/too-many-requests':      tr('status.tooMany'),
-      'auth/network-request-failed': tr('status.network')
-    }[err.code] || 'Ошибка: ' + (err.message || 'попробуйте ещё раз');
-    setAuthStatus(msg, 'var(--red)');
-  }
-
-  btn.disabled = false;
-  btn.innerHTML = isEmailSignInMode ? '<span>' + tr('auth.signIn') + '</span>' : '<span>' + tr('auth.create') + '</span>';
-};
-
-window.checkEmailVerified = async function() {
-  var btn = document.getElementById('verifyCheckBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span>' + tr('status.checking') + '</span>';
-  setVerifyStatus('');
-
-  try {
-    var fb   = await getFirebaseAuth();
-    var user = fb.auth.currentUser;
-    if (!user) throw new Error('no_user');
-    await user.reload();
-    user = fb.auth.currentUser;
-    if (user && user.emailVerified) {
-      sessionStorage.removeItem('iosxJustRegistered');
-      setVerifyStatus(tr('status.emailConfirmed'), 'var(--green)');
-      showApp();
-      return;
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = isEmailSignInMode ? '<span>' + tr('auth.signIn') + '</span>' : '<span>' + tr('auth.create') + '</span>';
     }
-    setVerifyStatus(tr('status.emailNotConfirmed'), 'var(--red)');
-  } catch (e) {
-    setVerifyStatus(tr('status.verifyError'), 'var(--red)');
   }
 
-  btn.disabled = false;
-  btn.innerHTML = '<span>' + tr('verify.check') + '</span>';
-};
+  async function checkEmailVerified() {
+    var btn = document.getElementById('verifyCheckBtn');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span>' + tr('status.checking') + '</span>';
+    }
+    setVerifyStatus('');
 
-window.resendVerification = async function() {
-  var btn = document.getElementById('verifyResendBtn');
-  btn.disabled = true;
-  setVerifyStatus(tr('status.resendSending'), 'var(--muted)');
-  try {
-    await sendVerificationToCurrentUser();
-    setVerifyStatus(tr('status.emailSent'), 'var(--green)');
-  } catch (err) {
-    var msg = err.code === 'auth/too-many-requests'
-      ? tr('status.tooMany')
-      : tr('status.resendError');
-    setVerifyStatus(msg, 'var(--red)');
+    try {
+      var auth = initFirebase();
+      var user = auth.currentUser;
+      if (!user) throw new Error('no_user');
+      await user.reload();
+      user = auth.currentUser;
+      if (user && user.emailVerified) {
+        sessionStorage.removeItem('iosxJustRegistered');
+        setVerifyStatus(tr('status.emailConfirmed'), 'var(--green)');
+        showApp();
+        return;
+      }
+      setVerifyStatus(tr('status.emailNotConfirmed'), 'var(--red)');
+    } catch (e) {
+      setVerifyStatus(tr('status.verifyError'), 'var(--red)');
+    }
+
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<span>' + tr('verify.check') + '</span>';
+    }
   }
-  btn.disabled = false;
-};
 
-window.signOutGoogle = async function() {
-  var cab = document.getElementById('cabinetOverlay');
-  if (cab) cab.classList.remove('active');
-  try {
-    var fb = await getFirebaseAuth();
-    await fb.signOut(fb.auth);
-  } catch(e) {}
-  sessionStorage.removeItem('iosxJustRegistered');
-  showAuthForm();
-  setAuthMode(false);
-  setAuthStatus('');
-};
-
-window.openForgotPassword = function() {
-  var authEmail   = document.getElementById('authEmail');
-  var forgotEmail = document.getElementById('forgotEmail');
-  if (authEmail && forgotEmail && authEmail.value) forgotEmail.value = authEmail.value;
-  setTextStatus('forgotStatus', '');
-  document.getElementById('forgotOverlay').classList.add('active');
-  setTimeout(function() { if (forgotEmail) forgotEmail.focus(); }, 100);
-};
-
-window.closeForgotPassword = function() {
-  document.getElementById('forgotOverlay').classList.remove('active');
-};
-
-window.handleForgotPassword = async function() {
-  var email = document.getElementById('forgotEmail').value.trim().toLowerCase();
-  var btn   = document.getElementById('forgotBtn');
-  if (!email)               { setTextStatus('forgotStatus', tr('status.invalidEmail'), 'var(--red)'); return; }
-  if (!isValidEmail(email)) { setTextStatus('forgotStatus', tr('status.invalidEmail'), 'var(--red)'); return; }
-
-  btn.disabled = true;
-  btn.innerHTML = '<span>' + tr('status.resendSending') + '</span>';
-  try {
-    var fb = await getFirebaseAuth();
-    await fb.sendPasswordResetEmail(fb.auth, email, getEmailActionSettings());
-    setTextStatus('forgotStatus', tr('status.emailSent'), 'var(--green)');
-  } catch(err) {
-    var msg = {
-      'auth/invalid-email':          tr('status.invalidEmail'),
-      'auth/user-not-found':         tr('status.forgotNoAccount'),
-      'auth/too-many-requests':      tr('status.tooMany'),
-      'auth/network-request-failed': tr('status.network')
-    }[err.code] || tr('status.forgotError');
-    setTextStatus('forgotStatus', msg, 'var(--red)');
+  async function resendVerification() {
+    var btn = document.getElementById('verifyResendBtn');
+    if (btn) btn.disabled = true;
+    setVerifyStatus(tr('status.resendSending'), 'var(--muted)');
+    try {
+      await sendVerificationToCurrentUser();
+      setVerifyStatus(tr('status.emailSent'), 'var(--green)');
+    } catch (err) {
+      var msg = err.code === 'auth/too-many-requests' ? tr('status.tooMany') : tr('status.resendError');
+      setVerifyStatus(msg, 'var(--red)');
+    }
+    if (btn) btn.disabled = false;
   }
-  btn.disabled = false;
-  btn.innerHTML = '<span>' + tr('forgot.submit') + '</span>';
-};
 
-// ─── CABINET ─────────────────────────────────────────────
-window.openCabinet = function() {
-  loadCabinet();
-  document.getElementById('cabinetOverlay').classList.add('active');
-};
+  async function signOutGoogle() {
+    var cab = document.getElementById('cabinetOverlay');
+    if (cab) cab.classList.remove('active');
+    try {
+      var auth = initFirebase();
+      await auth.signOut();
+    } catch(e) {}
+    sessionStorage.removeItem('iosxJustRegistered');
+    showAuthForm();
+    setAuthMode(false);
+    setAuthStatus('');
+  }
 
-window.closeCabinet = function() {
-  document.getElementById('cabinetOverlay').classList.remove('active');
-};
+  async function handleForgotPassword() {
+    var email = (document.getElementById('forgotEmail') && document.getElementById('forgotEmail').value.trim().toLowerCase()) || '';
+    var btn = document.getElementById('forgotBtn');
+    if (!email) { setTextStatus('forgotStatus', tr('status.invalidEmail'), 'var(--red)'); return; }
+    if (!isValidEmail(email)) { setTextStatus('forgotStatus', tr('status.invalidEmail'), 'var(--red)'); return; }
 
-function loadCabinet() {
-  getFirebaseAuth().then(function(fb) {
-    var user = fb.auth.currentUser;
-    var emailEl = document.getElementById('cabinetEmail');
-    if (emailEl && user) emailEl.value = user.email || '';
-  }).catch(function(){});
-}
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span>' + tr('status.resendSending') + '</span>';
+    }
+    try {
+      var auth = initFirebase();
+      await auth.sendPasswordResetEmail(email, getEmailActionSettings());
+      setTextStatus('forgotStatus', tr('status.emailSent'), 'var(--green)');
+    } catch(err) {
+      var msg = {
+        'auth/invalid-email': tr('status.invalidEmail'),
+        'auth/user-not-found': tr('status.forgotNoAccount'),
+        'auth/too-many-requests': tr('status.tooMany'),
+        'auth/network-request-failed': tr('status.network')
+      }[err.code] || tr('status.forgotError');
+      setTextStatus('forgotStatus', msg, 'var(--red)');
+    }
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<span>' + tr('forgot.submit') + '</span>';
+    }
+  }
 
-getFirebaseAuth().catch(function(){});
+  // ─── MODALS ───────────────────────────────────────────
+  function openPrivacy() { document.getElementById('privacyOverlay').classList.add('active'); }
+  function closePrivacy() { document.getElementById('privacyOverlay').classList.remove('active'); }
 
-document.addEventListener('DOMContentLoaded', async function() {
-  setLanguage(currentLang);
-  showAuthForm();
-  setAuthMode(false);
+  function openCabinet() {
+    loadCabinet();
+    document.getElementById('cabinetOverlay').classList.add('active');
+  }
+  function closeCabinet() { document.getElementById('cabinetOverlay').classList.remove('active'); }
 
-  var savedEmail = localStorage.getItem('iosxEmail');
-  if (savedEmail) document.getElementById('authEmail').value = savedEmail;
+  function loadCabinet() {
+    try {
+      var auth = initFirebase();
+      var user = auth.currentUser;
+      var emailEl = document.getElementById('cabinetEmail');
+      if (emailEl && user) emailEl.value = user.email || '';
+    } catch(e) {}
+  }
 
-  try {
-    var fb = await getFirebaseAuth();
-    fb.onAuthStateChanged(fb.auth, async function(user) {
-      if (!user) { showAuthForm(); return; }
-      await user.reload().catch(function(){});
-      user = fb.auth.currentUser;
-      if (user && user.emailVerified) { showApp(); return; }
-      if (sessionStorage.getItem('iosxJustRegistered') === '1') {
-        showVerifyPending(tr('status.verifyHintRegister'));
-      } else {
-        showAuthForm();
-        setAuthMode(true);
+  function openForgotPassword() {
+    var authEmail = document.getElementById('authEmail');
+    var forgotEmail = document.getElementById('forgotEmail');
+    if (authEmail && forgotEmail && authEmail.value) forgotEmail.value = authEmail.value;
+    setTextStatus('forgotStatus', '');
+    document.getElementById('forgotOverlay').classList.add('active');
+    setTimeout(function() { if (forgotEmail) forgotEmail.focus(); }, 100);
+  }
+  function closeForgotPassword() { document.getElementById('forgotOverlay').classList.remove('active'); }
+
+  // ─── EVENT LISTENERS ──────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    // Init Firebase refs
+    deviceSearch = document.getElementById('deviceSearch');
+    deviceList = document.getElementById('deviceList');
+    deviceHidden = document.getElementById('deviceHidden');
+
+    // Language buttons
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        setLanguage(this.getAttribute('data-lang'));
+      });
+    });
+
+    // Auth form
+    document.getElementById('authForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      handleEmailAuth();
+    });
+
+    // Auth switch
+    document.getElementById('authSwitchBtn').addEventListener('click', function() {
+      setAuthMode(!isEmailSignInMode);
+    });
+
+    // Google auth
+    document.getElementById('authGoogleBtn').addEventListener('click', signInWithGoogle);
+
+    // Forgot password
+    document.getElementById('forgotPasswordBtn').addEventListener('click', openForgotPassword);
+    document.getElementById('forgotBtn').addEventListener('click', handleForgotPassword);
+
+    // Verify buttons
+    document.getElementById('verifyCheckBtn').addEventListener('click', checkEmailVerified);
+    document.getElementById('verifyResendBtn').addEventListener('click', resendVerification);
+
+    // Cabinet
+    document.getElementById('cabinetBtn').addEventListener('click', openCabinet);
+    document.getElementById('closeCabinet').addEventListener('click', closeCabinet);
+    document.getElementById('cabinetHomeBtn').addEventListener('click', function() { closeCabinet(); setStep(1); });
+    document.getElementById('logoutBtn').addEventListener('click', signOutGoogle);
+
+    // Privacy
+    document.getElementById('privacyLink').addEventListener('click', function(e) { e.preventDefault(); openPrivacy(); });
+    document.getElementById('closePrivacy').addEventListener('click', closePrivacy);
+
+    // Close modals
+    document.getElementById('privacyOverlay').addEventListener('click', function(e) { if (e.target === this) closePrivacy(); });
+    document.getElementById('forgotOverlay').addEventListener('click', function(e) { if (e.target === this) closeForgotPassword(); });
+    document.getElementById('cabinetOverlay').addEventListener('click', function(e) { if (e.target === this) closeCabinet(); });
+
+    // Telegram button
+    document.getElementById('telegramBtn').addEventListener('click', openTelegramBot);
+
+    // Hero CTA scroll
+    document.getElementById('heroCtaBtn').addEventListener('click', function() {
+      document.getElementById('requestForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Submit form
+    document.getElementById('submitFormBtn').addEventListener('click', submitRequest);
+
+    // Device picker events
+    if (deviceSearch) {
+      deviceSearch.addEventListener('focus', function() {
+        var val = deviceSearch.value.trim();
+        if (val) renderSearchResults(val);
+        else renderBrandList();
+      });
+
+      deviceSearch.addEventListener('blur', function() {
+        setTimeout(function() {
+          finalizeDevice();
+          closeDropdown();
+        }, 150);
+      });
+
+      deviceSearch.addEventListener('input', function() {
+        var val = deviceSearch.value.trim();
+        if (deviceHidden) deviceHidden.value = val;
+        if (!val) renderBrandList();
+        else renderSearchResults(val);
+      });
+    }
+
+    document.addEventListener('click', function(e) {
+      var wrapper = document.getElementById('deviceWrapper');
+      if (wrapper && !wrapper.contains(e.target)) {
+        finalizeDevice();
+        closeDropdown();
       }
     });
-  } catch(e) {
-    setAuthStatus(tr('status.firebaseConnect'), 'var(--red)');
-  }
-});
+
+    // Escape key closes modals
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closePrivacy();
+        closeForgotPassword();
+        closeCabinet();
+      }
+    });
+
+    // ─── INIT ─────────────────────────────────────────
+    setLanguage(currentLang);
+    showAuthForm();
+    setAuthMode(false);
+
+    var savedEmail = localStorage.getItem('iosxEmail');
+    var authEmailInput = document.getElementById('authEmail');
+    if (savedEmail && authEmailInput) authEmailInput.value = savedEmail;
+
+    try {
+      var auth = initFirebase();
+      auth.onAuthStateChanged(function(user) {
+        if (!user) {
+          showAuthForm();
+          return;
+        }
+        user.reload().then(function() {
+          user = auth.currentUser;
+          if (user && user.emailVerified) {
+            showApp();
+          } else if (sessionStorage.getItem('iosxJustRegistered') === '1') {
+            showVerifyPending(tr('status.verifyHintRegister'));
+          } else {
+            showAuthForm();
+            setAuthMode(true);
+          }
+        }).catch(function() {
+          showAuthForm();
+          setAuthMode(true);
+        });
+      });
+    } catch(e) {
+      setAuthStatus(tr('status.firebaseConnect'), 'var(--red)');
+    }
+  });
+})();
 </script>
 
 </body>
