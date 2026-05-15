@@ -1224,6 +1224,13 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script>
 (function() {
+  // ─── ROUTING ──────────────────────────────────────────
+  var pendingRoute = sessionStorage.getItem('iosxRoute');
+  if (pendingRoute) {
+    sessionStorage.removeItem('iosxRoute');
+    history.replaceState(null, '', getAppBasePath() + pendingRoute);
+  }
+
   // ─── TRANSLATIONS ─────────────────────────────────────
   const translations = {
     ru: {
@@ -1620,8 +1627,48 @@
     return firebaseAuth;
   }
 
-  // ─── STEPS ─────────────────────────────────────────────
-  function setStep(n) {
+  // ─── STEPS / ROUTES ───────────────────────────────────
+  var stepRoutes = {
+    1: '',
+    2: 'pending',
+    3: 'success'
+  };
+
+  var stepTitles = {
+    1: 'IOSx — Request',
+    2: 'IOSx — Pending',
+    3: 'IOSx — Done'
+  };
+
+  function getAppBasePath() {
+    var path = window.location.pathname || '/';
+    return path.indexOf('/IOSx.github.io') === 0 ? '/IOSx.github.io' : '';
+  }
+
+  function buildRoutePath(step) {
+    var basePath = getAppBasePath();
+    var route = stepRoutes[step] || '';
+    return basePath + '/' + (route ? route : '');
+  }
+
+  function setLoginRoute() {
+    var nextPath = getAppBasePath() + '/login';
+    if (window.location.pathname !== nextPath) {
+      history.replaceState({ auth: true }, '', nextPath);
+    }
+    document.title = 'IOSx — Login';
+  }
+
+  function getStepFromPath() {
+    var basePath = getAppBasePath();
+    var path = (window.location.pathname || '/').replace(basePath, '').replace(/^\/+|\/+$/g, '');
+    if (path === 'pending') return 2;
+    if (path === 'success') return 3;
+    return 1;
+  }
+
+  function setStep(n, options) {
+    options = options || {};
     [1,2,3].forEach(function(i) {
       var el = document.getElementById('step' + i);
       if (!el) return;
@@ -1633,6 +1680,14 @@
       var page = document.getElementById(id);
       if (page) page.classList.toggle('active', i+1 === n);
     });
+    document.title = stepTitles[n] || 'IOSx — Device Config Tool';
+    if (!options.skipRoute) {
+      var nextPath = buildRoutePath(n);
+      if (window.location.pathname !== nextPath) {
+        if (options.replaceRoute) history.replaceState({ step: n }, '', nextPath);
+        else history.pushState({ step: n }, '', nextPath);
+      }
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -1661,7 +1716,8 @@
   function setAuthStatus(message, color) { setTextStatus('authStatus', message, color); }
   function setVerifyStatus(message, color) { setTextStatus('verifyStatus', message, color); }
 
-  function showAuthForm() {
+  function showAuthForm(options) {
+    options = options || {};
     document.getElementById('authScreen').style.display = '';
     document.getElementById('appContent').style.display = 'none';
     document.getElementById('authForm').style.display = '';
@@ -1670,6 +1726,7 @@
     if (divider) divider.style.display = '';
     document.getElementById('authSwitchBtn').style.display = '';
     document.getElementById('verifyPending').style.display = 'none';
+    if (!options.skipRoute) setLoginRoute();
   }
 
   function showApp() {
@@ -1678,6 +1735,7 @@
     var cab = document.getElementById('cabinetOverlay');
     if (cab) cab.classList.remove('active');
     syncAccountEmail();
+    setStep(getStepFromPath(), { replaceRoute: true });
   }
 
   function showVerifyPending(hintText) {
@@ -2349,6 +2407,12 @@
       }
     });
 
+    window.addEventListener('popstate', function() {
+      if (document.getElementById('appContent').style.display !== 'none') {
+        setStep(getStepFromPath(), { skipRoute: true });
+      }
+    });
+
     // Escape key closes modals
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
@@ -2360,7 +2424,7 @@
 
     // ─── INIT ─────────────────────────────────────────
     setLanguage(currentLang);
-    showAuthForm();
+    showAuthForm({ skipRoute: true });
     setAuthMode(false);
 
     var savedEmail = localStorage.getItem('iosxEmail');
