@@ -1134,6 +1134,10 @@
       <div class="confirm-sub" data-i18n="confirm.sub">Следующий шаг — перейти в Telegram-бот для оплаты и продолжения.</div>
       <div class="confirm-details">
         <div class="confirm-row">
+          <span class="confirm-row-label" data-i18n="confirm.requestId">Заявка</span>
+          <span class="confirm-row-value" id="confirmRequestId">—</span>
+        </div>
+        <div class="confirm-row">
           <span class="confirm-row-label">Email</span>
           <span class="confirm-row-value" id="confirmEmail">—</span>
         </div>
@@ -1154,6 +1158,7 @@
         Важно: заявка действует 2 часа. Если не оплатить в течение этого времени, она будет автоматически отменена.
       </div>
       <button type="button" class="btn" id="telegramBtn"><span data-i18n="confirm.telegram">Перейти в Telegram-бот для оплаты</span></button>
+      <button type="button" class="btn btn-outline" id="newRequestBtn" style="margin-top:10px;"><span data-i18n="confirm.newRequest">Создать новую заявку</span></button>
     </div>
   </div>
 
@@ -1284,7 +1289,9 @@
       "confirm.expiry": "Важно: заявка действует 2 часа. Если не оплатить в течение этого времени, она будет автоматически отменена.",
       "confirm.statusLabel": "Статус",
       "confirm.statusValue": "✓ Принято",
+      "confirm.requestId": "Заявка",
       "confirm.telegram": "Перейти в Telegram-бот для оплаты",
+      "confirm.newRequest": "Создать новую заявку",
       "waiting.title": "Создаём заявку",
       "waiting.sub": "Проверяем данные и готовим переход в Telegram-бот.",
       "footer.privacy": "Политика конфиденциальности",
@@ -1395,7 +1402,9 @@
       "confirm.expiry": "Important: the request is valid for 2 hours. If payment is not completed in time, it will be cancelled automatically.",
       "confirm.statusLabel": "Status",
       "confirm.statusValue": "✓ Accepted",
+      "confirm.requestId": "Request",
       "confirm.telegram": "Go to Telegram bot for payment",
+      "confirm.newRequest": "Create new request",
       "waiting.title": "Creating request",
       "waiting.sub": "Checking details and preparing the Telegram bot handoff.",
       "footer.privacy": "Privacy policy",
@@ -1506,7 +1515,9 @@
       "confirm.expiry": "重要：申请有效期为 2 小时。如果未在此时间内付款，申请将自动取消。",
       "confirm.statusLabel": "状态",
       "confirm.statusValue": "✓ 已接受",
+      "confirm.requestId": "申请",
       "confirm.telegram": "前往 Telegram 机器人付款",
+      "confirm.newRequest": "创建新申请",
       "waiting.title": "正在创建申请",
       "waiting.sub": "正在检查信息并准备跳转到 Telegram 机器人。",
       "footer.privacy": "隐私政策",
@@ -1697,6 +1708,15 @@
   const BOT_BASE_URL = 'https://t.me/' + BOT_USERNAME;
   let currentTelegramUrl = BOT_BASE_URL;
 
+  function createRequestId() {
+    var randomPart = Math.random().toString(36).slice(2, 8).toUpperCase();
+    return 'REQ-' + Date.now().toString(36).toUpperCase() + '-' + randomPart;
+  }
+
+  function buildTelegramUrl(requestId) {
+    return BOT_BASE_URL + '?start=' + encodeURIComponent(String(requestId || '').replace(/[^a-zA-Z0-9_-]/g, '_'));
+  }
+
   function openTelegramBot() {
     window.open(currentTelegramUrl || BOT_BASE_URL, '_blank', 'noopener');
   }
@@ -1715,6 +1735,41 @@
 
   function setAuthStatus(message, color) { setTextStatus('authStatus', message, color); }
   function setVerifyStatus(message, color) { setTextStatus('verifyStatus', message, color); }
+
+  function saveRequestState(request) {
+    try {
+      sessionStorage.setItem('iosxLastRequest', JSON.stringify(request));
+    } catch(e) {}
+  }
+
+  function getLastRequestState() {
+    try {
+      return JSON.parse(sessionStorage.getItem('iosxLastRequest') || 'null');
+    } catch(e) {
+      return null;
+    }
+  }
+
+  function applyRequestState(request) {
+    if (!request) return;
+    var requestIdEl = document.getElementById('confirmRequestId');
+    var confirmEmail = document.getElementById('confirmEmail');
+    var confirmDevice = document.getElementById('confirmDevice');
+    var confirmProcessor = document.getElementById('confirmProcessor');
+
+    if (requestIdEl) requestIdEl.textContent = request.requestId || '—';
+    if (confirmEmail) confirmEmail.textContent = request.email || '—';
+    if (confirmDevice) confirmDevice.textContent = request.device || '—';
+    if (confirmProcessor) confirmProcessor.textContent = request.processor === 'unknown' ? tr('processor.unknown') : (request.processor || '—');
+    currentTelegramUrl = request.telegramUrl || buildTelegramUrl(request.requestId);
+  }
+
+  function startNewRequest() {
+    sessionStorage.removeItem('iosxLastRequest');
+    currentTelegramUrl = BOT_BASE_URL;
+    setStep(1);
+    syncAccountEmail();
+  }
 
   function showAuthForm(options) {
     options = options || {};
@@ -1735,6 +1790,7 @@
     var cab = document.getElementById('cabinetOverlay');
     if (cab) cab.classList.remove('active');
     syncAccountEmail();
+    applyRequestState(getLastRequestState());
     setStep(getStepFromPath(), { replaceRoute: true });
   }
 
@@ -1991,6 +2047,9 @@
     var commentVal = document.querySelector('[name="comment"]') && document.querySelector('[name="comment"]').value.trim();
     var statusEl = document.getElementById('formStatus');
     var submitBtn = document.getElementById('submitFormBtn');
+    var requestId = createRequestId();
+    var createdAt = new Date().toISOString();
+    var expiresAt = new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString();
 
     if (statusEl) {
       statusEl.classList.remove('visible');
@@ -2043,13 +2102,17 @@
             comment: commentVal || '',
             pageUrl: SITE_URL,
             firebaseUid: user.uid,
-            idToken: idToken
+            idToken: idToken,
+            requestId: requestId,
+            createdAt: createdAt,
+            expiresAt: expiresAt
           })
         }
       );
       var data = await res.json();
       if (!data || data.status !== 'success') throw new Error('Server error');
-      currentTelegramUrl = data.telegramUrl || BOT_BASE_URL;
+      requestId = data.requestId || requestId;
+      currentTelegramUrl = data.telegramUrl || buildTelegramUrl(requestId);
     } catch (e) {
       if (statusEl) {
         statusEl.textContent = tr('status.submitError');
@@ -2063,13 +2126,18 @@
       return;
     }
 
-    var confirmEmail = document.getElementById('confirmEmail');
-    var confirmDevice = document.getElementById('confirmDevice');
-    var confirmProcessor = document.getElementById('confirmProcessor');
-
-    if (confirmEmail) confirmEmail.textContent = emailVal;
-    if (confirmDevice) confirmDevice.textContent = deviceVal;
-    if (confirmProcessor) confirmProcessor.textContent = processorVal === 'unknown' ? tr('processor.unknown') : processorVal;
+    var requestState = {
+      requestId: requestId,
+      email: emailVal,
+      device: deviceVal,
+      processor: processorVal,
+      comment: commentVal || '',
+      telegramUrl: currentTelegramUrl,
+      createdAt: createdAt,
+      expiresAt: expiresAt
+    };
+    saveRequestState(requestState);
+    applyRequestState(requestState);
 
     document.getElementById('requestForm').reset();
     if (deviceHidden) deviceHidden.value = '';
@@ -2367,6 +2435,7 @@
 
     // Telegram button
     document.getElementById('telegramBtn').addEventListener('click', openTelegramBot);
+    document.getElementById('newRequestBtn').addEventListener('click', startNewRequest);
 
     // Hero CTA scroll
     document.getElementById('heroCtaBtn').addEventListener('click', function() {
