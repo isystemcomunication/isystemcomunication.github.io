@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IOSx — Redirect</title>
+<script>
+(function() {
+  var basePath = '/IOSx.github.io';
+  var path = window.location.pathname || '/';
+  var route = path.indexOf(basePath) === 0 ? path.slice(basePath.length) : path;
+  route = route || '/';
+  sessionStorage.setItem('iosxRoute', route + window.location.search + window.location.hash);
+  window.location.replace(basePath + '/');
+})();
+</script>
+</head>
+<body></body>
+</html>
