@@ -1669,8 +1669,7 @@
   };
 
   function getAppBasePath() {
-    var path = window.location.pathname || '/';
-    return path.indexOf('/IOSx.github.io') === 0 ? '/IOSx.github.io' : '';
+    return '';
   }
 
   function buildRoutePath(step) {
@@ -1720,7 +1719,7 @@
   }
 
   // ─── HELPERS ───────────────────────────────────────────
-  const SITE_URL = 'https://isystemcomunication.github.io/IOSx.github.io/';
+  const SITE_URL = 'https://isystemcomunication.github.io/';
   const BOT_USERNAME = 'iosx_support_bot';
   const BOT_BASE_URL = 'https://t.me/' + BOT_USERNAME;
   let currentTelegramUrl = BOT_BASE_URL;
