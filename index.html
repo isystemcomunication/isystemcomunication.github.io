@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IOSx — Device Config Tool</title>
 <script>
   if (window.location.search === '?v=4') {
@@ -1594,6 +1594,18 @@
     return tr(key).replace('{value}', value);
   }
 
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, function(ch) {
+      return {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[ch];
+    });
+  }
+
   function applyTranslations() {
     document.querySelectorAll('[data-i18n]').forEach(function(el) {
       el.textContent = tr(el.getAttribute('data-i18n'));
@@ -2016,7 +2028,7 @@
       var typed = deviceSearch.value.trim();
       if (typed) {
         deviceHidden.value = typed;
-        var custom = makeItem('device-custom', trValue('device.useTyped', typed), function() { selectDevice(typed); });
+        var custom = makeItem('device-custom', trValue('device.useTyped', escapeHtml(typed)), function() { selectDevice(typed); });
         deviceList.appendChild(custom);
       }
     } else {
@@ -2036,7 +2048,7 @@
       });
 
       if (typed2 && !allDevices.some(function(d) { return d.toLowerCase() === typed2.toLowerCase(); })) {
-        var custom2 = makeItem('device-custom', trValue('device.useTypedManual', typed2), function() { selectDevice(typed2); });
+        var custom2 = makeItem('device-custom', trValue('device.useTypedManual', escapeHtml(typed2)), function() { selectDevice(typed2); });
         deviceList.appendChild(custom2);
       }
     }
