@@ -1895,6 +1895,7 @@
       "status.magicLinkEmail": "Введите email, на который пришла ссылка",
       "status.magicLinkError": "Не удалось войти по ссылке. Запросите новую ссылку",
       "status.emailLinkNotEnabled": "В Firebase Console включите вход по email-ссылке",
+      "status.continueUrlError": "Домен ссылки не разрешён в Firebase Console",
       "status.verifyHintLogin": "Подтвердите email по ссылке из письма, затем нажмите «Я подтвердил»",
       "status.verifyHintRegister": "Откройте письмо, нажмите ссылку, затем вернитесь и нажмите «Я подтвердил»",
       "status.emailConfirmed": "Email подтверждён",
@@ -2013,6 +2014,7 @@
       "status.magicLinkEmail": "Enter the email that received the link",
       "status.magicLinkError": "Could not sign in with this link. Request a new one",
       "status.emailLinkNotEnabled": "Enable email link sign-in in Firebase Console",
+      "status.continueUrlError": "This link domain is not allowed in Firebase Console",
       "status.verifyHintLogin": "Confirm your email using the link, then click \"I confirmed\"",
       "status.verifyHintRegister": "Open the email, click the link, then return and click \"I confirmed\"",
       "status.emailConfirmed": "Email confirmed",
@@ -2131,6 +2133,7 @@
       "status.magicLinkEmail": "请输入收到链接的邮箱",
       "status.magicLinkError": "无法通过此链接登录，请重新请求链接",
       "status.emailLinkNotEnabled": "请在 Firebase Console 中启用邮件链接登录",
+      "status.continueUrlError": "此链接域名未在 Firebase Console 中授权",
       "status.verifyHintLogin": "请通过邮件中的链接确认邮箱，然后点击\"我已确认\"",
       "status.verifyHintRegister": "打开邮件，点击链接，然后返回并点击\"我已确认\"",
       "status.emailConfirmed": "邮箱已确认",
@@ -2859,10 +2862,7 @@
   }
 
   function getMagicLinkActionSettings() {
-    var baseUrl = window.location.origin && window.location.origin !== 'null'
-      ? window.location.origin + getAppBasePath() + '/login'
-      : SITE_URL + 'login';
-    return { url: baseUrl, handleCodeInApp: true };
+    return { url: SITE_URL + 'login', handleCodeInApp: true };
   }
 
   async function sendVerificationToCurrentUser() {
@@ -2956,7 +2956,10 @@
         'auth/too-many-requests': tr('status.tooMany'),
         'auth/network-request-failed': tr('status.network'),
         'auth/unauthorized-domain': tr('status.unauthorizedDomain'),
-        'auth/operation-not-allowed': tr('status.emailLinkNotEnabled')
+        'auth/operation-not-allowed': tr('status.emailLinkNotEnabled'),
+        'auth/invalid-continue-uri': tr('status.continueUrlError'),
+        'auth/unauthorized-continue-uri': tr('status.continueUrlError'),
+        'auth/missing-continue-uri': tr('status.continueUrlError')
       }[err.code] || ('Ошибка: ' + (err.message || 'попробуйте ещё раз'));
       setAuthStatus(msg, 'var(--red)');
     }
