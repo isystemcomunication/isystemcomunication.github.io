@@ -1773,6 +1773,14 @@
       <input type="email" id="cabinetEmail" class="form-input" readonly style="background:transparent;border-color:var(--border);color:var(--muted);cursor:default;">
     </div>
 
+    <div class="form-group">
+      <label class="form-label" data-i18n="cabinet.password">Пароль</label>
+      <input type="password" id="cabinetPassword" class="form-input" data-i18n-placeholder="cabinet.passwordPlaceholder" placeholder="Новый пароль минимум 8 символов" minlength="8" autocomplete="new-password">
+    </div>
+
+    <button type="button" class="btn btn-outline" id="cabinetPasswordBtn" style="margin-top:0;margin-bottom:10px;"><span data-i18n="cabinet.savePassword">Сохранить пароль</span></button>
+    <div class="status-msg" id="cabinetPasswordStatus" style="margin-bottom:12px;"></div>
+
     <div class="cabinet-actions">
       <button type="button" class="btn btn-outline" id="cabinetHomeBtn"><span data-i18n="cabinet.home">Главная</span></button>
       <button type="button" class="btn btn-danger" id="logoutBtn"><span data-i18n="cabinet.logout">Выйти</span></button>
@@ -1875,6 +1883,9 @@
       "privacy.limitsCopy": "Сервис не обходит FRP, блокировки аккаунтов, MDM, защиту владельца и ограничения производителей или операторов.",
       "cabinet.title": "Ваш кабинет",
       "cabinet.sub": "Данные аккаунта",
+      "cabinet.password": "Пароль",
+      "cabinet.passwordPlaceholder": "Новый пароль минимум 8 символов",
+      "cabinet.savePassword": "Сохранить пароль",
       "cabinet.home": "Главная",
       "cabinet.logout": "Выйти",
       "forgot.title": "Восстановление доступа",
@@ -1896,6 +1907,7 @@
       "status.magicLinkError": "Не удалось войти по ссылке. Запросите новую ссылку",
       "status.emailLinkNotEnabled": "В Firebase Console включите вход по email-ссылке",
       "status.continueUrlError": "Домен ссылки не разрешён в Firebase Console",
+      "status.magicLinkApiMissing": "Укажите адрес Railway API для magic link",
       "status.verifyHintLogin": "Подтвердите email по ссылке из письма, затем нажмите «Я подтвердил»",
       "status.verifyHintRegister": "Откройте письмо, нажмите ссылку, затем вернитесь и нажмите «Я подтвердил»",
       "status.emailConfirmed": "Email подтверждён",
@@ -1919,6 +1931,9 @@
       "status.forgotNoAccount": "Аккаунт с этим email не найден",
       "status.forgotError": "Не удалось отправить письмо. Попробуйте позже",
       "status.firebaseConnect": "Не удалось подключиться к Firebase. Проверьте интернет",
+      "status.passwordSaved": "Пароль сохранён. Войдите снова с новым паролем",
+      "status.passwordLoginAgain": "Для безопасности подтвердите вход ещё раз, затем сохраните пароль",
+      "status.passwordSaveError": "Не удалось сохранить пароль. Попробуйте позже",
       "device.manual": "✏ Ввести вручную",
       "device.manualPlaceholder": "Введите название устройства...",
       "device.back": "‹ Назад",
@@ -1994,6 +2009,9 @@
       "privacy.limitsCopy": "The service does not bypass FRP, account locks, MDM, owner protection, or manufacturer/carrier restrictions.",
       "cabinet.title": "Your account",
       "cabinet.sub": "Account details",
+      "cabinet.password": "Password",
+      "cabinet.passwordPlaceholder": "New password, at least 8 characters",
+      "cabinet.savePassword": "Save password",
       "cabinet.home": "Home",
       "cabinet.logout": "Log out",
       "forgot.title": "Account recovery",
@@ -2015,6 +2033,7 @@
       "status.magicLinkError": "Could not sign in with this link. Request a new one",
       "status.emailLinkNotEnabled": "Enable email link sign-in in Firebase Console",
       "status.continueUrlError": "This link domain is not allowed in Firebase Console",
+      "status.magicLinkApiMissing": "Set the Railway API URL for magic links",
       "status.verifyHintLogin": "Confirm your email using the link, then click \"I confirmed\"",
       "status.verifyHintRegister": "Open the email, click the link, then return and click \"I confirmed\"",
       "status.emailConfirmed": "Email confirmed",
@@ -2038,6 +2057,9 @@
       "status.forgotNoAccount": "No account found for this email",
       "status.forgotError": "Could not send the email. Try again later",
       "status.firebaseConnect": "Could not connect to Firebase. Check your connection",
+      "status.passwordSaved": "Password saved. Sign in again with the new password",
+      "status.passwordLoginAgain": "For security, confirm sign-in again, then save the password",
+      "status.passwordSaveError": "Could not save password. Try again later",
       "device.manual": "✏ Enter manually",
       "device.manualPlaceholder": "Enter device name...",
       "device.back": "‹ Back",
@@ -2113,6 +2135,9 @@
       "privacy.limitsCopy": "本服务不会绕过 FRP、账户锁、MDM、所有者保护或制造商/运营商限制。",
       "cabinet.title": "你的账户",
       "cabinet.sub": "账户信息",
+      "cabinet.password": "密码",
+      "cabinet.passwordPlaceholder": "新密码至少 8 个字符",
+      "cabinet.savePassword": "保存密码",
       "cabinet.home": "主页",
       "cabinet.logout": "退出",
       "forgot.title": "恢复访问",
@@ -2134,6 +2159,7 @@
       "status.magicLinkError": "无法通过此链接登录，请重新请求链接",
       "status.emailLinkNotEnabled": "请在 Firebase Console 中启用邮件链接登录",
       "status.continueUrlError": "此链接域名未在 Firebase Console 中授权",
+      "status.magicLinkApiMissing": "请设置 magic link 的 Railway API 地址",
       "status.verifyHintLogin": "请通过邮件中的链接确认邮箱，然后点击\"我已确认\"",
       "status.verifyHintRegister": "打开邮件，点击链接，然后返回并点击\"我已确认\"",
       "status.emailConfirmed": "邮箱已确认",
@@ -2157,6 +2183,9 @@
       "status.forgotNoAccount": "未找到该邮箱对应的账户",
       "status.forgotError": "无法发送邮件，请稍后再试",
       "status.firebaseConnect": "无法连接 Firebase，请检查网络",
+      "status.passwordSaved": "密码已保存，请使用新密码重新登录",
+      "status.passwordLoginAgain": "为了安全，请重新确认登录后再保存密码",
+      "status.passwordSaveError": "无法保存密码，请稍后再试",
       "device.manual": "✏ 手动输入",
       "device.manualPlaceholder": "输入设备名称...",
       "device.back": "‹ 返回",
@@ -2321,6 +2350,7 @@
 
   // ─── HELPERS ───────────────────────────────────────────
   const SITE_URL = 'https://isystemcomunication.github.io/';
+  const MAGIC_LINK_API_URL = 'https://YOUR-RAILWAY-DOMAIN.up.railway.app/send-magic-link';
   const BOT_USERNAME = 'iosx_support_bot';
   const BOT_BASE_URL = 'https://t.me/' + BOT_USERNAME;
   let currentTelegramUrl = BOT_BASE_URL;
@@ -2504,13 +2534,16 @@
   function syncAccountEmail() {
     var user = getVerifiedUser();
     var emailInput = document.getElementById('email');
-    if (!emailInput || !user) return;
-    emailInput.value = user.email || '';
-    emailInput.readOnly = true;
-    emailInput.style.background = 'transparent';
-    emailInput.style.borderColor = 'var(--border)';
-    emailInput.style.color = 'var(--muted)';
-    emailInput.style.cursor = 'default';
+    if (emailInput && user) {
+      emailInput.value = user.email || '';
+      emailInput.readOnly = true;
+      emailInput.style.background = 'transparent';
+      emailInput.style.borderColor = 'var(--border)';
+      emailInput.style.color = 'var(--muted)';
+      emailInput.style.cursor = 'default';
+    }
+    var cabinetEmail = document.getElementById('cabinetEmail');
+    if (cabinetEmail && user) cabinetEmail.value = user.email || '';
   }
 
   // ─── DEVICE PICKER DATA ────────────────────────────────
@@ -2945,8 +2978,20 @@
     setAuthStatus('');
 
     try {
-      var auth = initFirebase();
-      await auth.sendSignInLinkToEmail(email, getMagicLinkActionSettings());
+      if (!MAGIC_LINK_API_URL || MAGIC_LINK_API_URL.indexOf('YOUR-RAILWAY-DOMAIN') !== -1) {
+        throw { code: 'iosx/magic-link-api-missing' };
+      }
+
+      var res = await fetch(MAGIC_LINK_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email }),
+      });
+      var data = await res.json().catch(function() { return {}; });
+      if (!res.ok || !data.ok) {
+        throw { code: data.error || 'iosx/magic-link-send-failed' };
+      }
+
       localStorage.setItem('iosxEmail', email);
       localStorage.setItem('iosxEmailForSignIn', email);
       setAuthStatus(tr('status.magicLinkSent'), 'var(--green)');
@@ -2959,7 +3004,10 @@
         'auth/operation-not-allowed': tr('status.emailLinkNotEnabled'),
         'auth/invalid-continue-uri': tr('status.continueUrlError'),
         'auth/unauthorized-continue-uri': tr('status.continueUrlError'),
-        'auth/missing-continue-uri': tr('status.continueUrlError')
+        'auth/missing-continue-uri': tr('status.continueUrlError'),
+        'iosx/magic-link-api-missing': tr('status.magicLinkApiMissing'),
+        'invalid_email': tr('status.invalidEmail'),
+        'send_failed': tr('status.submitError')
       }[err.code] || ('Ошибка: ' + (err.message || 'попробуйте ещё раз'));
       setAuthStatus(msg, 'var(--red)');
     }
@@ -3001,6 +3049,49 @@
     }
 
     return true;
+  }
+
+  async function saveCabinetPassword() {
+    var btn = document.getElementById('cabinetPasswordBtn');
+    var passwordInput = document.getElementById('cabinetPassword');
+    var password = passwordInput ? passwordInput.value : '';
+
+    if (!password || password.length < 8) {
+      setTextStatus('cabinetPasswordStatus', tr('status.shortPassword'), 'var(--red)');
+      return;
+    }
+
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span>' + tr('status.sending') + '</span>';
+    }
+    setTextStatus('cabinetPasswordStatus', '');
+
+    try {
+      var auth = initFirebase();
+      var user = auth.currentUser;
+      if (!user) throw new Error('no_user');
+      await user.updatePassword(password);
+      if (passwordInput) passwordInput.value = '';
+      closeCabinet();
+      await auth.signOut();
+      sessionStorage.removeItem('iosxJustRegistered');
+      showAuthForm({ signInMode: true });
+      setAuthStatus(tr('status.passwordSaved'), 'var(--green)');
+      return;
+    } catch (err) {
+      var msg = {
+        'auth/requires-recent-login': tr('status.passwordLoginAgain'),
+        'auth/weak-password': tr('status.shortPassword'),
+        'auth/network-request-failed': tr('status.network')
+      }[err.code] || tr('status.passwordSaveError');
+      setTextStatus('cabinetPasswordStatus', msg, 'var(--red)');
+    }
+
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<span>' + tr('cabinet.savePassword') + '</span>';
+    }
   }
 
   async function checkEmailVerified() {
@@ -3096,6 +3187,7 @@
 
   function openCabinet() {
     loadCabinet();
+    setTextStatus('cabinetPasswordStatus', '');
     document.getElementById('cabinetOverlay').classList.add('active');
   }
   function closeCabinet() { document.getElementById('cabinetOverlay').classList.remove('active'); }
@@ -3106,6 +3198,8 @@
       var user = auth.currentUser;
       var emailEl = document.getElementById('cabinetEmail');
       if (emailEl && user) emailEl.value = user.email || '';
+      var passwordInput = document.getElementById('cabinetPassword');
+      if (passwordInput) passwordInput.value = '';
     } catch(e) {}
   }
 
@@ -3185,6 +3279,7 @@
     document.getElementById('cabinetBtn').addEventListener('click', openCabinet);
     document.getElementById('closeCabinet').addEventListener('click', closeCabinet);
     document.getElementById('cabinetHomeBtn').addEventListener('click', function() { closeCabinet(); setStep(1); });
+    document.getElementById('cabinetPasswordBtn').addEventListener('click', saveCabinetPassword);
     document.getElementById('logoutBtn').addEventListener('click', signOutGoogle);
 
     // Privacy
