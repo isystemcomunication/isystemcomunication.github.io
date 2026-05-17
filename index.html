@@ -2220,7 +2220,7 @@
 
   // ─── STEPS / ROUTES ───────────────────────────────────
   var stepRoutes = {
-    1: '',
+    1: 'home',
     2: 'pending',
     3: 'success'
   };
@@ -2252,6 +2252,7 @@
   function getStepFromPath() {
     var basePath = getAppBasePath();
     var path = (window.location.pathname || '/').replace(basePath, '').replace(/^\/+|\/+$/g, '');
+    if (path === 'home') return 1;
     if (path === 'pending') return 2;
     if (path === 'success') return 3;
     return 1;
@@ -2351,7 +2352,13 @@
   }
 
   function isAuthPath() {
-    return (window.location.pathname || '/').replace(/\/+$/g, '') === '/login';
+    var path = (window.location.pathname || '/').replace(/\/+$/g, '') || '/';
+    return path === '/login' || path === '/register';
+  }
+
+  function isAppPath() {
+    var path = (window.location.pathname || '/').replace(/^\/+|\/+$/g, '');
+    return path === 'home' || path === 'pending' || path === 'success';
   }
 
   function showLanding(options) {
@@ -3010,16 +3017,22 @@
     var landingStartBtn = document.getElementById('landingStartBtn');
     if (landingStartBtn) {
       landingStartBtn.addEventListener('click', function() {
-        showAuthForm();
-        setAuthMode(false);
+        if (getVerifiedUser()) showApp();
+        else {
+          showAuthForm();
+          setAuthMode(false);
+        }
       });
     }
 
     var landingLoginBtn = document.getElementById('landingLoginBtn');
     if (landingLoginBtn) {
       landingLoginBtn.addEventListener('click', function() {
-        showAuthForm();
-        setAuthMode(true);
+        if (getVerifiedUser()) showApp();
+        else {
+          showAuthForm();
+          setAuthMode(true);
+        }
       });
     }
 
@@ -3147,7 +3160,8 @@
         user.reload().then(function() {
           user = auth.currentUser;
           if (user && user.emailVerified) {
-            showApp();
+            if (isAppPath() || isAuthPath()) showApp();
+            else showLanding({ skipRoute: true });
           } else if (sessionStorage.getItem('iosxJustRegistered') === '1') {
             showVerifyPending(tr('status.verifyHintRegister'));
           } else {
