@@ -2350,7 +2350,7 @@
 
   // ─── HELPERS ───────────────────────────────────────────
   const SITE_URL = 'https://isystemcomunication.github.io/';
-  const MAGIC_LINK_API_URL = 'https://YOUR-RAILWAY-DOMAIN.up.railway.app/send-magic-link';
+  const MAGIC_LINK_API_URL = '';
   const BOT_USERNAME = 'iosx_support_bot';
   const BOT_BASE_URL = 'https://t.me/' + BOT_USERNAME;
   let currentTelegramUrl = BOT_BASE_URL;
@@ -2978,18 +2978,19 @@
     setAuthStatus('');
 
     try {
-      if (!MAGIC_LINK_API_URL || MAGIC_LINK_API_URL.indexOf('YOUR-RAILWAY-DOMAIN') !== -1) {
-        throw { code: 'iosx/magic-link-api-missing' };
-      }
-
-      var res = await fetch(MAGIC_LINK_API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email }),
-      });
-      var data = await res.json().catch(function() { return {}; });
-      if (!res.ok || !data.ok) {
-        throw { code: data.error || 'iosx/magic-link-send-failed' };
+      if (MAGIC_LINK_API_URL) {
+        var res = await fetch(MAGIC_LINK_API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email }),
+        });
+        var data = await res.json().catch(function() { return {}; });
+        if (!res.ok || !data.ok) {
+          throw { code: data.error || 'iosx/magic-link-send-failed' };
+        }
+      } else {
+        var auth = initFirebase();
+        await auth.sendSignInLinkToEmail(email, getMagicLinkActionSettings());
       }
 
       localStorage.setItem('iosxEmail', email);
