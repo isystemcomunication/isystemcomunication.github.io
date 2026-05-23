@@ -1368,7 +1368,7 @@
         <a href="#landingContact">Контакт</a>
       </nav>
       <div class="landing-actions">
-        <a class="landing-icon-link" href="https://t.me/iosx_support_bot" aria-label="Telegram">
+        <a class="landing-icon-link" href="https://t.me/iosx_support_bot" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4 20-7Z"/><path d="M22 2 11 13"/></svg>
         </a>
         <button type="button" class="btn btn-outline" id="landingLoginBtn" style="width:auto;min-width:112px;">Войти</button>
@@ -1499,7 +1499,7 @@
           <a href="#landingServices">Услуги</a>
           <a href="#landingProcess">Как это работает</a>
           <a href="#" id="landingPrivacyLink">Privacy</a>
-          <a href="https://t.me/iosx_support_bot">Telegram</a>
+          <a href="https://t.me/iosx_support_bot" target="_blank" rel="noopener noreferrer">Telegram</a>
         </nav>
         <a class="landing-scrolltop" href="#landingTop" aria-label="Наверх">↗</a>
       </div>
@@ -1682,7 +1682,7 @@
           <input type="text" name="comment" class="form-input" data-i18n-placeholder="placeholder.comment" placeholder="Опишите задачу...">
         </div>
 
-        <button type="button" class="btn" id="submitFormBtn"><span data-i18n="form.submit">Отправить заявку →</span></button>
+        <button type="submit" class="btn" id="submitFormBtn"><span data-i18n="form.submit">Отправить заявку →</span></button>
         <div class="status-msg" id="formStatus"></div>
       </form>
     </div>
@@ -1740,7 +1740,7 @@
 
 <div class="modal-overlay" id="privacyOverlay">
   <div class="modal" style="max-width:480px;">
-    <button class="modal-close" id="closePrivacy">✕</button>
+    <button type="button" class="modal-close" id="closePrivacy" aria-label="Закрыть">✕</button>
     <div class="modal-title" data-i18n="privacy.title">Конфиденциальность</div>
     <div class="modal-sub" data-i18n="privacy.updated">Последнее обновление: 2025</div>
     <div style="display:flex;flex-direction:column;gap:20px;">
@@ -1764,7 +1764,7 @@
 
 <div class="modal-overlay" id="cabinetOverlay">
   <div class="modal" style="max-width:440px;">
-    <button class="modal-close" id="closeCabinet">✕</button>
+    <button type="button" class="modal-close" id="closeCabinet" aria-label="Закрыть">✕</button>
     <div class="modal-title" data-i18n="cabinet.title">Ваш кабинет</div>
     <div class="modal-sub" data-i18n="cabinet.sub">Данные аккаунта</div>
 
@@ -1790,7 +1790,7 @@
 
 <div class="modal-overlay" id="forgotOverlay">
   <div class="modal" style="max-width:440px;">
-    <button class="modal-close" id="closeForgot">✕</button>
+    <button type="button" class="modal-close" id="closeForgot" aria-label="Закрыть">✕</button>
     <div class="modal-title" data-i18n="forgot.title">Восстановление доступа</div>
     <div class="modal-sub" data-i18n="forgot.sub">Укажите email при регистрации</div>
     <div class="form-group">
@@ -2356,7 +2356,16 @@
   let currentTelegramUrl = BOT_BASE_URL;
 
   function createRequestId() {
-    var randomPart = Math.random().toString(36).slice(2, 8).toUpperCase();
+    var randomPart = '';
+    if (window.crypto && window.crypto.getRandomValues) {
+      var bytes = new Uint8Array(4);
+      window.crypto.getRandomValues(bytes);
+      randomPart = Array.prototype.map.call(bytes, function(byte) {
+        return byte.toString(36).padStart(2, '0');
+      }).join('').slice(0, 8).toUpperCase();
+    } else {
+      randomPart = Math.random().toString(36).slice(2, 10).toUpperCase();
+    }
     return 'REQ-' + Date.now().toString(36).toUpperCase() + '-' + randomPart;
   }
 
@@ -2745,6 +2754,8 @@
     var requestId = createRequestId();
     var createdAt = new Date().toISOString();
     var expiresAt = new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString();
+
+    if (submitBtn && submitBtn.disabled) return;
 
     if (statusEl) {
       statusEl.classList.remove('visible');
@@ -3270,6 +3281,7 @@
 
     // Forgot password
     document.getElementById('forgotPasswordBtn').addEventListener('click', openForgotPassword);
+    document.getElementById('closeForgot').addEventListener('click', closeForgotPassword);
     document.getElementById('forgotBtn').addEventListener('click', handleForgotPassword);
 
     // Verify buttons
@@ -3302,7 +3314,10 @@
     });
 
     // Submit form
-    document.getElementById('submitFormBtn').addEventListener('click', submitRequest);
+    document.getElementById('requestForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      submitRequest();
+    });
 
     // Device picker events
     if (deviceSearch) {
@@ -3410,4 +3425,3 @@
 
 </body>
 </html>
-
